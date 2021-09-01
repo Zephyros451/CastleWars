@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab7735601245c4f499bcb693d57c35a8, type: 3}
+  m_Name: A Allegiance Settings
+  m_EditorClassIdentifier: 
+  Player: {fileID: 11400000, guid: 55997862316fdd44aaa7a6e1fdd10934, type: 2}
+  Neutral: {fileID: 11400000, guid: 2dbf8f1a3aa3ebc438d598884f0dee2b, type: 2}
+  Enemy: {fileID: 11400000, guid: 5a4d2544adc9cd44b9a553ce473401d0, type: 2}
