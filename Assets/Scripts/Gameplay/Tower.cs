@@ -12,9 +12,13 @@ public class Tower : MonoBehaviour
     [SerializeField] private Navigator navigator;
     [SerializeField] private Button lvlUp;
     [SerializeField] private AllegianceSettings allegianceSettings;
-    
+
+    private bool shouldGenerate = true;
     private int towerLevel = 1;
     private WaitForSeconds garrisonReplenishDeltaTime = new WaitForSeconds(1.2f);
+    private WaitForSeconds replenishCooldown = new WaitForSeconds(2f);
+
+    private Coroutine replenishCooldownCoroutine;
 
     private float garrisonCount = 10;
     public float GarrisonCount
@@ -26,7 +30,7 @@ public class Tower : MonoBehaviour
         set
         {
             garrisonCount = value;
-            if (garrisonCount < towerLevel * 5 && towerLevel < 5)
+            if (garrisonCount <= Level * 5 && Level < 5)
             {
                 lvlUp.interactable = false;
             }
@@ -35,10 +39,23 @@ public class Tower : MonoBehaviour
                 lvlUp.interactable = true;
             }
 
-            garrisonCounterText.text = $"{(int)garrisonCount}/{towerLevel*10}";
+            garrisonCounterText.text = $"{(int)garrisonCount}/{Level * 10}";
         }
     }
-    public int Level => towerLevel;
+    public int Level
+    {
+        get
+        {
+            return towerLevel;
+        }
+        private set
+        {
+            towerLevel = value;
+            towerLevelText.text = Level.ToString();
+            garrisonCounterText.text = $"{(int)garrisonCount}/{towerLevel * 10}";
+        }
+    }
+
     public Navigator Navigator => navigator;
     public Allegiance Allegiance => towerData.Allegiance; 
 
@@ -61,12 +78,10 @@ public class Tower : MonoBehaviour
 
     public void LevelUp()
     {
-        lvlUp.interactable = false;
-        GarrisonCount -= towerLevel * 5;
-        towerLevel++;
-        towerLevelText.text = towerLevel.ToString();
+        GarrisonCount -= Level * 5;
+        Level++;
 
-        if(towerLevel == 5)
+        if(Level == 5)
         {
             lvlUp.enabled = false;
         }
@@ -74,10 +89,9 @@ public class Tower : MonoBehaviour
 
     private void ChangeAllegiance(Allegiance newAllegiance)
     {
-        if (towerLevel > 1)
+        if (Level > 1)
         {
-            towerLevel--;
-            towerLevelText.text = towerLevel.ToString();
+            Level = 1;
         }
 
         switch(newAllegiance)
@@ -107,14 +121,14 @@ public class Tower : MonoBehaviour
         while (true)
         {
             yield return garrisonReplenishDeltaTime;
-            if (GarrisonCount < towerLevel * 10)
+            if (GarrisonCount < Level * 10)
             {
-                if (towerData.type != Type.A)
+                if (towerData.type != TowerType.A && shouldGenerate)
                 {
                     GarrisonCount++;
                 }
             }
-            else if(GarrisonCount > towerLevel * 10 + 1)
+            else if(GarrisonCount > Level * 10 + 1)
             {
                 GarrisonCount--;
             }
@@ -144,6 +158,13 @@ public class Tower : MonoBehaviour
         GarrisonCount = newGarrisonCount;
     }
 
+    private IEnumerator ReplenishCooldown()
+    {
+        shouldGenerate = false;
+        yield return replenishCooldown;
+        shouldGenerate = true;
+    }
+
     private void Stop()
     {
         StopAllCoroutines();
@@ -159,19 +180,26 @@ public class Tower : MonoBehaviour
             }
             else
             {
-                if (model.type == Type.LI || model.type == Type.A)
+                if (replenishCooldownCoroutine != null)
                 {
-                    GarrisonCount -= 0.8f;
+                    StopCoroutine(replenishCooldownCoroutine);
                 }
-                else if (model.type == Type.HI)
+
+                if (model.type == TowerType.LI || model.type == TowerType.A)
                 {
-                    GarrisonCount -= 1.2f;
+                    GarrisonCount -= 0.5f;
+                }
+                else if (model.type == TowerType.HI)
+                {
+                    GarrisonCount -= 1.1f;
                 }
 
                 if (GarrisonCount <= 0)
                 {
                     ChangeAllegiance(model.Allegiance);
                 }
+
+                replenishCooldownCoroutine = StartCoroutine(ReplenishCooldown());
             }
             Destroy(model.gameObject);
         }

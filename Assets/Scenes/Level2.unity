@@ -1880,7 +1880,7 @@ PrefabInstance:
         type: 3}
       propertyPath: towers.Array.data[0]
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 6305736696479914216}
     - target: {fileID: 7448174155087153991, guid: 76010650ae9726645b154502ee57ebe2,
         type: 3}
       propertyPath: curve

@@ -7,7 +7,7 @@ public class Model : MonoBehaviour
     public bool IsActive;
     public int SegmentsTravelled;
     public Allegiance Allegiance;
-    public Type type;
+    public TowerType type;
 
     public void ActivateCollider()
     {

@@ -9,8 +9,8 @@ public class Unit : MonoBehaviour
     private BezierCurve curve;
     private List<Vector3> path;
     private List<Model> models;
-    private float speed = 1.5f;
-    private WaitForSeconds modelTimeSpacing = new WaitForSeconds(0.3f);
+    private float speed = 1f;
+    private WaitForSeconds modelTimeSpacing = new WaitForSeconds(0.45f);
 
     public UnitData UnitData => unitData;
 
