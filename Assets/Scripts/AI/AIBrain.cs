@@ -98,18 +98,18 @@ public class AIBrain : MonoBehaviour
             case GameDifficulty.Hard:
                 if (tower.Navigator.HasNeighbourWithAllegiance(Allegiance.Player))
                 {
-                    if (tower.GarrisonCount >= tower.Level * 10f)
+                    if (tower.GarrisonCount >= tower.QuantityCap)
                         return true;
                 }
                 else
                 {
-                    if (tower.GarrisonCount >= tower.Level * 5f)
+                    if (tower.GarrisonCount >= tower.LvlUpQuantity)
                         return true;
                 }
                 return false;
 
             case GameDifficulty.Normal:
-                if (tower.GarrisonCount >= tower.Level * 7.5f)
+                if (tower.GarrisonCount >= tower.QuantityCap * 0.75f)
                 {
                     return true;
                 }
@@ -118,12 +118,12 @@ public class AIBrain : MonoBehaviour
             case GameDifficulty.Easy:
                 if (tower.Navigator.HasNeighbourWithAllegiance(Allegiance.Player))
                 {
-                    if (tower.GarrisonCount >= tower.Level * 5f)
+                    if (tower.GarrisonCount >= tower.LvlUpQuantity)
                         return true;
                 }
                 else
                 {
-                    if (tower.GarrisonCount == tower.Level * 10f)
+                    if (tower.GarrisonCount == tower.QuantityCap)
                         return true;
                 }
                 return false;

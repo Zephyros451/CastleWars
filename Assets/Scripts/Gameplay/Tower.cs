@@ -6,16 +6,18 @@ using UnityEngine.UI;
 
 public class Tower : MonoBehaviour
 {
+    [SerializeField] private TowerSheetData towerSheetData;
+    [SerializeField] private TowerData towerData;
+    [SerializeField] private AllegianceSettings allegianceSettings;
+
     [SerializeField] private TextMeshProUGUI garrisonCounterText;
     [SerializeField] private TextMeshProUGUI towerLevelText;
-    [SerializeField] private TowerData towerData;
     [SerializeField] private Navigator navigator;
     [SerializeField] private Button lvlUp;
-    [SerializeField] private AllegianceSettings allegianceSettings;
 
     private bool shouldGenerate = true;
     private int towerLevel = 1;
-    private WaitForSeconds garrisonReplenishDeltaTime = new WaitForSeconds(1.2f);
+    private WaitForSeconds garrisonReplenishDeltaTime = new WaitForSeconds(1f);
     private WaitForSeconds replenishCooldown = new WaitForSeconds(2f);
 
     private Coroutine replenishCooldownCoroutine;
@@ -30,7 +32,7 @@ public class Tower : MonoBehaviour
         set
         {
             garrisonCount = value;
-            if (garrisonCount <= Level * 5 && Level < 5)
+            if (garrisonCount <= LvlUpQuantity && Level < 5)
             {
                 lvlUp.interactable = false;
             }
@@ -39,9 +41,10 @@ public class Tower : MonoBehaviour
                 lvlUp.interactable = true;
             }
 
-            garrisonCounterText.text = $"{(int)garrisonCount}/{Level * 10}";
+            garrisonCounterText.text = $"{(int)garrisonCount}/{QuantityCap}";
         }
     }
+
     public int Level
     {
         get
@@ -52,12 +55,17 @@ public class Tower : MonoBehaviour
         {
             towerLevel = value;
             towerLevelText.text = Level.ToString();
-            garrisonCounterText.text = $"{(int)garrisonCount}/{towerLevel * 10}";
+            garrisonCounterText.text = $"{(int)garrisonCount}/{QuantityCap}";
         }
     }
 
+    public int QuantityCap => towerSheetData.TowerLevelData[Level-1].quantityCap;
+    public int LvlUpQuantity => towerSheetData.TowerLevelData[Level-1].lvlUpQuantity;
+    public float GenerationRate => towerSheetData.TowerLevelData[Level-1].generationRate;
+    public float LvlUpTime => towerSheetData.TowerLevelData[Level-1].lvlUpTime;
+
     public Navigator Navigator => navigator;
-    public Allegiance Allegiance => towerData.Allegiance; 
+    public Allegiance Allegiance => towerData.Allegiance;
 
     private void Start()
     {
@@ -78,7 +86,7 @@ public class Tower : MonoBehaviour
 
     public void LevelUp()
     {
-        GarrisonCount -= Level * 5;
+        GarrisonCount -= LvlUpQuantity;
         Level++;
 
         if(Level == 5)
@@ -121,16 +129,16 @@ public class Tower : MonoBehaviour
         while (true)
         {
             yield return garrisonReplenishDeltaTime;
-            if (GarrisonCount < Level * 10)
+            if (GarrisonCount < QuantityCap)
             {
                 if (towerData.type != TowerType.A && shouldGenerate)
                 {
-                    GarrisonCount++;
+                    GarrisonCount += GenerationRate;
                 }
             }
-            else if(GarrisonCount > Level * 10 + 1)
+            else if(GarrisonCount > QuantityCap + 1)
             {
-                GarrisonCount--;
+                GarrisonCount -= GenerationRate;
             }
         }
     }

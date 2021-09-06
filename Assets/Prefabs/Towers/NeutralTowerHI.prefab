@@ -372,12 +372,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de96a121251b7d143a101eb20c86ffc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  towerSheetData: {fileID: 11400000, guid: e13dfa172a9e7564d8135e24d60f96eb, type: 2}
+  towerData: {fileID: 11400000, guid: e7b7f1d3481a59a4db203b71a68db648, type: 2}
+  allegianceSettings: {fileID: 11400000, guid: d60ce8e0b25b93a4b987b58bc5d8c503, type: 2}
   garrisonCounterText: {fileID: 6148163026281320973}
   towerLevelText: {fileID: 5457403711977119031}
-  towerData: {fileID: 11400000, guid: e7b7f1d3481a59a4db203b71a68db648, type: 2}
   navigator: {fileID: 3617874578662907270}
   lvlUp: {fileID: 8170454665463001485}
-  allegianceSettings: {fileID: 11400000, guid: d60ce8e0b25b93a4b987b58bc5d8c503, type: 2}
 --- !u!54 &3159991637173585454
 Rigidbody:
   m_ObjectHideFlags: 0

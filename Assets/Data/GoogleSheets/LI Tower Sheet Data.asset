@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   towerLevelData:
   - quantityCap: 10
-    lvlUpQuantity: 0
+    lvlUpQuantity: 5
     generationRate: 0.8
     lvlUpTime: 4
   - quantityCap: 20
