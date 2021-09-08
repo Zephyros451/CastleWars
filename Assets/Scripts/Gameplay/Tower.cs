@@ -16,7 +16,7 @@ public class Tower : MonoBehaviour
     [SerializeField] private Button lvlUp;
 
     private bool shouldGenerate = true;
-    private int towerLevel = 1;
+    private int towerLevel = 0;
     private WaitForSeconds garrisonReplenishDeltaTime = new WaitForSeconds(1f);
     private WaitForSeconds replenishCooldown = new WaitForSeconds(2f);
 
@@ -32,7 +32,7 @@ public class Tower : MonoBehaviour
         set
         {
             garrisonCount = value;
-            if (garrisonCount <= LvlUpQuantity && Level < 5)
+            if (garrisonCount <= LvlUpQuantity && Level < 4)
             {
                 lvlUp.interactable = false;
             }
@@ -54,15 +54,15 @@ public class Tower : MonoBehaviour
         private set
         {
             towerLevel = value;
-            towerLevelText.text = Level.ToString();
+            towerLevelText.text = (Level + 1).ToString();
             garrisonCounterText.text = $"{(int)garrisonCount}/{QuantityCap}";
         }
     }
 
-    public int QuantityCap => towerSheetData.TowerLevelData[Level-1].quantityCap;
-    public int LvlUpQuantity => towerSheetData.TowerLevelData[Level-1].lvlUpQuantity;
-    public float GenerationRate => towerSheetData.TowerLevelData[Level-1].generationRate;
-    public float LvlUpTime => towerSheetData.TowerLevelData[Level-1].lvlUpTime;
+    public int QuantityCap => towerSheetData.TowerLevelData[Level].quantityCap;
+    public int LvlUpQuantity => towerSheetData.TowerLevelData[Level].lvlUpQuantity;
+    public float GenerationRate => towerSheetData.TowerLevelData[Level].generationRate;
+    public float LvlUpTime => towerSheetData.TowerLevelData[Level].lvlUpTime;
 
     public Navigator Navigator => navigator;
     public Allegiance Allegiance => towerData.Allegiance;
@@ -89,7 +89,7 @@ public class Tower : MonoBehaviour
         GarrisonCount -= LvlUpQuantity;
         Level++;
 
-        if(Level == 5)
+        if(Level == 4)
         {
             lvlUp.enabled = false;
         }
@@ -97,9 +97,9 @@ public class Tower : MonoBehaviour
 
     private void ChangeAllegiance(Allegiance newAllegiance)
     {
-        if (Level > 1)
+        if (Level > 0)
         {
-            Level = 1;
+            Level = 0;
         }
 
         switch(newAllegiance)
@@ -162,7 +162,7 @@ public class Tower : MonoBehaviour
             models.Add(model);
         }
 
-        unit.Init(path, models, tower, Level-1);
+        unit.Init(path, models, tower, Level);
 
         GarrisonCount = newGarrisonCount;
     }
@@ -194,7 +194,8 @@ public class Tower : MonoBehaviour
                     StopCoroutine(replenishCooldownCoroutine);
                 }
 
-                GarrisonCount -= model.unit.UnitSheetData.UnitLevelData[model.unit.Level].attackInField;
+                GarrisonCount -= model.unit.UnitSheetData.UnitLevelData[model.unit.Level].attackInField / towerSheetData.TowerLevelData[Level].hp;
+                model.TakeDamage(towerSheetData.TowerLevelData[Level].attackInTower * GarrisonCount);
 
                 if (GarrisonCount <= 0)
                 {
@@ -203,7 +204,6 @@ public class Tower : MonoBehaviour
 
                 replenishCooldownCoroutine = StartCoroutine(ReplenishCooldown());
             }
-            Destroy(model.gameObject);
         }
     }
 }

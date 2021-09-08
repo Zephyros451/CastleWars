@@ -17,8 +17,6 @@ public class UnitSheetData : ScriptableObject, ICollectionSet<UnitLevelData>
 [System.Serializable]
 public class UnitLevelData
 {
-    [SerializeField, GoogleSheetParam("attack_tower")]
-    public float attackInTower;
     [SerializeField, GoogleSheetParam("attack_field")]
     public float attackInField;
     [SerializeField, GoogleSheetParam("hp")]

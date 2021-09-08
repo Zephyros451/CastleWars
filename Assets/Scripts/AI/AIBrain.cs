@@ -90,7 +90,7 @@ public class AIBrain : MonoBehaviour
 
     private bool ShouldLevelUp(Tower tower)
     {
-        if (tower.Level == 5)
+        if (tower.Level == 4)
             return false;
 
         switch (gameDifficulty)

@@ -25,4 +25,8 @@ public class TowerLevelData
     public float generationRate;
     [SerializeField, GoogleSheetParam("lvl_up_time")]
     public float lvlUpTime;
+    [SerializeField, GoogleSheetParam("attack_tower")]
+    public float attackInTower;
+    [SerializeField, GoogleSheetParam("hp")]
+    public float hp;
 }

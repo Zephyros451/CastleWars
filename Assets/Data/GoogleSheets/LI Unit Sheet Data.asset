@@ -13,23 +13,18 @@ MonoBehaviour:
   m_Name: LI Unit Sheet Data
   m_EditorClassIdentifier: 
   unitLevelData:
-  - attackInTower: 2
-    attackInField: 1
-    hp: 2
-    speed: 5
-  - attackInTower: 2
-    attackInField: 1
+  - attackInField: 1
     hp: 2
     speed: 2
-  - attackInTower: 2
-    attackInField: 1
+  - attackInField: 1
     hp: 2
     speed: 2
-  - attackInTower: 2
-    attackInField: 1
+  - attackInField: 1
     hp: 2
     speed: 2
-  - attackInTower: 2
-    attackInField: 1
+  - attackInField: 1
+    hp: 2
+    speed: 2
+  - attackInField: 1
     hp: 2
     speed: 2

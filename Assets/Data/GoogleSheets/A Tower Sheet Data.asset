@@ -17,19 +17,29 @@ MonoBehaviour:
     lvlUpQuantity: 5
     generationRate: 0
     lvlUpTime: 4
+    attackInTower: 1.5
+    hp: 1.5
   - quantityCap: 20
     lvlUpQuantity: 10
     generationRate: 0
     lvlUpTime: 4
+    attackInTower: 1.5
+    hp: 1.5
   - quantityCap: 30
     lvlUpQuantity: 15
     generationRate: 0
     lvlUpTime: 4
+    attackInTower: 1.5
+    hp: 1.5
   - quantityCap: 40
     lvlUpQuantity: 20
     generationRate: 0
     lvlUpTime: 4
+    attackInTower: 1.5
+    hp: 1.5
   - quantityCap: 50
     lvlUpQuantity: 1000
     generationRate: 0
     lvlUpTime: 4
+    attackInTower: 1.5
+    hp: 1.5

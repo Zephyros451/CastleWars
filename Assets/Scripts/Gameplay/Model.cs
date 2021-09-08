@@ -10,6 +10,22 @@ public class Model : MonoBehaviour
     public TowerType type;
     public Unit unit;
 
+    private float hp;
+
+    private void Start()
+    {
+        hp = unit.UnitSheetData.UnitLevelData[unit.Level].hp;
+    }
+
+    public void TakeDamage(float damage)
+    {
+        hp -= damage;
+        if (hp < 0f) 
+        {
+            Destroy(this.gameObject);
+        }
+    }
+
     public void ActivateCollider()
     {
         collider.enabled = true;

@@ -13,23 +13,18 @@ MonoBehaviour:
   m_Name: HI Unit Sheet Data
   m_EditorClassIdentifier: 
   unitLevelData:
-  - attackInTower: 2.5
-    attackInField: 2.2
+  - attackInField: 2.2
     hp: 2.3
     speed: 2
-  - attackInTower: 2.5
-    attackInField: 2.2
+  - attackInField: 2.2
     hp: 2.3
     speed: 2
-  - attackInTower: 2.5
-    attackInField: 2.2
+  - attackInField: 2.2
     hp: 2.3
     speed: 2
-  - attackInTower: 2.5
-    attackInField: 2.2
+  - attackInField: 2.2
     hp: 2.3
     speed: 2
-  - attackInTower: 2.5
-    attackInField: 2.2
+  - attackInField: 2.2
     hp: 2.3
     speed: 2
