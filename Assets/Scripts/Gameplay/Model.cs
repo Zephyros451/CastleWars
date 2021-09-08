@@ -8,6 +8,7 @@ public class Model : MonoBehaviour
     public int SegmentsTravelled;
     public Allegiance Allegiance;
     public TowerType type;
+    public Unit unit;
 
     public void ActivateCollider()
     {

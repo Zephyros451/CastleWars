@@ -158,10 +158,11 @@ public class Tower : MonoBehaviour
         for (int i = 0; i < troopSize; i++)
         {
             var model = Instantiate(unit.UnitData.modelPrefab, transform.position, Quaternion.identity, unit.transform);
+            model.unit = unit;
             models.Add(model);
         }
 
-        unit.Init(path, models, tower);
+        unit.Init(path, models, tower, Level-1);
 
         GarrisonCount = newGarrisonCount;
     }
@@ -193,14 +194,7 @@ public class Tower : MonoBehaviour
                     StopCoroutine(replenishCooldownCoroutine);
                 }
 
-                if (model.type == TowerType.LI || model.type == TowerType.A)
-                {
-                    GarrisonCount -= 0.5f;
-                }
-                else if (model.type == TowerType.HI)
-                {
-                    GarrisonCount -= 1.1f;
-                }
+                GarrisonCount -= model.unit.UnitSheetData.UnitLevelData[model.unit.Level].attackInField;
 
                 if (GarrisonCount <= 0)
                 {
