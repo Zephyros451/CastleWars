@@ -136,9 +136,9 @@ public class Tower : MonoBehaviour
                     GarrisonCount += GenerationRate;
                 }
             }
-            else if(GarrisonCount > QuantityCap + 1)
+            else if(GarrisonCount > QuantityCap)
             {
-                GarrisonCount -= GenerationRate;
+                GarrisonCount--;
             }
         }
     }
@@ -158,7 +158,7 @@ public class Tower : MonoBehaviour
         for (int i = 0; i < troopSize; i++)
         {
             var model = Instantiate(unit.UnitData.modelPrefab, transform.position, Quaternion.identity, unit.transform);
-            model.unit = unit;
+            model.Init(unit, towerData);
             models.Add(model);
         }
 
@@ -186,6 +186,7 @@ public class Tower : MonoBehaviour
             if (model.Allegiance == towerData.Allegiance)
             {
                 GarrisonCount++;
+                Destroy(model.gameObject);
             }
             else
             {
@@ -194,7 +195,7 @@ public class Tower : MonoBehaviour
                     StopCoroutine(replenishCooldownCoroutine);
                 }
 
-                GarrisonCount -= model.unit.UnitSheetData.UnitLevelData[model.unit.Level].attackInField / towerSheetData.TowerLevelData[Level].hp;
+                GarrisonCount -= model.Attack / towerSheetData.TowerLevelData[Level].hp;
                 model.TakeDamage(towerSheetData.TowerLevelData[Level].attackInTower * GarrisonCount);
 
                 if (GarrisonCount <= 0)

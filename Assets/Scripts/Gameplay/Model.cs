@@ -1,19 +1,23 @@
 ﻿using UnityEngine;
 
+[RequireComponent(typeof(SphereCollider))]
 public class Model : MonoBehaviour
 {
-    [SerializeField] private SphereCollider collider;
+    [SerializeField, HideInInspector] private SphereCollider collider;
 
-    public bool IsActive;
-    public int SegmentsTravelled;
-    public Allegiance Allegiance;
-    public TowerType type;
-    public Unit unit;
+    [HideInInspector] public bool IsActive;
+    [HideInInspector] public int SegmentsTravelled;
 
+    private Unit unit;
     private float hp;
 
-    private void Start()
+    public Allegiance Allegiance { get; private set; }
+    public float Attack => unit.UnitSheetData.UnitLevelData[unit.Level].attackInField;
+
+    public void Init(Unit unit, TowerData towerData)
     {
+        Allegiance = towerData.Allegiance;
+        this.unit = unit;
         hp = unit.UnitSheetData.UnitLevelData[unit.Level].hp;
     }
 
@@ -29,5 +33,10 @@ public class Model : MonoBehaviour
     public void ActivateCollider()
     {
         collider.enabled = true;
+    }
+
+    private void Reset()
+    {
+        collider = GetComponent<SphereCollider>();
     }
 }

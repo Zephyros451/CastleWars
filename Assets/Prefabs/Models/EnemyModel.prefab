@@ -107,7 +107,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   collider: {fileID: 9018209138761626342}
+  allegiance: 1
   IsActive: 0
   SegmentsTravelled: 0
-  Allegiance: 1
   type: 0
