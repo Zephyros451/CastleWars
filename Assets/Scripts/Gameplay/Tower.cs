@@ -158,7 +158,7 @@ public class Tower : MonoBehaviour
                     GarrisonCount += GenerationRate;
                 }
             }
-            else if(GarrisonCount > QuantityCap)
+            else if ((GarrisonCount - QuantityCap) > 1f) 
             {
                 GarrisonCount--;
             }
