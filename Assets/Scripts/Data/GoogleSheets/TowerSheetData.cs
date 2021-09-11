@@ -1,18 +1,12 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
-using SIDGIN.Common;
+﻿using SIDGIN.Common;
 using SIDGIN.GoogleSheets;
+using System.Collections.Generic;
+using UnityEngine;
 
-public class TowerSheetData : ScriptableObject, ICollectionSet<TowerLevelData>, ICollectionGet<TowerLevelData>
+public class TowerSheetData : ScriptableObject, ICollectionSet<TowerLevelData>
 {
-    [SerializeField]
-    protected List<TowerLevelData> towerLevelData;
+    [SerializeField] protected List<TowerLevelData> towerLevelData;
     public List<TowerLevelData> TowerLevelData => towerLevelData;
-
-    public List<TowerLevelData> GetCollection()
-    {
-        return towerLevelData;
-    }
 
     void ICollectionSet<TowerLevelData>.SetCollection(List<TowerLevelData> data)
     {
@@ -31,4 +25,8 @@ public class TowerLevelData
     public float generationRate;
     [SerializeField, GoogleSheetParam("lvl_up_time")]
     public float lvlUpTime;
+    [SerializeField, GoogleSheetParam("attack_tower")]
+    public float attackInTower;
+    [SerializeField, GoogleSheetParam("hp")]
+    public float hp;
 }

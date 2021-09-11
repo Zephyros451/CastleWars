@@ -5,20 +5,25 @@ using UnityEngine;
 public class Unit : MonoBehaviour
 {
     [SerializeField] private UnitData unitData;
+    [SerializeField] private UnitSheetData unitSheetData;
 
+    private int level;
     private BezierCurve curve;
     private List<Vector3> path;
     private List<Model> models;
-    private float speed = 1f;
-    private WaitForSeconds modelTimeSpacing = new WaitForSeconds(0.45f);
+    private WaitForSeconds modelTimeSpacing;
 
     public UnitData UnitData => unitData;
+    public UnitSheetData UnitSheetData => unitSheetData;
+    public int Level => level;
 
-    public void Init(BezierCurve curve, List<Model> models, Tower destination)
+    public void Init(BezierCurve curve, List<Model> models, Tower destination, int level)
     {
         this.curve = curve;
         path = curve.GetSegmentPoints();
         this.models = models;
+        this.level = level;
+        modelTimeSpacing = new WaitForSeconds(0.5f/unitSheetData.UnitLevelData[level].speed);
 
         StartCoroutine(ActivateModels());
     }
@@ -55,7 +60,7 @@ public class Unit : MonoBehaviour
             {
                 if ((models[i].SegmentsTravelled < path.Count) && models[i].IsActive)
                 {
-                    models[i].transform.position = Vector3.MoveTowards(models[i].transform.position, path[models[i].SegmentsTravelled], speed * Time.deltaTime);
+                    models[i].transform.position = Vector3.MoveTowards(models[i].transform.position, path[models[i].SegmentsTravelled], unitSheetData.UnitLevelData[level].speed * Time.deltaTime);
 
                     var difference = Vector3.Distance(models[i].transform.position, path[models[i].SegmentsTravelled]);
                     if (difference < 0.1f)

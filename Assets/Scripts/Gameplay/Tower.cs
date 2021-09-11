@@ -16,7 +16,7 @@ public class Tower : MonoBehaviour
     [SerializeField] private Button lvlUp;
 
     private bool shouldGenerate = true;
-    private int towerLevel = 1;
+    private int towerLevel = 0;
     private WaitForSeconds garrisonReplenishDeltaTime = new WaitForSeconds(1f);
     private WaitForSeconds replenishCooldown = new WaitForSeconds(2f);
 
@@ -32,7 +32,7 @@ public class Tower : MonoBehaviour
         set
         {
             garrisonCount = value;
-            if (garrisonCount <= LvlUpQuantity && Level < 5)
+            if (garrisonCount <= LvlUpQuantity && Level < 4)
             {
                 lvlUp.interactable = false;
             }
@@ -54,15 +54,15 @@ public class Tower : MonoBehaviour
         private set
         {
             towerLevel = value;
-            towerLevelText.text = Level.ToString();
+            towerLevelText.text = (Level + 1).ToString();
             garrisonCounterText.text = $"{(int)garrisonCount}/{QuantityCap}";
         }
     }
 
-    public int QuantityCap => towerSheetData.TowerLevelData[Level-1].quantityCap;
-    public int LvlUpQuantity => towerSheetData.TowerLevelData[Level-1].lvlUpQuantity;
-    public float GenerationRate => towerSheetData.TowerLevelData[Level-1].generationRate;
-    public float LvlUpTime => towerSheetData.TowerLevelData[Level-1].lvlUpTime;
+    public int QuantityCap => towerSheetData.TowerLevelData[Level].quantityCap;
+    public int LvlUpQuantity => towerSheetData.TowerLevelData[Level].lvlUpQuantity;
+    public float GenerationRate => towerSheetData.TowerLevelData[Level].generationRate;
+    public float LvlUpTime => towerSheetData.TowerLevelData[Level].lvlUpTime;
 
     public Navigator Navigator => navigator;
     public Allegiance Allegiance => towerData.Allegiance;
@@ -89,7 +89,7 @@ public class Tower : MonoBehaviour
         GarrisonCount -= LvlUpQuantity;
         Level++;
 
-        if(Level == 5)
+        if(Level == 4)
         {
             lvlUp.enabled = false;
         }
@@ -97,9 +97,9 @@ public class Tower : MonoBehaviour
 
     private void ChangeAllegiance(Allegiance newAllegiance)
     {
-        if (Level > 1)
+        if (Level > 0)
         {
-            Level = 1;
+            Level = 0;
         }
 
         switch(newAllegiance)
@@ -136,9 +136,9 @@ public class Tower : MonoBehaviour
                     GarrisonCount += GenerationRate;
                 }
             }
-            else if(GarrisonCount > QuantityCap + 1)
+            else if(GarrisonCount > QuantityCap)
             {
-                GarrisonCount -= GenerationRate;
+                GarrisonCount--;
             }
         }
     }
@@ -158,10 +158,11 @@ public class Tower : MonoBehaviour
         for (int i = 0; i < troopSize; i++)
         {
             var model = Instantiate(unit.UnitData.modelPrefab, transform.position, Quaternion.identity, unit.transform);
+            model.Init(unit, towerData);
             models.Add(model);
         }
 
-        unit.Init(path, models, tower);
+        unit.Init(path, models, tower, Level);
 
         GarrisonCount = newGarrisonCount;
     }
@@ -185,6 +186,7 @@ public class Tower : MonoBehaviour
             if (model.Allegiance == towerData.Allegiance)
             {
                 GarrisonCount++;
+                Destroy(model.gameObject);
             }
             else
             {
@@ -193,14 +195,8 @@ public class Tower : MonoBehaviour
                     StopCoroutine(replenishCooldownCoroutine);
                 }
 
-                if (model.type == TowerType.LI || model.type == TowerType.A)
-                {
-                    GarrisonCount -= 0.5f;
-                }
-                else if (model.type == TowerType.HI)
-                {
-                    GarrisonCount -= 1.1f;
-                }
+                GarrisonCount -= model.Attack / towerSheetData.TowerLevelData[Level].hp;
+                model.TakeDamage(towerSheetData.TowerLevelData[Level].attackInTower * GarrisonCount);
 
                 if (GarrisonCount <= 0)
                 {
@@ -209,7 +205,6 @@ public class Tower : MonoBehaviour
 
                 replenishCooldownCoroutine = StartCoroutine(ReplenishCooldown());
             }
-            Destroy(model.gameObject);
         }
     }
 }
