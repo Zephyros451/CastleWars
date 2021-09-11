@@ -17,18 +17,19 @@ public class PlayerInput : MonoBehaviour
         {
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, 50, 1 << 0))
             {
-                if(hit.collider.TryGetComponent(out Tower tower))
+                if(hit.collider.TryGetComponent(out TowerCollision collision))
                 {
-                    if (tower.Allegiance != Allegiance.Player)
+                    if (collision.Tower.Allegiance != Allegiance.Player)
                     {
                         firstTower = null;
                         return;
                     }
 
-                    StartPointSet?.Invoke((tower.transform.position));
+                    StartPointSet?.Invoke((collision.transform.position));
                     isDragged = true;
-                    firstTower = tower;
+                    firstTower = collision.Tower;                    
                 }
+                //Debug.Log(hit.collider.name);
             }
         }
 
@@ -36,9 +37,9 @@ public class PlayerInput : MonoBehaviour
         {
             if(isDragged && Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, 50, 1 << 0))
             {
-                if(hit.collider.TryGetComponent(out Tower tower))
+                if(hit.collider.TryGetComponent(out TowerCollision collision))
                 {
-                    EndPointSet?.Invoke(tower.transform.position);
+                    EndPointSet?.Invoke(collision.transform.position);
                     return;
                 }
 
@@ -50,9 +51,9 @@ public class PlayerInput : MonoBehaviour
         {
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, 50, 1 << 0))
             {
-                if (hit.collider.TryGetComponent(out Tower tower) && firstTower != null)
+                if (hit.collider.TryGetComponent(out TowerCollision collision) && firstTower != null)
                 {
-                    secondTower = tower;
+                    secondTower = collision.Tower;
 
                     if (firstTower == secondTower)
                     {
@@ -67,6 +68,8 @@ public class PlayerInput : MonoBehaviour
                     
                     firstTower.SendTroopTo(secondTower);
                 }
+
+                //Debug.Log(hit.collider.name);
             }
 
             InputStopped?.Invoke();

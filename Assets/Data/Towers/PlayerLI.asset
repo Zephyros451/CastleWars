@@ -13,6 +13,5 @@ MonoBehaviour:
   m_Name: PlayerLI
   m_EditorClassIdentifier: 
   unitData: {fileID: 11400000, guid: b92e34bb60d6d0d4d8286fa5be5c59a1, type: 2}
-  Allegiance: 0
   levelPrefabs: []
-  material: {fileID: 2100000, guid: 0495daa58fdfdf14aabdf631742ea8f1, type: 2}
+  material: {fileID: 2100000, guid: 625af3f060d987949800ab4796bd9057, type: 2}

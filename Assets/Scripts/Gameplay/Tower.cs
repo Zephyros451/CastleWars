@@ -1,19 +1,28 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Tower : MonoBehaviour
 {
-    [SerializeField] private TowerSheetData towerSheetData;
-    [SerializeField] private TowerData towerData;
-    [SerializeField] private AllegianceSettings allegianceSettings;
+    [SerializeField] private Allegiance allegiance;
+    [SerializeField] private TowerType type;
 
-    [SerializeField] private TextMeshProUGUI garrisonCounterText;
-    [SerializeField] private TextMeshProUGUI towerLevelText;
-    [SerializeField] private Navigator navigator;
-    [SerializeField] private Button lvlUp;
+    [SerializeField, HideInInspector] private Allegiance initializedAllegiance;
+    [SerializeField, HideInInspector] private TowerType initializedTowerType;
+
+    [SerializeField, HideInInspector] private TowerSheetData towerSheetData;
+    [SerializeField, HideInInspector] private List<TowerData> towerDataInstances;
+    [SerializeField, HideInInspector] private TowerData towerData;
+
+    [SerializeField, HideInInspector] private TextMeshProUGUI garrisonCounterText;
+    [SerializeField, HideInInspector] private TextMeshProUGUI towerLevelText;
+    [SerializeField, HideInInspector] private Button lvlUp;
+    [SerializeField, HideInInspector] private Navigator navigator;
+    [SerializeField, HideInInspector] private TowerCollision towerCollision;
+    [SerializeField, HideInInspector] private Renderer renderer;
 
     private bool shouldGenerate = true;
     private int towerLevel = 0;
@@ -65,10 +74,20 @@ public class Tower : MonoBehaviour
     public float LvlUpTime => towerSheetData.TowerLevelData[Level].lvlUpTime;
 
     public Navigator Navigator => navigator;
-    public Allegiance Allegiance => towerData.Allegiance;
+    public Allegiance Allegiance => allegiance;
+    public TowerType TowerType => type;
+    public bool IsNotInitialized => towerSheetData == null || towerData == null;
+
+    public TowerType InitializedTowerType { get { return initializedTowerType; } set { initializedTowerType = value; } }
+    public Allegiance InitializedAllegiance { get { return initializedAllegiance; } set { initializedAllegiance = value; } }
 
     private void Start()
     {
+        if(Allegiance == Allegiance.Player)
+        {
+            lvlUp.enabled = true;
+        }
+
         StartCoroutine(GarrisonUpdate());
     }
 
@@ -76,6 +95,7 @@ public class Tower : MonoBehaviour
     {
         GameState.instance.YouLose += Stop;
         GameState.instance.YouWin += Stop;
+        towerCollision.TowerAttacked += OnTowerAttacked;
     }
 
     private void OnDisable()
@@ -104,24 +124,26 @@ public class Tower : MonoBehaviour
 
         switch(newAllegiance)
         {
-            case Allegiance.Enemy:
-                towerData = allegianceSettings.Enemy;
-                lvlUp.enabled = false;
+            case Allegiance.Player:
+                towerData = towerDataInstances[0];
+                lvlUp.enabled = true;
                 break;
             case Allegiance.Neutral:
-                towerData = allegianceSettings.Neutral;
+                towerData = towerDataInstances[1];
                 lvlUp.enabled = false;
                 break;
-            case Allegiance.Player:
-                towerData = allegianceSettings.Player;
-                lvlUp.enabled = true;
+            case Allegiance.Enemy:
+                towerData = towerDataInstances[2];
+                lvlUp.enabled = false;
                 break;
             default:
                 Debug.Log("Wrong Allegiance Type");
                 break;
         }
 
-        GetComponent<Renderer>().sharedMaterial = this.towerData.material;
+
+        allegiance = newAllegiance;
+        renderer.sharedMaterial = towerData.material;
     }
 
     private IEnumerator GarrisonUpdate()
@@ -131,7 +153,7 @@ public class Tower : MonoBehaviour
             yield return garrisonReplenishDeltaTime;
             if (GarrisonCount < QuantityCap)
             {
-                if (towerData.type != TowerType.A && shouldGenerate)
+                if (type != TowerType.Archer && shouldGenerate)
                 {
                     GarrisonCount += GenerationRate;
                 }
@@ -158,7 +180,7 @@ public class Tower : MonoBehaviour
         for (int i = 0; i < troopSize; i++)
         {
             var model = Instantiate(unit.UnitData.modelPrefab, transform.position, Quaternion.identity, unit.transform);
-            model.Init(unit, towerData);
+            model.Init(unit, Allegiance);
             models.Add(model);
         }
 
@@ -174,37 +196,92 @@ public class Tower : MonoBehaviour
         shouldGenerate = true;
     }
 
+    private void OnTowerAttacked(Model model)
+    {
+        if (model.Allegiance == Allegiance)
+        {
+            GarrisonCount++;
+            Destroy(model.gameObject);
+        }
+        else
+        {
+            if (replenishCooldownCoroutine != null)
+            {
+                StopCoroutine(replenishCooldownCoroutine);
+            }
+
+            GarrisonCount -= model.Attack / towerSheetData.TowerLevelData[Level].hp;
+            model.TakeDamage(towerSheetData.TowerLevelData[Level].attackInTower * GarrisonCount);
+
+            if (GarrisonCount <= 0)
+            {
+                ChangeAllegiance(model.Allegiance);
+            }
+
+            replenishCooldownCoroutine = StartCoroutine(ReplenishCooldown());
+        }
+    }
+
     private void Stop()
     {
         StopAllCoroutines();
+    }    
+
+    
+    public void Initialize(TowerType newType, Allegiance newAllegiance)
+    {
+        string[] guids = AssetDatabase.FindAssets("t:TowerDataSettings");
+        string path = AssetDatabase.GUIDToAssetPath(guids[0]);
+        towerDataInstances = new List<TowerData>(AssetDatabase.LoadAssetAtPath<TowerDataSettings>(path).GetData(type));
+
+        switch (type)
+        {
+            case TowerType.Swordsman:
+                guids = AssetDatabase.FindAssets("t:LITowerSheetData");
+                break;
+            case TowerType.Spearman:
+                guids = AssetDatabase.FindAssets("t:HITowerSheetData");
+                break;
+            case TowerType.Archer:
+                guids = AssetDatabase.FindAssets("t:ATowerSheetData");
+                break;
+            default:
+                guids = new string[1];
+                Debug.LogError("wrong tower type");
+                break;
+        }
+
+        path = AssetDatabase.GUIDToAssetPath(guids[0]);
+        towerSheetData = AssetDatabase.LoadAssetAtPath<TowerSheetData>(path);
+
+        switch (allegiance)
+        {
+            case Allegiance.Player:
+                towerData = towerDataInstances[0];
+                break;
+            case Allegiance.Neutral:
+                towerData = towerDataInstances[1];
+                break;
+            case Allegiance.Enemy:
+                towerData = towerDataInstances[2];
+                break;
+        }
+
+        renderer.sharedMaterial = towerData.material;
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void Reset()
     {
-        if(other.TryGetComponent(out Model model))
-        {
-            if (model.Allegiance == towerData.Allegiance)
-            {
-                GarrisonCount++;
-                Destroy(model.gameObject);
-            }
-            else
-            {
-                if (replenishCooldownCoroutine != null)
-                {
-                    StopCoroutine(replenishCooldownCoroutine);
-                }
-
-                GarrisonCount -= model.Attack / towerSheetData.TowerLevelData[Level].hp;
-                model.TakeDamage(towerSheetData.TowerLevelData[Level].attackInTower * GarrisonCount);
-
-                if (GarrisonCount <= 0)
-                {
-                    ChangeAllegiance(model.Allegiance);
-                }
-
-                replenishCooldownCoroutine = StartCoroutine(ReplenishCooldown());
-            }
-        }
+        garrisonCounterText = GetComponentInChildren<GarrisonCountFlag>().GetComponent<TextMeshProUGUI>();
+        towerLevelText = GetComponentInChildren<TowerLevelText>().GetComponent<TextMeshProUGUI>();
+        lvlUp = GetComponentInChildren<LvlUpButtonFlag>().GetComponent<Button>();
+        navigator = GetComponent<Navigator>();
+        towerCollision = GetComponentInChildren<TowerCollision>();
+        renderer = GetComponentInChildren<Renderer>();
     }
 }
+
+
+public enum Allegiance { Player, Neutral, Enemy }
+
+public enum TowerType { Swordsman, Spearman, Archer }

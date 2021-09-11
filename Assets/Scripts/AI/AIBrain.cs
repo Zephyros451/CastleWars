@@ -15,6 +15,7 @@ public class AIBrain : MonoBehaviour
 
     private void Start()
     {
+        UpdateTowers();
         StartCoroutine(AIProcessing());
         gameDifficulty = difficultySettings.difficulty;
     }

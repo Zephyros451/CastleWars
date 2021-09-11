@@ -35,8 +35,13 @@ public class RangeArea : MonoBehaviour
     {
         if(other.TryGetComponent(out Model model))
         {
-            if(model.Allegiance!=tower.Allegiance)
+            if(model.Allegiance != tower.Allegiance)
                 models.Add(model);
         }
+    }
+
+    private void Reset()
+    {
+        tower = transform.parent.GetComponent<Tower>();
     }
 }

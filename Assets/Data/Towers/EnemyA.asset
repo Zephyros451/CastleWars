@@ -13,7 +13,5 @@ MonoBehaviour:
   m_Name: EnemyA
   m_EditorClassIdentifier: 
   unitData: {fileID: 11400000, guid: da380c78c9fea1e4d8d41a2526d92b31, type: 2}
-  Allegiance: 1
-  type: 2
   levelPrefabs: []
-  material: {fileID: 2100000, guid: f41b123ea6ca83e4ebd4131632d65114, type: 2}
+  material: {fileID: 2100000, guid: 27e6ed9663317ba4aaf9aa0afa73a54a, type: 2}

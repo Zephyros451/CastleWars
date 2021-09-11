@@ -14,9 +14,9 @@ public class Model : MonoBehaviour
     public Allegiance Allegiance { get; private set; }
     public float Attack => unit.UnitSheetData.UnitLevelData[unit.Level].attackInField;
 
-    public void Init(Unit unit, TowerData towerData)
+    public void Init(Unit unit, Allegiance allegiance)
     {
-        Allegiance = towerData.Allegiance;
+        Allegiance = allegiance;
         this.unit = unit;
         hp = unit.UnitSheetData.UnitLevelData[unit.Level].hp;
     }

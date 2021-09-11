@@ -13,7 +13,5 @@ MonoBehaviour:
   m_Name: NeutralHI
   m_EditorClassIdentifier: 
   unitData: {fileID: 0}
-  Allegiance: 2
-  type: 1
   levelPrefabs: []
-  material: {fileID: 2100000, guid: fb2cd7e7c50599641aaf24486d2db8c0, type: 2}
+  material: {fileID: 2100000, guid: aa26c5ab099dd8f46bd4a85d66b2c343, type: 2}

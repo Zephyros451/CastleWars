@@ -67,7 +67,7 @@ public class Unit : MonoBehaviour
                     {
                         models[i].SegmentsTravelled++;
 
-                        if (models[i].SegmentsTravelled > path.Count / 4)
+                        if (models[i].SegmentsTravelled > path.Count / 2)
                         {
                             models[i].ActivateCollider();
                         }
