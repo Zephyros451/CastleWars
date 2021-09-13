@@ -5,6 +5,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(Navigator))]
 public class Tower : MonoBehaviour
 {
     [SerializeField] private Allegiance allegiance;
@@ -22,7 +23,7 @@ public class Tower : MonoBehaviour
     [SerializeField, HideInInspector] private Button lvlUp;
     [SerializeField, HideInInspector] private Navigator navigator;
     [SerializeField, HideInInspector] private TowerCollision towerCollision;
-    [SerializeField, HideInInspector] private Renderer renderer;
+    [SerializeField, HideInInspector] private Renderer[] renderers;
 
     private bool shouldGenerate = true;
     private int towerLevel = 0;
@@ -143,7 +144,10 @@ public class Tower : MonoBehaviour
 
 
         allegiance = newAllegiance;
-        renderer.sharedMaterial = towerData.material;
+        foreach (var renderer in renderers)
+        {
+            renderer.sharedMaterial = towerData.material;
+        }
     }
 
     private IEnumerator GarrisonUpdate()
@@ -225,9 +229,9 @@ public class Tower : MonoBehaviour
     private void Stop()
     {
         StopAllCoroutines();
-    }    
+    }
 
-    
+#if UNITY_EDITOR
     public void Initialize(TowerType newType, Allegiance newAllegiance)
     {
         string[] guids = AssetDatabase.FindAssets("t:TowerDataSettings");
@@ -267,7 +271,10 @@ public class Tower : MonoBehaviour
                 break;
         }
 
-        renderer.sharedMaterial = towerData.material;
+        foreach(var renderer in renderers)
+        {
+            renderer.sharedMaterial = towerData.material;
+        }
     }
 
     private void Reset()
@@ -277,8 +284,9 @@ public class Tower : MonoBehaviour
         lvlUp = GetComponentInChildren<LvlUpButtonFlag>().GetComponent<Button>();
         navigator = GetComponent<Navigator>();
         towerCollision = GetComponentInChildren<TowerCollision>();
-        renderer = GetComponentInChildren<Renderer>();
+        renderers = GetComponentsInChildren<Renderer>();
     }
+#endif
 }
 
 

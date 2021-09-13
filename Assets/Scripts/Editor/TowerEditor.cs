@@ -8,7 +8,10 @@ public class TowerEditor : Editor
 
     public void OnEnable()
     {
-        tower = (Tower)target;
+        if (target as Tower)
+        {
+            tower = (Tower)target;
+        }
     }
 
     public override void OnInspectorGUI()
