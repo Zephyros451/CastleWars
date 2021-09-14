@@ -8,8 +8,8 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Navigator))]
 public class Tower : MonoBehaviour
 {
-    [SerializeField] private Allegiance allegiance;
-    [SerializeField] private TowerType type;
+    [SerializeField, HideInInspector] private Allegiance allegiance;
+    [SerializeField, HideInInspector] private TowerType type;
 
     [SerializeField, HideInInspector] private Allegiance initializedAllegiance;
     [SerializeField, HideInInspector] private TowerType initializedTowerType;
@@ -234,6 +234,11 @@ public class Tower : MonoBehaviour
 #if UNITY_EDITOR
     public void Initialize(TowerType newType, Allegiance newAllegiance)
     {
+        Reset();
+
+        type = newType;
+        allegiance = newAllegiance;
+
         string[] guids = AssetDatabase.FindAssets("t:TowerDataSettings");
         string path = AssetDatabase.GUIDToAssetPath(guids[0]);
         towerDataInstances = new List<TowerData>(AssetDatabase.LoadAssetAtPath<TowerDataSettings>(path).GetData(type));
