@@ -292,6 +292,11 @@ public class Tower : MonoBehaviour
         renderers = GetComponentsInChildren<Renderer>();
     }
 #endif
+
+    private void Destroy()
+    {
+        Navigator.Destroy();
+    }
 }
 
 

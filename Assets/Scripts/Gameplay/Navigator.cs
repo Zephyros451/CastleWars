@@ -46,6 +46,15 @@ public class Navigator : MonoBehaviour
         paths.Remove(path);
     }
 
+    public void Destroy()
+    {
+        foreach(var path in paths)
+        {
+            path.Destroy();
+            DestroyImmediate(path);
+        }
+    }
+
     public bool HasNeighbourWithAllegiance(Allegiance allegiance)
     {
         foreach(var tower in towers)

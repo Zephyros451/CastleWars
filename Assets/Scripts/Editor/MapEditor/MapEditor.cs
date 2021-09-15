@@ -68,6 +68,7 @@ public class MapEditor : EditorWindow
         instance.name = $"{userData.Tower1.name} <-> {userData.Tower2.name}";
 
         InitializePathsList();
+        InitializePathsToolbar();
         EditorUtility.SetDirty(userData.Tower1.Navigator);
         EditorUtility.SetDirty(userData.Tower2.Navigator);
         EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
