@@ -2488,6 +2488,16 @@ PrefabInstance:
       objectReference: {fileID: 489415863}
     - target: {fileID: 3617874578662907270, guid: 64d368a80fade07478e134ecff80f885,
         type: 3}
+      propertyPath: curves.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3617874578662907270, guid: 64d368a80fade07478e134ecff80f885,
+        type: 3}
+      propertyPath: towers.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3617874578662907270, guid: 64d368a80fade07478e134ecff80f885,
+        type: 3}
       propertyPath: curves.Array.data[0]
       value: 
       objectReference: {fileID: 598121306}

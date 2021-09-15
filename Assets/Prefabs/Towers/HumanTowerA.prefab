@@ -194,12 +194,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 615da238c05b6a946afac4a1bb951d75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  towers:
-  - {fileID: 0}
-  - {fileID: 0}
-  curves:
-  - {fileID: 0}
-  - {fileID: 0}
+  towers: []
+  paths: []
 --- !u!114 &8310280199241107491
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -224,7 +220,7 @@ MonoBehaviour:
   lvlUp: {fileID: 2129949564538839375}
   navigator: {fileID: 8933114704521346019}
   towerCollision: {fileID: 4559269191753461062}
-  renderer: {fileID: 9108426486601628034}
+  renderers: []
 --- !u!1 &4161037229745151026
 GameObject:
   m_ObjectHideFlags: 0
@@ -399,7 +395,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e9064e788bc1904baa909f88de2e4d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tower: {fileID: 0}
+  tower: {fileID: 8310280199241107491}
 --- !u!1 &5990758214453283463
 GameObject:
   m_ObjectHideFlags: 0
@@ -444,7 +440,7 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 2
+  m_Radius: 5
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &8984232149960545424
 MonoBehaviour:
@@ -458,7 +454,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 607cbc1172c5fbc439dc5fdcc6a972b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tower: {fileID: 0}
+  tower: {fileID: 8310280199241107491}
 --- !u!54 &6698755135722353641
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -836,12 +832,6 @@ PrefabInstance:
 --- !u!4 &7938875811706815213 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8747614101541148998, guid: dac3a7d556fc40a4298c6f36900f0d29,
-    type: 3}
-  m_PrefabInstance: {fileID: 1677953496327330731}
-  m_PrefabAsset: {fileID: 0}
---- !u!23 &9108426486601628034 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 7579250795452899881, guid: dac3a7d556fc40a4298c6f36900f0d29,
     type: 3}
   m_PrefabInstance: {fileID: 1677953496327330731}
   m_PrefabAsset: {fileID: 0}

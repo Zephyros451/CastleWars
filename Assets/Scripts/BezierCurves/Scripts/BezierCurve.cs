@@ -15,7 +15,7 @@ using System.Collections.Generic;
 [ExecuteInEditMode]
 [Serializable]
 public class BezierCurve : MonoBehaviour {
-	
+
 	#region PublicVariables
 	
 	/// <summary>

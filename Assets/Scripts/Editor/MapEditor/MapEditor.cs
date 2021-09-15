@@ -1,9 +1,10 @@
+using System;
+using System.Collections.Generic;
 using UnityEditor;
+using UnityEditor.SceneManagement;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
-using UnityEditor.UIElements;
-using System.Collections.Generic;
-using System;
 
 public class MapEditor : EditorWindow
 {
@@ -11,11 +12,15 @@ public class MapEditor : EditorWindow
     private VisualElement root;
     private Editor editor;
     private Tower[] towers;
+    private ListView towerList;
+    private ListView pathsList;
+    private ToolbarButton deleteTowerButton;
 
     private TowersParentFlag towersParent;
     private PathsParentFlag pathsParent;
 
     private Tower currentTower;
+    private Path currentPath;
 
     [MenuItem("Tools/MapEditor")]
     public static void OpenMapEditorWindow()
@@ -36,62 +41,124 @@ public class MapEditor : EditorWindow
         InitializeTowerToolbar();
     }
 
+    private void InitializePathsToolbar(List<object> obj = null)
+    {
+        pathsParent = FindObjectOfType<PathsParentFlag>();
+
+        var pathPrefab = AssetDatabase.LoadAssetAtPath<Path>("Assets/Prefabs/Path.prefab");
+
+        var deletePathButton = root.Q<ToolbarButton>("delete-path");
+        deletePathButton.clicked += DeletePath;
+        var addPathMenu = root.Q<ToolbarMenu>("add-path");
+
+        Func<DropdownMenuAction, DropdownMenuAction.Status> func = (a) => { return DropdownMenuAction.Status.Normal; };
+
+        addPathMenu.menu.MenuItems().Clear();
+        foreach (var tower in currentTower.Navigator.NotConnectedTowers)
+        {
+            addPathMenu.menu.AppendAction($"{tower.name}", CreatePath, func, new PathUserData(pathPrefab, currentTower, tower));
+        }
+    }
+
+    private void CreatePath(DropdownMenuAction obj)
+    {
+        var userData = obj.userData as PathUserData;
+        var instance = PrefabUtility.InstantiatePrefab(userData.PathPrefab, pathsParent.transform) as Path;
+        instance.Initialize(userData.Tower1, userData.Tower2);
+        instance.name = $"{userData.Tower1.name} <-> {userData.Tower2.name}";
+
+        InitializePathsList();
+        EditorUtility.SetDirty(userData.Tower1.Navigator);
+        EditorUtility.SetDirty(userData.Tower2.Navigator);
+        EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+    }
+
+    private void DeletePath()
+    {
+        if(currentPath != null)
+        {
+            currentPath.Destroy();
+            DestroyImmediate(currentPath.gameObject);
+            InitializePathsList();
+        }
+    }
+
+    private void InitializeTowerList()
+    {
+        towers = FindObjectsOfType<Tower>();
+        Array.Reverse(towers);
+
+        if (towerList != null)
+        {
+            towerList.onSelectionChanged -= SelectTower;
+            towerList.onSelectionChanged -= InitializePathsList;
+            towerList.onSelectionChanged -= InitializePathsToolbar;
+        }
+
+        towerList = root.Q<ListView>("tower-list");
+        Func<VisualElement> makeItem = () => new Label();
+        Action<VisualElement, int> bindItem = (e, i) => (e as Label).text = towers[i].name;
+        int itemHeight = 15;
+
+        towerList.itemsSource = towers;
+        towerList.itemHeight = itemHeight;
+        towerList.makeItem = makeItem;
+        towerList.bindItem = bindItem;
+        towerList.selectionType = SelectionType.Single;
+
+        towerList.onSelectionChanged += SelectTower;
+        towerList.onSelectionChanged += InitializePathsList;
+        towerList.onSelectionChanged += InitializePathsToolbar;
+    }
+
     private void InitializeTowerToolbar()
     {
         towersParent = FindObjectOfType<TowersParentFlag>();
-        pathsParent = FindObjectOfType<PathsParentFlag>();
 
-        var swordsmanTower = AssetDatabase.LoadAssetAtPath<Tower>("Assets/Prefabs/Towers/HumanTowerLI.prefab");
-        var spearmanTower = AssetDatabase.LoadAssetAtPath<Tower>("Assets/Prefabs/Towers/HumanTowerHI.prefab");
-        var archerTower = AssetDatabase.LoadAssetAtPath<Tower>("Assets/Prefabs/Towers/HumanTowerA.prefab");
+        var swordsmanTowerPrefab = AssetDatabase.LoadAssetAtPath<Tower>("Assets/Prefabs/Towers/HumanTowerLI.prefab");
+        var spearmanTowerPrefab = AssetDatabase.LoadAssetAtPath<Tower>("Assets/Prefabs/Towers/HumanTowerHI.prefab");
+        var archerTowerPrefab = AssetDatabase.LoadAssetAtPath<Tower>("Assets/Prefabs/Towers/HumanTowerA.prefab");
 
-        var deleteTowerButton = root.Q<ToolbarButton>("delete-tower");
+        deleteTowerButton = root.Q<ToolbarButton>("delete-tower");
         deleteTowerButton.clicked += DeleteTower;
         var addTowerMenu = root.Q<ToolbarMenu>("add-tower");
 
-        addTowerMenu.menu.AppendAction("Player/Swordsman", CreateTower,
-                                       (a) => { return DropdownMenuAction.Status.Normal; },
-                                       new TowerUserData(swordsmanTower, Allegiance.Player, TowerType.Swordsman));
+        Func<DropdownMenuAction, DropdownMenuAction.Status> func = (a) => { return DropdownMenuAction.Status.Normal; };
 
-        addTowerMenu.menu.AppendAction("Player/Spearman", CreateTower,
-                                       (a) => { return DropdownMenuAction.Status.Normal; },
-                                       new TowerUserData(spearmanTower, Allegiance.Player, TowerType.Spearman));
+        addTowerMenu.menu.AppendAction("Player/Swordsman", CreateTower, func,
+                                       new TowerUserData(swordsmanTowerPrefab, Allegiance.Player, TowerType.Swordsman));
 
-        addTowerMenu.menu.AppendAction("Player/Archer", CreateTower,
-                                       (a) => { return DropdownMenuAction.Status.Normal; },
-                                       new TowerUserData(archerTower, Allegiance.Player, TowerType.Archer));
+        addTowerMenu.menu.AppendAction("Player/Spearman", CreateTower, func,
+                                       new TowerUserData(spearmanTowerPrefab, Allegiance.Player, TowerType.Spearman));
 
-        addTowerMenu.menu.AppendAction("Neutral/Swordsman", CreateTower,
-                                       (a) => { return DropdownMenuAction.Status.Normal; },
-                                       new TowerUserData(swordsmanTower, Allegiance.Neutral, TowerType.Swordsman));
+        addTowerMenu.menu.AppendAction("Player/Archer", CreateTower, func,
+                                       new TowerUserData(archerTowerPrefab, Allegiance.Player, TowerType.Archer));
 
-        addTowerMenu.menu.AppendAction("Neutral/Spearman", CreateTower,
-                                       (a) => { return DropdownMenuAction.Status.Normal; },
-                                       new TowerUserData(spearmanTower, Allegiance.Neutral, TowerType.Spearman));
+        addTowerMenu.menu.AppendAction("Neutral/Swordsman", CreateTower, func,
+                                       new TowerUserData(swordsmanTowerPrefab, Allegiance.Neutral, TowerType.Swordsman));
 
-        addTowerMenu.menu.AppendAction("Neutral/Archer", CreateTower,
-                                       (a) => { return DropdownMenuAction.Status.Normal; },
-                                       new TowerUserData(archerTower, Allegiance.Neutral, TowerType.Archer));
+        addTowerMenu.menu.AppendAction("Neutral/Spearman", CreateTower, func,
+                                       new TowerUserData(spearmanTowerPrefab, Allegiance.Neutral, TowerType.Spearman));
 
-        addTowerMenu.menu.AppendAction("Enemy/Swordsman", CreateTower,
-                                       (a) => { return DropdownMenuAction.Status.Normal; },
-                                       new TowerUserData(swordsmanTower, Allegiance.Enemy, TowerType.Swordsman));
+        addTowerMenu.menu.AppendAction("Neutral/Archer", CreateTower, func,
+                                       new TowerUserData(archerTowerPrefab, Allegiance.Neutral, TowerType.Archer));
 
-        addTowerMenu.menu.AppendAction("Enemy/Spearman", CreateTower,
-                                       (a) => { return DropdownMenuAction.Status.Normal; },
-                                       new TowerUserData(spearmanTower, Allegiance.Enemy, TowerType.Spearman));
+        addTowerMenu.menu.AppendAction("Enemy/Swordsman", CreateTower, func,
+                                       new TowerUserData(swordsmanTowerPrefab, Allegiance.Enemy, TowerType.Swordsman));
 
-        addTowerMenu.menu.AppendAction("Enemy/Archer", CreateTower,
-                                       (a) => { return DropdownMenuAction.Status.Normal; },
-                                       new TowerUserData(archerTower, Allegiance.Enemy, TowerType.Archer));
+        addTowerMenu.menu.AppendAction("Enemy/Spearman", CreateTower, func,
+                                       new TowerUserData(spearmanTowerPrefab, Allegiance.Enemy, TowerType.Spearman));
+
+        addTowerMenu.menu.AppendAction("Enemy/Archer", CreateTower, func,
+                                       new TowerUserData(archerTowerPrefab, Allegiance.Enemy, TowerType.Archer));
     }
 
     private void CreateTower(DropdownMenuAction obj)
     {
         var userData = obj.userData as TowerUserData;
-        var instance = PrefabUtility.InstantiatePrefab(userData.Tower, towersParent.transform) as Tower;
+        var instance = PrefabUtility.InstantiatePrefab(userData.TowerPrefab, towersParent.transform) as Tower;
         instance.Initialize(userData.TowerType, userData.Allegiance);
-        instance.name = $"{instance.Allegiance} {instance.TowerType} Tower";
+        instance.name = $"Tower {towers.Length + 1}";
 
         InitializeTowerList();
     }
@@ -105,39 +172,73 @@ public class MapEditor : EditorWindow
         }
     }
 
-    private void InitializeTowerList()
+    private void SelectTower(List<object> obj)
     {
-        towers = FindObjectsOfType<Tower>();
+        currentTower = (Tower)obj[0];
+    }
+    
+    private void InitializePathsList(List<object> obj = null)
+    {
+        if (currentTower == null)
+            return;
 
-        var towerList = root.Q<ListView>("tower-list");
+        if (pathsList != null)
+        {
+            pathsList.onSelectionChanged -= SelectPath;
+        }
+
+        pathsList = root.Q<ListView>("path-list");
         Func<VisualElement> makeItem = () => new Label();
-        Action<VisualElement, int> bindItem = (e, i) => (e as Label).text = towers[i].name;
+        Action<VisualElement, int> bindItem = (e, i) => (e as Label).text = $"{currentTower.name} -> {currentTower.Navigator.Paths[i].name}";
         int itemHeight = 15;
-        towerList.itemsSource = towers;
-        towerList.itemHeight = itemHeight;
-        towerList.makeItem = makeItem;
-        towerList.bindItem = bindItem;
-        towerList.selectionType = SelectionType.Single;
 
-        towerList.onItemChosen += SelectTower;
+        pathsList.itemsSource = currentTower.Navigator.Paths;
+        pathsList.itemHeight = itemHeight;
+        pathsList.makeItem = makeItem;
+        pathsList.bindItem = bindItem;
+        pathsList.selectionType = SelectionType.Single;
+
+        pathsList.onSelectionChanged += SelectPath;
     }
 
-    private void SelectTower(object obj)
+    private void SelectPath(List<object> obj)
     {
-        currentTower = (Tower)obj;
+        currentPath = (Path)obj[0];
     }
 
     private class TowerUserData
     {
-        public Tower Tower;
-        public Allegiance Allegiance;
-        public TowerType TowerType;
+        public Tower TowerPrefab { get; }
+        public Allegiance Allegiance { get; }
+        public TowerType TowerType { get; }
 
         public TowerUserData(Tower tower, Allegiance allegiance, TowerType towerType)
         {
-            Tower = tower;
+            TowerPrefab = tower;
             Allegiance = allegiance;
             TowerType = towerType;
         }
+    }
+
+    private class PathUserData
+    {
+        public Path PathPrefab { get; }
+        public Tower Tower1 { get; }
+        public Tower Tower2 { get; }
+
+        public PathUserData(Path pathPrefab, Tower tower1, Tower tower2)
+        {
+            PathPrefab = pathPrefab;
+            Tower1 = tower1;
+            Tower2 = tower2;
+        }
+    }
+
+    private void OnDisable()
+    {
+        towerList.onSelectionChanged -= SelectTower;
+        towerList.onSelectionChanged -= InitializePathsList;
+        towerList.onSelectionChanged -= InitializePathsToolbar;
+        deleteTowerButton.clicked -= DeleteTower;
     }
 }

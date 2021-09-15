@@ -336,14 +336,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 615da238c05b6a946afac4a1bb951d75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  towers:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  curves:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  towers: []
+  paths: []
 --- !u!114 &6148163026109484392
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -368,7 +362,7 @@ MonoBehaviour:
   lvlUp: {fileID: 8170454665463001485}
   navigator: {fileID: 3617874578662907270}
   towerCollision: {fileID: 2935813035471409496}
-  renderer: {fileID: 4206043437680052262}
+  renderers: []
 --- !u!1 &6148163026281320971
 GameObject:
   m_ObjectHideFlags: 0
@@ -689,7 +683,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e9064e788bc1904baa909f88de2e4d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tower: {fileID: 0}
+  tower: {fileID: 6148163026109484392}
 --- !u!1001 &4074156100539956629
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -762,12 +756,6 @@ PrefabInstance:
 --- !u!4 &3032596987197764425 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1341999602655235804, guid: 41c0912d49b9f4549ac203006d955bb6,
-    type: 3}
-  m_PrefabInstance: {fileID: 4074156100539956629}
-  m_PrefabAsset: {fileID: 0}
---- !u!23 &4206043437680052262 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 203947707073885619, guid: 41c0912d49b9f4549ac203006d955bb6,
     type: 3}
   m_PrefabInstance: {fileID: 4074156100539956629}
   m_PrefabAsset: {fileID: 0}

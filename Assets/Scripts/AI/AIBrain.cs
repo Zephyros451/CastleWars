@@ -15,6 +15,7 @@ public class AIBrain : MonoBehaviour
 
     private void Start()
     {
+        towers = FindObjectsOfType<Tower>().ToList();
         UpdateTowers();
         StartCoroutine(AIProcessing());
         gameDifficulty = difficultySettings.difficulty;
@@ -169,7 +170,6 @@ public class AIBrain : MonoBehaviour
 
     private void Reset()
     {
-        towers = FindObjectsOfType<Tower>().ToList();
         difficultySettings = Resources.FindObjectsOfTypeAll<DifficultySettings>()[0];
     }
 
