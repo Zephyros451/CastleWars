@@ -8,6 +8,7 @@ public class Path : MonoBehaviour
     [SerializeField] private List<Tower> towers = new List<Tower>(2);
     [SerializeField] private List<BezierCurve> directions = new List<BezierCurve>(2);
 
+#if UNITY_EDITOR
     public void Initialize(Tower tower1, Tower tower2)
     {
         var curvePrefab = AssetDatabase.LoadAssetAtPath<BezierCurve>("Assets/Prefabs/Curve.prefab");
@@ -28,6 +29,8 @@ public class Path : MonoBehaviour
         tower1.Navigator.RegisterPathTo(tower2, this);
         tower2.Navigator.RegisterPathTo(tower1, this);
     }
+
+#endif
 
     public void Destroy()
     {

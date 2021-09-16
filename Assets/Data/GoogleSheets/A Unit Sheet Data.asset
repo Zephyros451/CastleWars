@@ -13,18 +13,18 @@ MonoBehaviour:
   m_Name: A Unit Sheet Data
   m_EditorClassIdentifier: 
   unitLevelData:
-  - attackInField: 0.8
-    hp: 1.5
-    speed: 2
-  - attackInField: 0.8
-    hp: 1.5
-    speed: 2
-  - attackInField: 0.8
-    hp: 1.5
-    speed: 2
-  - attackInField: 0.8
-    hp: 1.5
-    speed: 2
-  - attackInField: 0.8
-    hp: 1.5
-    speed: 2
+  - attackInField: 1
+    hp: 1.6
+    speed: 2.3
+  - attackInField: 1
+    hp: 1.6
+    speed: 2.3
+  - attackInField: 1
+    hp: 1.6
+    speed: 2.3
+  - attackInField: 1
+    hp: 1.6
+    speed: 2.3
+  - attackInField: 1
+    hp: 1.6
+    speed: 2.3
