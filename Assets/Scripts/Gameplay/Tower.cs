@@ -1,30 +1,29 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.UI;
 
 [RequireComponent(typeof(Navigator))]
 public class Tower : MonoBehaviour
 {
+    public event Action<TowerData> TowerDataChanged;
+    public event Action LevelChanged;
+    public event Action GarrisonCountChanged;
+
     [SerializeField, HideInInspector] private Allegiance allegiance;
     [SerializeField, HideInInspector] private TowerType type;
 
     [SerializeField, HideInInspector] private TowerSheetData towerSheetData;
     [SerializeField, HideInInspector] private List<TowerData> towerDataInstances;
-    [SerializeField, HideInInspector] private TowerData towerData;
-
-    [SerializeField, HideInInspector] private TextMeshProUGUI garrisonCounterText;
-    [SerializeField, HideInInspector] private TextMeshProUGUI towerLevelText;
-    [SerializeField, HideInInspector] private Button lvlUp;
+    [SerializeField, HideInInspector] private TowerData towerData;    
     [SerializeField, HideInInspector] private Navigator navigator;
     [SerializeField, HideInInspector] private TowerCollision towerCollision;
-    [SerializeField, HideInInspector] private Renderer[] renderers;
 
     private bool shouldGenerate = true;
     private int towerLevel = 0;
-    private WaitForSeconds replenishCooldown = new WaitForSeconds(2f);
+    private WaitForSeconds generationStopCooldown = new WaitForSeconds(2f);
+    private WaitForSeconds generationRate;
 
     private Coroutine replenishCooldownCoroutine;
 
@@ -38,16 +37,7 @@ public class Tower : MonoBehaviour
         set
         {
             garrisonCount = value;
-            if (garrisonCount <= LvlUpQuantity && Level < 4)
-            {
-                lvlUp.interactable = false;
-            }
-            else
-            {
-                lvlUp.interactable = true;
-            }
-
-            garrisonCounterText.text = $"{(int)garrisonCount}/{QuantityCap}";
+            GarrisonCountChanged?.Invoke();
         }
     }
 
@@ -60,8 +50,7 @@ public class Tower : MonoBehaviour
         private set
         {
             towerLevel = value;
-            towerLevelText.text = (Level + 1).ToString();
-            garrisonCounterText.text = $"{(int)garrisonCount}/{QuantityCap}";
+            LevelChanged?.Invoke();
         }
     }
 
@@ -74,14 +63,6 @@ public class Tower : MonoBehaviour
     public Allegiance Allegiance => allegiance;
     public TowerType TowerType => type;
 
-    private void Start()
-    {
-        if(Allegiance == Allegiance.Player)
-        {
-            lvlUp.enabled = true;
-        }
-    }
-
     private void OnEnable()
     {
         towerCollision.TowerAttacked += OnTowerAttacked;
@@ -92,15 +73,21 @@ public class Tower : MonoBehaviour
         towerCollision.TowerAttacked -= OnTowerAttacked;
     }
 
+    private void Start()
+    {
+        TowerDataChanged?.Invoke(towerData);
+
+        if (Mathf.Approximately(towerSheetData.TowerLevelData[Level].generationRate, 0f))
+            return;
+
+        generationRate = new WaitForSeconds(towerSheetData.TowerLevelData[Level].generationRate);
+        StartCoroutine(GarrisonUpdate());
+    }
+
     public void LevelUp()
     {
         GarrisonCount -= LvlUpQuantity;
         Level++;
-
-        if(Level == 4)
-        {
-            lvlUp.enabled = false;
-        }
     }
 
     private void ChangeAllegiance(Allegiance newAllegiance)
@@ -114,41 +101,39 @@ public class Tower : MonoBehaviour
         {
             case Allegiance.Player:
                 towerData = towerDataInstances[0];
-                lvlUp.enabled = true;
                 break;
             case Allegiance.Neutral:
                 towerData = towerDataInstances[1];
-                lvlUp.enabled = false;
                 break;
             case Allegiance.Enemy:
                 towerData = towerDataInstances[2];
-                lvlUp.enabled = false;
                 break;
             default:
                 Debug.Log("Wrong Allegiance Type");
                 break;
         }
-
-
+        
         allegiance = newAllegiance;
-        foreach (var renderer in renderers)
-        {
-            renderer.sharedMaterial = towerData.material;
-        }
+
+        TowerDataChanged?.Invoke(towerData);
     }
 
-    public void OnUpdateGarrison()
+    public IEnumerator GarrisonUpdate()
     {
-        if (GarrisonCount < QuantityCap)
+        while (true)
         {
-            if (shouldGenerate)
+            yield return generationRate;
+            if (GarrisonCount < QuantityCap)
             {
-                GarrisonCount += GenerationRate;
+                if (shouldGenerate)
+                {
+                    GarrisonCount++;
+                }
             }
-        }
-        else if ((GarrisonCount - QuantityCap) > 1f)
-        {
-            GarrisonCount--;
+            else if ((GarrisonCount - QuantityCap) > 1f)
+            {
+                GarrisonCount--;
+            }
         }
     }
 
@@ -179,7 +164,7 @@ public class Tower : MonoBehaviour
     private IEnumerator ReplenishCooldown()
     {
         shouldGenerate = false;
-        yield return replenishCooldown;
+        yield return generationStopCooldown;
         shouldGenerate = true;
     }
 
@@ -256,20 +241,13 @@ public class Tower : MonoBehaviour
                 break;
         }
 
-        foreach(var renderer in renderers)
-        {
-            renderer.sharedMaterial = towerData.material;
-        }
+        GetComponent<TowerView>().Initialize(towerData);
     }
 
     private void Reset()
-    {
-        garrisonCounterText = GetComponentInChildren<GarrisonCountFlag>().GetComponent<TextMeshProUGUI>();
-        towerLevelText = GetComponentInChildren<TowerLevelText>().GetComponent<TextMeshProUGUI>();
-        lvlUp = GetComponentInChildren<LvlUpButtonFlag>().GetComponent<Button>();
+    {        
         navigator = GetComponent<Navigator>();
         towerCollision = GetComponentInChildren<TowerCollision>();
-        renderers = GetComponentsInChildren<Renderer>();
     }
 
     private void Destroy()
@@ -278,7 +256,6 @@ public class Tower : MonoBehaviour
     }
 #endif
 }
-
 
 public enum Allegiance { Player, Neutral, Enemy }
 

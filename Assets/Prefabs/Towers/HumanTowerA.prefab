@@ -157,6 +157,7 @@ GameObject:
   - component: {fileID: 4161037228064988565}
   - component: {fileID: 8933114704521346019}
   - component: {fileID: 8310280199241107491}
+  - component: {fileID: 4332034101347129223}
   m_Layer: 0
   m_Name: HumanTowerA
   m_TagString: Untagged
@@ -210,8 +211,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   allegiance: 0
   type: 0
-  initializedAllegiance: 0
-  initializedTowerType: 0
   towerSheetData: {fileID: 0}
   towerDataInstances: []
   towerData: {fileID: 0}
@@ -221,6 +220,18 @@ MonoBehaviour:
   navigator: {fileID: 8933114704521346019}
   towerCollision: {fileID: 4559269191753461062}
   renderers: []
+--- !u!114 &4332034101347129223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4161037228064988564}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bfe8c37326a24040b1d2888ba3a8662, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4161037229745151026
 GameObject:
   m_ObjectHideFlags: 0
