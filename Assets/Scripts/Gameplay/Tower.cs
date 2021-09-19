@@ -88,8 +88,6 @@ public class Tower : MonoBehaviour
         {
             lvlUp.enabled = true;
         }
-
-        StartCoroutine(GarrisonUpdate());
     }
 
     private void OnEnable()
@@ -150,22 +148,18 @@ public class Tower : MonoBehaviour
         }
     }
 
-    private IEnumerator GarrisonUpdate()
+    public void OnUpdateGarrison()
     {
-        while (true)
+        if (GarrisonCount < QuantityCap)
         {
-            yield return garrisonReplenishDeltaTime;
-            if (GarrisonCount < QuantityCap)
+            if (shouldGenerate)
             {
-                if (type != TowerType.Archer && shouldGenerate)
-                {
-                    GarrisonCount += GenerationRate;
-                }
+                GarrisonCount += GenerationRate;
             }
-            else if ((GarrisonCount - QuantityCap) > 1f) 
-            {
-                GarrisonCount--;
-            }
+        }
+        else if ((GarrisonCount - QuantityCap) > 1f)
+        {
+            GarrisonCount--;
         }
     }
 
