@@ -208,13 +208,15 @@ public class Tower : MonoBehaviour
                 StopCoroutine(replenishCooldownCoroutine);
             }
 
-            GarrisonCount -= model.Attack / towerSheetData.TowerLevelData[Level].hp;
-            model.TakeDamage(towerSheetData.TowerLevelData[Level].attackInTower * GarrisonCount);
-
             if (GarrisonCount <= 0)
             {
                 ChangeAllegiance(model.Allegiance);
+                replenishCooldownCoroutine = StartCoroutine(ReplenishCooldown());
+                return;
             }
+
+            GarrisonCount -= model.Attack / towerSheetData.TowerLevelData[Level].hp;
+            model.TakeDamage(towerSheetData.TowerLevelData[Level].attackInTower * GarrisonCount);            
 
             replenishCooldownCoroutine = StartCoroutine(ReplenishCooldown());
         }
