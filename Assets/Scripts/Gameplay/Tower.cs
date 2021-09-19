@@ -11,9 +11,6 @@ public class Tower : MonoBehaviour
     [SerializeField, HideInInspector] private Allegiance allegiance;
     [SerializeField, HideInInspector] private TowerType type;
 
-    [SerializeField, HideInInspector] private Allegiance initializedAllegiance;
-    [SerializeField, HideInInspector] private TowerType initializedTowerType;
-
     [SerializeField, HideInInspector] private TowerSheetData towerSheetData;
     [SerializeField, HideInInspector] private List<TowerData> towerDataInstances;
     [SerializeField, HideInInspector] private TowerData towerData;
@@ -27,7 +24,6 @@ public class Tower : MonoBehaviour
 
     private bool shouldGenerate = true;
     private int towerLevel = 0;
-    private WaitForSeconds garrisonReplenishDeltaTime = new WaitForSeconds(1f);
     private WaitForSeconds replenishCooldown = new WaitForSeconds(2f);
 
     private Coroutine replenishCooldownCoroutine;
@@ -77,10 +73,6 @@ public class Tower : MonoBehaviour
     public Navigator Navigator => navigator;
     public Allegiance Allegiance => allegiance;
     public TowerType TowerType => type;
-    public bool IsNotInitialized => towerSheetData == null || towerData == null;
-
-    public TowerType InitializedTowerType { get { return initializedTowerType; } set { initializedTowerType = value; } }
-    public Allegiance InitializedAllegiance { get { return initializedAllegiance; } set { initializedAllegiance = value; } }
 
     private void Start()
     {
@@ -92,15 +84,12 @@ public class Tower : MonoBehaviour
 
     private void OnEnable()
     {
-        GameState.instance.YouLose += Stop;
-        GameState.instance.YouWin += Stop;
         towerCollision.TowerAttacked += OnTowerAttacked;
     }
 
     private void OnDisable()
     {
-        GameState.instance.YouLose -= Stop;
-        GameState.instance.YouWin -= Stop;
+        towerCollision.TowerAttacked -= OnTowerAttacked;
     }
 
     public void LevelUp()
@@ -222,11 +211,6 @@ public class Tower : MonoBehaviour
         }
     }
 
-    private void Stop()
-    {
-        StopAllCoroutines();
-    }
-
 #if UNITY_EDITOR
     public void Initialize(TowerType newType, Allegiance newAllegiance)
     {
@@ -287,12 +271,12 @@ public class Tower : MonoBehaviour
         towerCollision = GetComponentInChildren<TowerCollision>();
         renderers = GetComponentsInChildren<Renderer>();
     }
-#endif
 
     private void Destroy()
     {
         Navigator.Destroy();
     }
+#endif
 }
 
 
