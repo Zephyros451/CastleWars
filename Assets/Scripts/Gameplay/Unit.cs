@@ -7,7 +7,6 @@ public class Unit : MonoBehaviour
     [SerializeField] private UnitData unitData;
     [SerializeField] private UnitSheetData unitSheetData;
 
-    private int level;
     private BezierCurve curve;
     private List<Vector3> path;
     private List<Model> models;
@@ -15,52 +14,57 @@ public class Unit : MonoBehaviour
 
     public UnitData UnitData => unitData;
     public UnitSheetData UnitSheetData => unitSheetData;
-    public int Level => level;
+    public int Level { get; private set; }
 
-    public void Init(BezierCurve curve, List<Model> models, Tower destination, int level)
+    public void Init(BezierCurve curve, List<Model> models, Tower destination, int level, DirectionType direction)
     {
         this.curve = curve;
         path = curve.GetSegmentPoints();
         this.models = models;
-        this.level = level;
+        Level = level;
         modelTimeSpacing = new WaitForSeconds(0.5f/unitSheetData.UnitLevelData[level].speed);
+
+        switch(direction)
+        {
+            case DirectionType.Backward:
+                path.Reverse();
+                break;
+            case DirectionType.Forward:
+                break;
+            default:
+                Debug.Log("Wrong direction type");
+                break;
+        }
 
         StartCoroutine(ActivateModels());
     }
 
-    private void OnEnable()
-    {
-        GameState.instance.YouLose += Stop;
-        GameState.instance.YouWin += Stop;
-    }
-
-    private void OnDisable()
-    {
-        GameState.instance.YouLose -= Stop;
-        GameState.instance.YouWin -= Stop;
-    }
-
     private void Update()
+    {
+        for (int i = models.Count - 1; i >= 0; i--)
+        {
+            if (models[i] == null)
+            {
+                models.Remove(models[i]);
+            }
+        }
+        if (models.Count == 0)
+        {
+            Destroy(this.gameObject);
+        }
+
+        MoveModels();
+    }
+
+    private void MoveModels()
     {
         if (curve != null)
         {
-            for (int i = models.Count - 1; i >= 0; i--)
-            {
-                if(models[i] == null)
-                {
-                    models.Remove(models[i]);
-                }
-            }
-            if(models.Count == 0)
-            {
-                Destroy(this.gameObject);
-            }
-
             for (int i = 0; i < models.Count; i++)
             {
                 if ((models[i].SegmentsTravelled < path.Count) && models[i].IsActive)
                 {
-                    models[i].transform.position = Vector3.MoveTowards(models[i].transform.position, path[models[i].SegmentsTravelled], unitSheetData.UnitLevelData[level].speed * Time.deltaTime);
+                    models[i].transform.position = Vector3.MoveTowards(models[i].transform.position, path[models[i].SegmentsTravelled], unitSheetData.UnitLevelData[Level].speed * Time.deltaTime);
 
                     var difference = Vector3.Distance(models[i].transform.position, path[models[i].SegmentsTravelled]);
                     if (difference < 0.1f)
@@ -83,14 +87,6 @@ public class Unit : MonoBehaviour
         {
             models[i].IsActive = true;
             yield return modelTimeSpacing;
-        }
-    }
-
-    private void Stop()
-    {
-        for (int i = 0; i < models.Count; i++)
-        {
-            models[i].IsActive = false;
         }
     }
 }

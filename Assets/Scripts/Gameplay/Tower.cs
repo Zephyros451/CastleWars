@@ -140,6 +140,7 @@ public class Tower : MonoBehaviour
     public void SendTroopTo(Tower tower)
     {
         var path = navigator.GetPathTo(tower);
+        var direction = navigator.GetDirectionTypeTo(tower);
         if (path == null)
             return;
 
@@ -156,7 +157,7 @@ public class Tower : MonoBehaviour
             models.Add(model);
         }
 
-        unit.Init(path, models, tower, Level);
+        unit.Init(path, models, tower, Level, direction);
 
         GarrisonCount = newGarrisonCount;
     }

@@ -28,6 +28,15 @@ public class Navigator : MonoBehaviour
         return null;
     }
 
+    public DirectionType GetDirectionTypeTo(Tower tower)
+    {
+        if(towers.Contains(tower))
+        {
+            return paths[towers.IndexOf(tower)].GetDirectionTypeTo(tower);
+        }
+        return DirectionType.None;
+    }
+
     public void RegisterPathTo(Tower tower, Path path)
     {
         if (towers.Contains(tower))
@@ -65,3 +74,6 @@ public class Navigator : MonoBehaviour
         return false;
     }
 }
+
+public enum DirectionType
+{ Forward, Backward, None }
