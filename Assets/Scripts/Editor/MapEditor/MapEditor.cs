@@ -190,7 +190,7 @@ public class MapEditor : EditorWindow
 
         pathsList = root.Q<ListView>("path-list");
         Func<VisualElement> makeItem = () => new Label();
-        Action<VisualElement, int> bindItem = (e, i) => (e as Label).text = $"{currentTower.name} -> {currentTower.Navigator.Paths[i].name}";
+        Action<VisualElement, int> bindItem = (e, i) => (e as Label).text = currentTower.Navigator.Paths[i].name;
         int itemHeight = 15;
 
         pathsList.itemsSource = currentTower.Navigator.Paths;
