@@ -7,20 +7,20 @@ public class Unit : MonoBehaviour
     [SerializeField] private UnitData unitData;
     [SerializeField] private UnitSheetData unitSheetData;
 
-    private BezierCurve curve;
     private List<Vector3> path;
-    private List<Model> models;
+    private Queue<Model> models = new Queue<Model>();
+    private List<Model> activeModels = new List<Model>();
     private WaitForSeconds modelTimeSpacing;
 
     public UnitData UnitData => unitData;
     public UnitSheetData UnitSheetData => unitSheetData;
     public int Level { get; private set; }
+    public BezierCurve Curve { get; private set; }
 
-    public void Init(BezierCurve curve, List<Model> models, Tower destination, int level, DirectionType direction)
+    public void Init(BezierCurve curve, Tower destination, int level, DirectionType direction)
     {
-        this.curve = curve;
+        Curve = curve;
         path = curve.GetSegmentPoints();
-        this.models = models;
         Level = level;
         modelTimeSpacing = new WaitForSeconds(0.5f/unitSheetData.UnitLevelData[level].speed);
 
@@ -39,18 +39,25 @@ public class Unit : MonoBehaviour
         StartCoroutine(ActivateModels());
     }
 
+    public void AddModels(List<Model> newModels)
+    {
+        for (int i = 0; i < newModels.Count; i++)
+        {
+            models.Enqueue(newModels[i]);
+        }
+    }
+
     private void Update()
     {
-        for (int i = models.Count - 1; i >= 0; i--)
+        if (activeModels.Count > 0)
         {
-            if (models[i] == null)
+            for (int i = activeModels.Count - 1; i >= 0; i--)
             {
-                models.Remove(models[i]);
+                if (activeModels[i] == null)
+                {
+                    activeModels.Remove(activeModels[i]);
+                }
             }
-        }
-        if (models.Count == 0)
-        {
-            Destroy(this.gameObject);
         }
 
         MoveModels();
@@ -58,22 +65,22 @@ public class Unit : MonoBehaviour
 
     private void MoveModels()
     {
-        if (curve != null)
+        if (Curve != null)
         {
-            for (int i = 0; i < models.Count; i++)
+            for (int i = 0; i < activeModels.Count; i++)
             {
-                if ((models[i].SegmentsTravelled < path.Count) && models[i].IsActive)
+                if ((activeModels[i].SegmentsTravelled < path.Count))
                 {
-                    models[i].transform.position = Vector3.MoveTowards(models[i].transform.position, path[models[i].SegmentsTravelled], unitSheetData.UnitLevelData[Level].speed * Time.deltaTime);
+                    activeModels[i].transform.position = Vector3.MoveTowards(activeModels[i].transform.position, path[activeModels[i].SegmentsTravelled], unitSheetData.UnitLevelData[Level].speed * Time.deltaTime);
 
-                    var difference = Vector3.Distance(models[i].transform.position, path[models[i].SegmentsTravelled]);
+                    var difference = Vector3.Distance(activeModels[i].transform.position, path[activeModels[i].SegmentsTravelled]);
                     if (difference < 0.1f)
                     {
-                        models[i].SegmentsTravelled++;
+                        activeModels[i].SegmentsTravelled++;
 
-                        if (models[i].SegmentsTravelled > path.Count / 2)
+                        if (activeModels[i].SegmentsTravelled > path.Count / 2)
                         {
-                            models[i].ActivateCollider();
+                            activeModels[i].ActivateCollider();
                         }
                     }
                 }
@@ -83,10 +90,17 @@ public class Unit : MonoBehaviour
 
     private IEnumerator ActivateModels()
     {
-        for (int i = 0; i < models.Count; i++)
+        while (true)
         {
-            models[i].IsActive = true;
-            yield return modelTimeSpacing;
+            if (models.Count > 0)
+            {
+                activeModels.Add(models.Dequeue());
+                yield return modelTimeSpacing;
+            }
+            else
+            {
+                yield return null;
+            }
         }
     }
 }

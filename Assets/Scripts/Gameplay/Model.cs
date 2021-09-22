@@ -9,25 +9,15 @@ public class Model : MonoBehaviour
     [HideInInspector] public int SegmentsTravelled;
 
     private Unit unit;
-    private float hp;
 
     public Allegiance Allegiance { get; private set; }
     public float Attack => unit.UnitSheetData.UnitLevelData[unit.Level].attackInField;
+    public float HP => unit.UnitSheetData.UnitLevelData[unit.Level].hp;
 
     public void Init(Unit unit, Allegiance allegiance)
     {
         Allegiance = allegiance;
         this.unit = unit;
-        hp = unit.UnitSheetData.UnitLevelData[unit.Level].hp;
-    }
-
-    public void TakeDamage(float damage)
-    {
-        hp -= damage;
-        if (hp < 0f) 
-        {
-            Destroy(this.gameObject);
-        }
     }
 
     public void ActivateCollider()

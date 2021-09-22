@@ -236,6 +236,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1985961432}
     m_Modifications:
+    - target: {fileID: 2129949564538839375, guid: bd2c2c084d18186459624ff4456ac574,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4161037228064988564, guid: bd2c2c084d18186459624ff4456ac574,
         type: 3}
       propertyPath: m_Name
@@ -456,7 +461,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 431037315}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
@@ -642,6 +647,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Tower 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2923044080283910682, guid: 00aa2f8515151ff408e87c57abdc7b0b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2923044080283910683, guid: 00aa2f8515151ff408e87c57abdc7b0b,
         type: 3}
@@ -1024,15 +1034,15 @@ PrefabInstance:
       propertyPath: renderers.Array.data[2]
       value: 
       objectReference: {fileID: 1511080279}
-    - target: {fileID: 910111484439772865, guid: 00aa2f8515151ff408e87c57abdc7b0b,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2923044080283910682, guid: 00aa2f8515151ff408e87c57abdc7b0b,
         type: 3}
       propertyPath: m_Name
       value: Tower 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2923044080283910682, guid: 00aa2f8515151ff408e87c57abdc7b0b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2923044080283910683, guid: 00aa2f8515151ff408e87c57abdc7b0b,
         type: 3}
@@ -1195,7 +1205,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 1511080277}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
@@ -1476,6 +1486,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 262076246555700893, guid: eda549aaab370c5438916eebed6f980a,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 619526425481960948, guid: eda549aaab370c5438916eebed6f980a,
         type: 3}
       propertyPath: m_Name

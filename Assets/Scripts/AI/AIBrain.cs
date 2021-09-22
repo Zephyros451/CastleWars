@@ -137,6 +137,9 @@ public class AIBrain : MonoBehaviour
 
     private bool ShouldAttack(Tower aiTower, Tower nonAITower)
     {
+        if (!aiTower.IsNotUnderAttack)
+            return false;
+
         int random = Random.Range(0, 101);
         switch (gameDifficulty)
         {

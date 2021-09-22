@@ -3,6 +3,8 @@ using System;
 
 public class PlayerInput : MonoBehaviour
 {
+    private readonly float doubleClickTime = 0.3f;
+
     public event Action<Vector3> StartPointSet;
     public event Action<Vector3> EndPointSet;
     public event Action InputStopped;
@@ -10,6 +12,7 @@ public class PlayerInput : MonoBehaviour
     private Tower firstTower;
     private Tower secondTower;
     private bool isDragged;
+    private float timeOfLastClick;
 
     private void Update()
     {
@@ -49,27 +52,47 @@ public class PlayerInput : MonoBehaviour
 
         if(Input.GetMouseButtonUp(0))
         {
-            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, 50, 1 << 0))
+            float timeSinceLastClick = Time.time - timeOfLastClick;
+
+            if (timeSinceLastClick <= doubleClickTime)
             {
-                if (hit.collider.TryGetComponent(out TowerCollision collision) && firstTower != null)
+                if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, 50, 1 << 0))
                 {
-                    secondTower = collision.Tower;
-
-                    if (firstTower == secondTower)
+                    if(hit.collider.TryGetComponent(out TowerCollision collision))
                     {
-                        firstTower = null;
-                        secondTower = null;
-
-                        InputStopped?.Invoke();
-                        isDragged = false;
-
-                        return;
+                        if(collision.Tower.Allegiance == Allegiance.Player)
+                        {
+                            collision.Tower.LevelUp();
+                        }
                     }
-                    
-                    firstTower.SendTroopTo(secondTower);
                 }
+            }
+            else
+            {
+                if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, 50, 1 << 0))
+                {
+                    if (hit.collider.TryGetComponent(out TowerCollision collision) && firstTower != null)
+                    {
+                        secondTower = collision.Tower;
 
-                //Debug.Log(hit.collider.name);
+                        if (firstTower == secondTower)
+                        {
+                            firstTower = null;
+                            secondTower = null;
+
+                            InputStopped?.Invoke();
+                            isDragged = false;
+
+                            timeOfLastClick = Time.time;
+
+                            return;
+                        }
+
+                        firstTower.SendTroopTo(secondTower);
+                    }
+
+                    //Debug.Log(hit.collider.name);
+                }
             }
 
             InputStopped?.Invoke();

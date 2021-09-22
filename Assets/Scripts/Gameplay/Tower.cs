@@ -20,10 +20,12 @@ public class Tower : MonoBehaviour
     [SerializeField, HideInInspector] private Navigator navigator;
     [SerializeField, HideInInspector] private TowerCollision towerCollision;
 
-    private bool shouldGenerate = true;
+    private List<Unit> units = new List<Unit>();
     private int towerLevel = 0;
     private WaitForSeconds generationStopCooldown = new WaitForSeconds(2f);
     private WaitForSeconds generationRate;
+    private WaitForSeconds degenerationRate;
+    private int inactiveAttackersInTower = 0;
 
     private Coroutine replenishCooldownCoroutine;
 
@@ -37,6 +39,9 @@ public class Tower : MonoBehaviour
         set
         {
             garrisonCount = value;
+
+            if (garrisonCount < 0f) garrisonCount = 0f;
+
             GarrisonCountChanged?.Invoke();
         }
     }
@@ -58,6 +63,9 @@ public class Tower : MonoBehaviour
     public int LvlUpQuantity => towerSheetData.TowerLevelData[Level].lvlUpQuantity;
     public float GenerationRate => towerSheetData.TowerLevelData[Level].generationRate;
     public float LvlUpTime => towerSheetData.TowerLevelData[Level].lvlUpTime;
+    public float AttackInTower => towerSheetData.TowerLevelData[Level].attackInTower;
+    public float HP => towerSheetData.TowerLevelData[Level].hp;
+    public bool IsNotUnderAttack { get; private set; } = true;
 
     public Navigator Navigator => navigator;
     public Allegiance Allegiance => allegiance;
@@ -77,15 +85,18 @@ public class Tower : MonoBehaviour
     {
         TowerDataChanged?.Invoke(towerData);
 
-        if (Mathf.Approximately(towerSheetData.TowerLevelData[Level].generationRate, 0f))
-            return;
-
         generationRate = new WaitForSeconds(towerSheetData.TowerLevelData[Level].generationRate);
-        StartCoroutine(GarrisonUpdate());
+        degenerationRate = new WaitForSeconds(0.8f);
+        
+        StartCoroutine(GarrisonGeneration());
+        StartCoroutine(GarrisonDegeneration());
     }
 
     public void LevelUp()
     {
+        if (GarrisonCount < LvlUpQuantity)
+            return;
+
         GarrisonCount -= LvlUpQuantity;
         Level++;
     }
@@ -118,24 +129,33 @@ public class Tower : MonoBehaviour
         TowerDataChanged?.Invoke(towerData);
     }
 
-    public IEnumerator GarrisonUpdate()
+    private IEnumerator GarrisonGeneration()
     {
         while (true)
         {
             yield return generationRate;
             if (GarrisonCount < QuantityCap)
             {
-                if (shouldGenerate)
+                if (IsNotUnderAttack)
                 {
                     GarrisonCount++;
                 }
             }
-            else if ((GarrisonCount - QuantityCap) > 1f)
+        }
+    }
+
+    private IEnumerator GarrisonDegeneration()
+    {
+        while(true)
+        {
+            yield return degenerationRate;            
+            if ((GarrisonCount - QuantityCap) >= 1f)
             {
                 GarrisonCount--;
             }
         }
     }
+
 
     public void SendTroopTo(Tower tower)
     {
@@ -147,7 +167,22 @@ public class Tower : MonoBehaviour
         float newGarrisonCount = GarrisonCount / 2f;
         int troopSize = (int)(GarrisonCount - newGarrisonCount);
 
-        var unit = Instantiate(towerData.unitData.unitPrefab, transform.position, Quaternion.identity);
+        Unit unit = null;
+        for (int i = 0; i < units.Count; i++) 
+        {
+            if (units[i].Curve == path)
+            {
+                unit = units[i];
+                break;
+            }
+        }
+        if(unit == null)
+        {
+            unit = Instantiate(towerData.unitData.unitPrefab, transform.position, Quaternion.identity);
+            unit.Init(path, tower, Level, direction);
+            units.Add(unit);
+        }
+
         List<Model> models = new List<Model>();
 
         for (int i = 0; i < troopSize; i++)
@@ -156,17 +191,16 @@ public class Tower : MonoBehaviour
             model.Init(unit, Allegiance);
             models.Add(model);
         }
-
-        unit.Init(path, models, tower, Level, direction);
+        unit.AddModels(models);
 
         GarrisonCount = newGarrisonCount;
     }
 
     private IEnumerator ReplenishCooldown()
     {
-        shouldGenerate = false;
+        IsNotUnderAttack = false;
         yield return generationStopCooldown;
-        shouldGenerate = true;
+        IsNotUnderAttack = true;
     }
 
     private void OnTowerAttacked(Model model)
@@ -183,15 +217,17 @@ public class Tower : MonoBehaviour
                 StopCoroutine(replenishCooldownCoroutine);
             }
 
-            if (GarrisonCount <= 0)
+            if (Mathf.Approximately(GarrisonCount, 0f))
             {
                 ChangeAllegiance(model.Allegiance);
                 replenishCooldownCoroutine = StartCoroutine(ReplenishCooldown());
                 return;
             }
 
-            GarrisonCount -= model.Attack / towerSheetData.TowerLevelData[Level].hp;
-            model.TakeDamage(towerSheetData.TowerLevelData[Level].attackInTower * GarrisonCount);            
+            int numberOfAttacksBeforeDeath = Mathf.Approximately(model.HP % AttackInTower, 0f) ?
+                                             (int)(model.HP/AttackInTower) : (int)(model.HP/AttackInTower+1);
+            GarrisonCount -= model.Attack / HP;
+            Destroy(model.gameObject);
 
             replenishCooldownCoroutine = StartCoroutine(ReplenishCooldown());
         }

@@ -12,14 +12,6 @@ public class TowerView : MonoBehaviour
     [SerializeField] private Button lvlUp;
     [SerializeField] private Renderer[] renderers;
 
-    private void Start()
-    {
-        if (tower.Allegiance == Allegiance.Player)
-        {
-            lvlUp.enabled = true;
-        }
-    }
-
     private void OnEnable()
     {
         tower.TowerDataChanged += UpdateTower;
@@ -46,33 +38,20 @@ public class TowerView : MonoBehaviour
         {
             renderer.sharedMaterial = data.material;
         }
-
-        if (tower.Allegiance == Allegiance.Player && tower.Level < 4)
-        {
-            lvlUp.enabled = true;
-        }
-        else
-        {
-            lvlUp.enabled = false;
-        }
     }
 
     private void UpdateLevel()
     {
         towerLevelText.text = (tower.Level + 1).ToString();
-        garrisonCounterText.text = $"{(int)tower.GarrisonCount}/{tower.QuantityCap}";
 
-        if (tower.Level == 4)
-        {
-            lvlUp.enabled = false;
-        }
+        UpdateGarrisonCount();
     }
 
     private void UpdateGarrisonCount()
     {
         garrisonCounterText.text = $"{(int)tower.GarrisonCount}/{tower.QuantityCap}";
 
-        if (tower.GarrisonCount <= tower.LvlUpQuantity && tower.Level < 4 && tower.Allegiance == Allegiance.Player)
+        if (tower.GarrisonCount < tower.LvlUpQuantity && tower.Level < 4 && tower.Allegiance == Allegiance.Player)
         {
             lvlUp.interactable = false;
         }
