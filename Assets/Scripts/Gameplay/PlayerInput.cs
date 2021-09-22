@@ -32,7 +32,6 @@ public class PlayerInput : MonoBehaviour
                     isDragged = true;
                     firstTower = collision.Tower;                    
                 }
-                //Debug.Log(hit.collider.name);
             }
         }
 
@@ -90,8 +89,6 @@ public class PlayerInput : MonoBehaviour
 
                         firstTower.SendTroopTo(secondTower);
                     }
-
-                    //Debug.Log(hit.collider.name);
                 }
             }
 

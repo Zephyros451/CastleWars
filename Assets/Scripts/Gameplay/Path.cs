@@ -43,6 +43,5 @@ public class Path : MonoBehaviour
         tower1.Navigator.RegisterPathTo(tower2, this);
         tower2.Navigator.RegisterPathTo(tower1, this);
     }
-
 #endif
 }

@@ -49,6 +49,12 @@ public class Unit : MonoBehaviour
 
     private void Update()
     {
+        CleanUpActiveModelsList();
+        MoveModels();
+    }
+
+    private void CleanUpActiveModelsList()
+    {
         if (activeModels.Count > 0)
         {
             for (int i = activeModels.Count - 1; i >= 0; i--)
@@ -59,30 +65,22 @@ public class Unit : MonoBehaviour
                 }
             }
         }
-
-        MoveModels();
     }
 
     private void MoveModels()
     {
-        if (Curve != null)
+        for (int i = 0; i < activeModels.Count; i++)
         {
-            for (int i = 0; i < activeModels.Count; i++)
+            activeModels[i].transform.position = Vector3.MoveTowards(activeModels[i].transform.position, path[activeModels[i].SegmentsTravelled], unitSheetData.UnitLevelData[Level].speed * Time.deltaTime);
+
+            var difference = Vector3.Distance(activeModels[i].transform.position, path[activeModels[i].SegmentsTravelled]);
+            if (difference < 0.1f)
             {
-                if ((activeModels[i].SegmentsTravelled < path.Count))
+                activeModels[i].SegmentsTravelled++;
+
+                if (activeModels[i].SegmentsTravelled > path.Count / 2)
                 {
-                    activeModels[i].transform.position = Vector3.MoveTowards(activeModels[i].transform.position, path[activeModels[i].SegmentsTravelled], unitSheetData.UnitLevelData[Level].speed * Time.deltaTime);
-
-                    var difference = Vector3.Distance(activeModels[i].transform.position, path[activeModels[i].SegmentsTravelled]);
-                    if (difference < 0.1f)
-                    {
-                        activeModels[i].SegmentsTravelled++;
-
-                        if (activeModels[i].SegmentsTravelled > path.Count / 2)
-                        {
-                            activeModels[i].ActivateCollider();
-                        }
-                    }
+                    activeModels[i].ActivateCollider();
                 }
             }
         }
