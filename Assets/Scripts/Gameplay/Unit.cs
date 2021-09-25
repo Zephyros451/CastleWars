@@ -22,7 +22,7 @@ public class Unit : MonoBehaviour
         Curve = curve;
         path = curve.GetSegmentPoints();
         Level = level;
-        modelTimeSpacing = new WaitForSeconds(0.5f/unitSheetData.UnitLevelData[level].speed);
+        modelTimeSpacing = new WaitForSeconds(0.55f/unitSheetData.UnitLevelData[level].speed);
 
         switch(direction)
         {
@@ -71,6 +71,9 @@ public class Unit : MonoBehaviour
     {
         for (int i = 0; i < activeModels.Count; i++)
         {
+            if (activeModels[i].SegmentsTravelled == path.Count)
+                continue;
+
             activeModels[i].transform.position = Vector3.MoveTowards(activeModels[i].transform.position, path[activeModels[i].SegmentsTravelled], unitSheetData.UnitLevelData[Level].speed * Time.deltaTime);
 
             var difference = Vector3.Distance(activeModels[i].transform.position, path[activeModels[i].SegmentsTravelled]);

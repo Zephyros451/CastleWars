@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using UnityEditor;
+using UnityEngine;
 
 [RequireComponent(typeof(Path))]
 [RequireComponent(typeof(MeshFilter))]
@@ -9,18 +10,20 @@ public class Road : MonoBehaviour
     [SerializeField] private float spacing = 1f;
     [SerializeField] private float roadWidth = 1f;
     [SerializeField] private bool autoUpdate;
-    [SerializeField] private float tiling = 1f;
+    [SerializeField] private float tiling = 24f;
+
+    [SerializeField] private MeshRenderer renderer;
 
     public bool AutoUpdate => autoUpdate;
 
-    public void UpdateRoad()
+    public void CreateRoad()
     {
         BezierCurve curve = GetComponent<Path>().Curve;
         Vector3[] points = curve.CalculateEvenlySpacedPoints(spacing);
         GetComponent<MeshFilter>().mesh = CreateRoadMesh(points);
 
         int textureRepeat = Mathf.RoundToInt(tiling * points.Length * spacing * 0.05f);
-        GetComponent<MeshRenderer>().sharedMaterial.mainTextureScale = new Vector2(1, textureRepeat);
+        renderer.sharedMaterial.mainTextureScale = new Vector2(1, textureRepeat);
     }
 
     private Mesh CreateRoadMesh(Vector3[] points)
@@ -43,8 +46,8 @@ public class Road : MonoBehaviour
             forward.Normalize();
             Vector3 left = new Vector3(-forward.z, 0f, forward.x);
 
-            verts[vertIndex] = points[i] + left * roadWidth * 0.5f;
-            verts[vertIndex + 1] = points[i] - left * roadWidth * 0.5f;
+            verts[vertIndex] = points[i] + left * roadWidth * Random.Range(0.35f,0.6f);
+            verts[vertIndex + 1] = points[i] - left * roadWidth * Random.Range(0.35f, 0.6f);
 
             float completionPercent = i / (float)(points.Length - 1);
             uvs[vertIndex] = new Vector2(0, completionPercent);
@@ -69,4 +72,16 @@ public class Road : MonoBehaviour
 
         return mesh;
     }
+
+#if UNITY_EDITOR
+    public void InitializeRoad()
+    {
+        tiling = 24f;
+        var roadMaterial = AssetDatabase.LoadAssetAtPath<Material>("Assets/Materials/Road.mat");
+        renderer = GetComponent<MeshRenderer>();
+        renderer.sharedMaterial = roadMaterial;
+
+        CreateRoad();
+    }
+#endif
 }

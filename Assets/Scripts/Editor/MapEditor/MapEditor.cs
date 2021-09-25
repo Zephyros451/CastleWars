@@ -41,49 +41,6 @@ public class MapEditor : EditorWindow
         InitializeTowerToolbar();
     }
 
-    private void InitializePathsToolbar(List<object> obj = null)
-    {
-        pathsParent = FindObjectOfType<PathsParentFlag>();
-
-        var pathPrefab = AssetDatabase.LoadAssetAtPath<Path>("Assets/Prefabs/Path.prefab");
-
-        var deletePathButton = root.Q<ToolbarButton>("delete-path");
-        deletePathButton.clicked += DeletePath;
-        var addPathMenu = root.Q<ToolbarMenu>("add-path");
-
-        Func<DropdownMenuAction, DropdownMenuAction.Status> func = (a) => { return DropdownMenuAction.Status.Normal; };
-
-        addPathMenu.menu.MenuItems().Clear();
-        foreach (var tower in currentTower.Navigator.NotConnectedTowers)
-        {
-            addPathMenu.menu.AppendAction($"{tower.name}", CreatePath, func, new PathUserData(pathPrefab, currentTower, tower));
-        }
-    }
-
-    private void CreatePath(DropdownMenuAction obj)
-    {
-        var userData = obj.userData as PathUserData;
-        var instance = PrefabUtility.InstantiatePrefab(userData.PathPrefab, pathsParent.transform) as Path;
-        instance.Initialize(userData.Tower1, userData.Tower2);
-        instance.name = $"{userData.Tower1.name} <-> {userData.Tower2.name}";
-
-        InitializePathsList();
-        InitializePathsToolbar();
-        EditorUtility.SetDirty(userData.Tower1.Navigator);
-        EditorUtility.SetDirty(userData.Tower2.Navigator);
-        EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
-    }
-
-    private void DeletePath()
-    {
-        if(currentPath != null)
-        {
-            currentPath.Destroy();
-            DestroyImmediate(currentPath.gameObject);
-            InitializePathsList();
-        }
-    }
-
     private void InitializeTowerList()
     {
         towers = FindObjectsOfType<Tower>();
@@ -200,6 +157,49 @@ public class MapEditor : EditorWindow
         pathsList.selectionType = SelectionType.Single;
 
         pathsList.onSelectionChanged += SelectPath;
+    }
+
+    private void InitializePathsToolbar(List<object> obj = null)
+    {
+        pathsParent = FindObjectOfType<PathsParentFlag>();
+
+        var pathPrefab = AssetDatabase.LoadAssetAtPath<Path>("Assets/Prefabs/Path.prefab");
+
+        var deletePathButton = root.Q<ToolbarButton>("delete-path");
+        deletePathButton.clicked += DeletePath;
+        var addPathMenu = root.Q<ToolbarMenu>("add-path");
+
+        Func<DropdownMenuAction, DropdownMenuAction.Status> func = (a) => { return DropdownMenuAction.Status.Normal; };
+
+        addPathMenu.menu.MenuItems().Clear();
+        foreach (var tower in currentTower.Navigator.NotConnectedTowers)
+        {
+            addPathMenu.menu.AppendAction($"{tower.name}", CreatePath, func, new PathUserData(pathPrefab, currentTower, tower));
+        }
+    }
+
+    private void CreatePath(DropdownMenuAction obj)
+    {
+        var userData = obj.userData as PathUserData;
+        var instance = PrefabUtility.InstantiatePrefab(userData.PathPrefab, pathsParent.transform) as Path;
+        instance.Initialize(userData.Tower1, userData.Tower2);
+        instance.name = $"{userData.Tower1.name} <-> {userData.Tower2.name}";
+
+        InitializePathsList();
+        InitializePathsToolbar();
+        EditorUtility.SetDirty(userData.Tower1.Navigator);
+        EditorUtility.SetDirty(userData.Tower2.Navigator);
+        EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+    }
+
+    private void DeletePath()
+    {
+        if (currentPath != null)
+        {
+            currentPath.Destroy();
+            DestroyImmediate(currentPath.gameObject);
+            InitializePathsList();
+        }
     }
 
     private void SelectPath(List<object> obj)

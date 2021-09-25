@@ -70,6 +70,7 @@ public class Tower : MonoBehaviour
     public Navigator Navigator => navigator;
     public Allegiance Allegiance => allegiance;
     public TowerType TowerType => type;
+    public TowerData TowerData => towerData;
 
     private void OnEnable()
     {
@@ -156,7 +157,6 @@ public class Tower : MonoBehaviour
         }
     }
 
-
     public void SendTroopTo(Tower tower)
     {
         var path = navigator.GetPathTo(tower);
@@ -187,7 +187,7 @@ public class Tower : MonoBehaviour
 
         for (int i = 0; i < troopSize; i++)
         {
-            var model = Instantiate(unit.UnitData.modelPrefab, transform.position, Quaternion.identity, unit.transform);
+            var model = Instantiate(unit.UnitData.modelPrefab, navigator.GetStartingPointTo(tower), Quaternion.identity, unit.transform);
             model.Init(unit, Allegiance);
             models.Add(model);
         }
@@ -221,6 +221,7 @@ public class Tower : MonoBehaviour
             {
                 ChangeAllegiance(model.Allegiance);
                 replenishCooldownCoroutine = StartCoroutine(ReplenishCooldown());
+                Destroy(model.gameObject);
                 return;
             }
 

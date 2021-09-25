@@ -15,3 +15,7 @@ MonoBehaviour:
   unitData: {fileID: 11400000, guid: da380c78c9fea1e4d8d41a2526d92b31, type: 2}
   levelPrefabs: []
   material: {fileID: 2100000, guid: 27e6ed9663317ba4aaf9aa0afa73a54a, type: 2}
+  backGarrisonUI: {fileID: 21300000, guid: 0a49a4be9a3805d448617b1d1f9c5e5a, type: 3}
+  frontGarrisonUI: {fileID: 21300000, guid: cf158cab486e0fd49aeab903c82c0b52, type: 3}
+  backLevelUI: {fileID: 21300000, guid: 600a923bc71360140a773a4d9cc14c47, type: 3}
+  frontLevelUI: {fileID: 21300000, guid: 08857bfaa8efd294c8e9cfa4de7fe4ba, type: 3}

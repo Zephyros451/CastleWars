@@ -36,6 +36,15 @@ public class Navigator : MonoBehaviour
         return DirectionType.None;
     }
 
+    public Vector3 GetStartingPointTo(Tower tower)
+    {
+        if(towers.Contains(tower))
+        {
+            return paths[towers.IndexOf(tower)].GetStartingPointTo(tower);
+        }
+        return Vector3.zero;
+    }
+
     public void RegisterPathTo(Tower tower, Path path)
     {
         if (towers.Contains(tower))
