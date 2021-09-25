@@ -9,12 +9,9 @@ public class Road : MonoBehaviour
     [Range(0.05f, 1f)]
     [SerializeField] private float spacing = 1f;
     [SerializeField] private float roadWidth = 1f;
-    [SerializeField] private bool autoUpdate;
-    [SerializeField] private float tiling = 24f;
 
-    [SerializeField] private MeshRenderer renderer;
-
-    public bool AutoUpdate => autoUpdate;
+    [SerializeField, HideInInspector] private float tiling = 24f;
+    [SerializeField, HideInInspector] private MeshRenderer renderer;
 
     public void CreateRoad()
     {
