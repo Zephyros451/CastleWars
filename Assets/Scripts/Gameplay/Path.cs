@@ -9,6 +9,8 @@ public class Path : MonoBehaviour
 
     private List<DirectionType> directions = new List<DirectionType> { DirectionType.Forward, DirectionType.Backward };
 
+    public BezierCurve Curve => curve;
+
     public void Destroy()
     {
         for (int i = 0; i < towers.Count; i++) 
