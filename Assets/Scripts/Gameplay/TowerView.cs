@@ -15,30 +15,29 @@ public class TowerView : MonoBehaviour
     [SerializeField] private Image levelCounterBackground;
     [SerializeField] private Image levelCounterFront;
     [SerializeField] private TextMeshProUGUI levelCounterText;
-    //[SerializeField] private Button lvlUp;
+    [SerializeField] private Image levelUp;
     [SerializeField] private Renderer[] renderers;
 
     private void OnEnable()
     {
         Reset();
-        UpdateLevel();
+        UpdateLevel(false);
+
+        if(tower.Allegiance != Allegiance.Player)
+        {
+            levelUp.enabled = false;
+        }
 
         tower.TowerDataChanged += UpdateTower;
-        tower.LevelChanged += UpdateLevel;
+        tower.LevelChanged += OnLevelChanged;
         tower.GarrisonCountChanged += UpdateGarrisonCount;
     }
 
     private void OnDisable()
     {
         tower.TowerDataChanged -= UpdateTower;
-        tower.LevelChanged -= UpdateLevel;
+        tower.LevelChanged -= OnLevelChanged;
         tower.GarrisonCountChanged -= UpdateGarrisonCount;
-    }
-
-    public void Initialize(TowerData data)
-    {
-        Reset();
-        UpdateTower(data);
     }
 
     private void UpdateTower(TowerData data)
@@ -54,13 +53,22 @@ public class TowerView : MonoBehaviour
         levelCounterFront.sprite = tower.TowerData.frontLevelUI;
     }
 
-    private void UpdateLevel()
+    private void OnLevelChanged()
+    {
+        UpdateLevel();
+    }
+
+    private void UpdateLevel(bool withAnimation = true)
     {
         levelCounterText.text = $"Lv. {(tower.Level + 1).ToString()}";
 
         garrisonCounterSlider.maxValue = tower.QuantityCap;
 
-        SquashAnimation();
+        if (withAnimation)
+        {
+            SquashAnimation();
+        }
+
         UpdateGarrisonCount();
     }
 
@@ -69,13 +77,16 @@ public class TowerView : MonoBehaviour
         garrisonCounterText.text = ((int)tower.GarrisonCount).ToString();
         garrisonCounterSlider.value = tower.GarrisonCount;
 
-        if (tower.GarrisonCount < tower.LvlUpQuantity && tower.Level < 4 && tower.Allegiance == Allegiance.Player)
+        if (tower.Allegiance == Allegiance.Player)
         {
-            //lvlUp.interactable = false;
-        }
-        else
-        {
-            //lvlUp.interactable = true;
+            if (tower.GarrisonCount < tower.LvlUpQuantity && tower.Level < 4)
+            {
+                levelUp.enabled = false;
+            }
+            else
+            {
+                levelUp.enabled = true;
+            }
         }
     }
 
@@ -87,6 +98,14 @@ public class TowerView : MonoBehaviour
             .Append(transform.DOScale(new Vector3(1f, 1f, 1f), 0.05f));
     }
 
+#if UNITY_EDITOR
+    public void Initialize(TowerData data)
+    {
+        Reset();
+        UpdateTower(data);
+    }
+#endif
+
     private void Reset()
     {
         tower = GetComponent<Tower>();
@@ -97,7 +116,7 @@ public class TowerView : MonoBehaviour
         levelCounterBackground = GetComponentInChildren<TowerLevelBackImageFlag>().GetComponent<Image>();
         levelCounterFront = GetComponentInChildren<TowerLevelFrontImageFlag>().GetComponent<Image>();
         levelCounterText = GetComponentInChildren<TowerLevelTextFlag>().GetComponent<TextMeshProUGUI>();
-        //lvlUp = GetComponentInChildren<LvlUpButtonFlag>().GetComponent<Button>();
+        levelUp = GetComponentInChildren<TowerLevelUpImageFlag>().GetComponent<Image>();
         renderers = GetComponentsInChildren<Renderer>();
     }
 }
