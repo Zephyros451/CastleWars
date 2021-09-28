@@ -182,6 +182,7 @@ public class MapEditor : EditorWindow
     {
         var userData = obj.userData as PathUserData;
         var instance = PrefabUtility.InstantiatePrefab(userData.PathPrefab, pathsParent.transform) as Path;
+        instance.transform.localPosition = new Vector3(0f, 0.01f, 0f);
         instance.Initialize(userData.Tower1, userData.Tower2);
         instance.name = $"{userData.Tower1.name} <-> {userData.Tower2.name}";
 

@@ -6,12 +6,13 @@ using UnityEngine;
 [RequireComponent(typeof(MeshRenderer))]
 public class Road : MonoBehaviour
 {
-    [Range(0.05f, 1f)]
+    [Range(0.05f, 5f)]
     [SerializeField] private float spacing = 1f;
     [SerializeField] private float roadWidth = 1f;
 
-    [SerializeField, HideInInspector] private float tiling = 24f;
+    [SerializeField, HideInInspector] private float tiling = 1f;
     [SerializeField, HideInInspector] private MeshRenderer renderer;
+    [SerializeField, HideInInspector] private Material material;
 
     public void CreateRoad()
     {
@@ -19,8 +20,10 @@ public class Road : MonoBehaviour
         Vector3[] points = curve.CalculateEvenlySpacedPoints(spacing);
         GetComponent<MeshFilter>().mesh = CreateRoadMesh(points);
 
-        int textureRepeat = Mathf.RoundToInt(tiling * points.Length * spacing * 0.05f);
-        renderer.sharedMaterial.mainTextureScale = new Vector2(1, textureRepeat);
+        int textureRepeat = Mathf.RoundToInt(tiling * points.Length * spacing * 0.01f);
+        material = new Material(renderer.sharedMaterial);
+        material.mainTextureScale = new Vector2(1, textureRepeat);
+        renderer.material = material;
     }
 
     private Mesh CreateRoadMesh(Vector3[] points)
@@ -31,7 +34,7 @@ public class Road : MonoBehaviour
 
         for (int i = 0, vertIndex = 0, triIndex = 0; i < points.Length; i++, vertIndex += 2, triIndex += 6)
         {
-            Vector3 forward = Vector3.zero;
+            Vector3 forward = new Vector3(0f, 0f, 0f);
             if (i < points.Length - 1) 
             {
                 forward += points[i + 1] - points[i];
@@ -41,10 +44,10 @@ public class Road : MonoBehaviour
                 forward += points[i] - points[i - 1];
             }
             forward.Normalize();
-            Vector3 left = new Vector3(-forward.z, 0f, forward.x);
+            Vector3 left = new Vector3(-forward.z, forward.y, forward.x);
 
-            verts[vertIndex] = points[i] + left * roadWidth * Random.Range(0.35f,0.6f);
-            verts[vertIndex + 1] = points[i] - left * roadWidth * Random.Range(0.35f, 0.6f);
+            verts[vertIndex] = points[i] + left * roadWidth * Random.Range(0.42f,0.58f);
+            verts[vertIndex + 1] = points[i] - left * roadWidth * Random.Range(0.42f, 0.58f);
 
             float completionPercent = i / (float)(points.Length - 1);
             uvs[vertIndex] = new Vector2(0, completionPercent);

@@ -61,8 +61,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spacing: 1
-  roadWidth: 1
-  autoUpdate: 0
+  roadWidth: 2.5
+  tiling: 24
+  renderer: {fileID: 0}
+  material: {fileID: 0}
 --- !u!33 &5073137975895355429
 MeshFilter:
   m_ObjectHideFlags: 0

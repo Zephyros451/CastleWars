@@ -2,8 +2,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using System.Collections.Generic;
 
-[RequireComponent(typeof(Tower))]
 public class TowerView : MonoBehaviour
 {
     [SerializeField, HideInInspector] private Tower tower;
@@ -16,7 +16,7 @@ public class TowerView : MonoBehaviour
     [SerializeField] private Image levelCounterFront;
     [SerializeField] private TextMeshProUGUI levelCounterText;
     [SerializeField] private Image levelUp;
-    [SerializeField] private Renderer[] renderers;
+    [SerializeField] private List<Renderer> renderers;
 
     private void OnEnable()
     {
@@ -79,7 +79,7 @@ public class TowerView : MonoBehaviour
 
         if (tower.Allegiance == Allegiance.Player)
         {
-            if (tower.GarrisonCount < tower.LvlUpQuantity && tower.Level < 4)
+            if (tower.GarrisonCount < tower.LvlUpQuantity)
             {
                 levelUp.enabled = false;
             }
@@ -108,15 +108,23 @@ public class TowerView : MonoBehaviour
 
     private void Reset()
     {
-        tower = GetComponent<Tower>();
-        garrisonCounterBackground = GetComponentInChildren<TowerGarrisonBackImageFlag>().GetComponent<Image>();
-        garrisonCounterFront = GetComponentInChildren<TowerGarrisonFrontImageFlag>().GetComponent<Image>();
-        garrisonCounterText = GetComponentInChildren<TowerGarrisonTextFlag>().GetComponent<TextMeshProUGUI>();
-        garrisonCounterSlider = GetComponentInChildren<Slider>();
-        levelCounterBackground = GetComponentInChildren<TowerLevelBackImageFlag>().GetComponent<Image>();
-        levelCounterFront = GetComponentInChildren<TowerLevelFrontImageFlag>().GetComponent<Image>();
-        levelCounterText = GetComponentInChildren<TowerLevelTextFlag>().GetComponent<TextMeshProUGUI>();
-        levelUp = GetComponentInChildren<TowerLevelUpImageFlag>().GetComponent<Image>();
-        renderers = GetComponentsInChildren<Renderer>();
+        tower = transform.parent.GetComponent<Tower>();
+        garrisonCounterBackground = tower.GetComponentInChildren<TowerGarrisonBackImageFlag>().GetComponent<Image>();
+        garrisonCounterFront = tower.GetComponentInChildren<TowerGarrisonFrontImageFlag>().GetComponent<Image>();
+        garrisonCounterText = tower.GetComponentInChildren<TowerGarrisonTextFlag>().GetComponent<TextMeshProUGUI>();
+        garrisonCounterSlider = tower.GetComponentInChildren<Slider>();
+        levelCounterBackground = tower.GetComponentInChildren<TowerLevelBackImageFlag>().GetComponent<Image>();
+        levelCounterFront = tower.GetComponentInChildren<TowerLevelFrontImageFlag>().GetComponent<Image>();
+        levelCounterText = tower.GetComponentInChildren<TowerLevelTextFlag>().GetComponent<TextMeshProUGUI>();
+        levelUp = tower.GetComponentInChildren<TowerLevelUpImageFlag>().GetComponent<Image>();
+        renderers = new List<Renderer>(tower.GetComponentsInChildren<Renderer>());
+
+        for (int i = renderers.Count - 1; i >= 0; i--) 
+        {
+            if(renderers[i].TryGetComponent<TowerGroundAreaFlag>(out TowerGroundAreaFlag flag))
+            {
+                renderers.Remove(renderers[i]);
+            }
+        }
     }
 }
