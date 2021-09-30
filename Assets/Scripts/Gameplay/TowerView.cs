@@ -31,6 +31,8 @@ public class TowerView : MonoBehaviour
         tower.TowerDataChanged += UpdateTower;
         tower.LevelChanged += OnLevelChanged;
         tower.GarrisonCountChanged += UpdateGarrisonCount;
+
+        LevelUpButtonAnimation();
     }
 
     private void OnDisable()
@@ -96,6 +98,11 @@ public class TowerView : MonoBehaviour
             .Append(transform.DOScale(new Vector3(1.1f, 0.9f, 1.1f), 0.12f))
             .Append(transform.DOScale(new Vector3(0.9f, 1.1f, 0.9f), 0.15f))
             .Append(transform.DOScale(new Vector3(1f, 1f, 1f), 0.05f));
+    }
+
+    private void LevelUpButtonAnimation()
+    {
+        levelUp.transform.DOLocalJump(new Vector3(levelUp.transform.localPosition.x,1f,0f), 2f, 1, 1f).SetLoops(-1, LoopType.Restart);
     }
 
 #if UNITY_EDITOR
