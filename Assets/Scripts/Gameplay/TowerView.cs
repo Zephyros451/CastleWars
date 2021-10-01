@@ -102,7 +102,7 @@ public class TowerView : MonoBehaviour
 
     private void LevelUpButtonAnimation()
     {
-        levelUp.transform.DOLocalJump(new Vector3(levelUp.transform.localPosition.x,1f,0f), 2f, 1, 1f).SetLoops(-1, LoopType.Restart);
+        levelUp.transform.DOLocalJump(new Vector3(levelUp.transform.localPosition.x,1f,0f), 2f, 1, 0.75f).SetLoops(-1, LoopType.Restart);
     }
 
 #if UNITY_EDITOR
