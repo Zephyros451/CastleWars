@@ -26,7 +26,7 @@ public class Tower : MonoBehaviour
     private WaitForSeconds generationRate;
     private WaitForSeconds degenerationRate;
     private int inactiveAttackersInTower = 0;
-    private bool IsNotLevelingUp;
+    private bool IsNotLevelingUp = true;
     private WaitForSeconds LevelUpCooldown = new WaitForSeconds(5f);
 
     private Coroutine attackedCoroutine;

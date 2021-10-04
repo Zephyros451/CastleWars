@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitPrefab: {fileID: 4857119745757701095, guid: 07f8e203081462d44a7c4907a3740670,
     type: 3}
-  modelPrefab: {fileID: 7142593347430253631, guid: 999337d7b0cf6544e82bbf0dc8a2b87d,
+  modelPrefab: {fileID: 4133431625004445574, guid: 6321dd10a1d5835478115a7ad6141b6b,
     type: 3}
