@@ -74,7 +74,13 @@ public class Unit : MonoBehaviour
             if (activeModels[i].SegmentsTravelled == path.Count)
                 continue;
 
-            activeModels[i].transform.position = Vector3.MoveTowards(activeModels[i].transform.position, path[activeModels[i].SegmentsTravelled], unitSheetData.UnitLevelData[Level].speed * Time.deltaTime);
+            Vector3 newPosition = Vector3.MoveTowards(activeModels[i].transform.position, path[activeModels[i].SegmentsTravelled], unitSheetData.UnitLevelData[Level].speed * Time.deltaTime);
+            Quaternion newRotation = Quaternion.identity;
+            if (newPosition - activeModels[i].transform.position != Vector3.zero)
+            {
+                 newRotation = Quaternion.LookRotation(newPosition - activeModels[i].transform.position);
+            }
+            activeModels[i].Move(newPosition, newRotation);
 
             var difference = Vector3.Distance(activeModels[i].transform.position, path[activeModels[i].SegmentsTravelled]);
             if (difference < 0.1f)
@@ -95,8 +101,23 @@ public class Unit : MonoBehaviour
         {
             if (models.Count > 0)
             {
-                activeModels.Add(models.Dequeue());
-                yield return modelTimeSpacing;
+                if (models.Count % 2 == 0)
+                {
+                    var model = models.Dequeue();
+                    model.SetOffset(-Vector3.left * 0.5f);
+                    activeModels.Add(model);
+
+                    model = models.Dequeue();
+                    model.SetOffset(Vector3.left * 0.5f);
+                    activeModels.Add(model);
+
+                    yield return modelTimeSpacing;
+                }
+                else
+                {
+                    activeModels.Add(models.Dequeue());
+                    yield return modelTimeSpacing;
+                }
             }
             else
             {

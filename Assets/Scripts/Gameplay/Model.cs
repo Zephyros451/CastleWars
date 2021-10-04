@@ -4,11 +4,13 @@
 public class Model : MonoBehaviour
 {
     [SerializeField, HideInInspector] private SphereCollider collider;
+    [SerializeField, HideInInspector] private Transform view;
 
     [HideInInspector] public bool IsActive;
     [HideInInspector] public int SegmentsTravelled;
 
     private Unit unit;
+    private Vector3 offset;
 
     public Allegiance Allegiance { get; private set; }
     public float Attack => unit.UnitSheetData.UnitLevelData[unit.Level].attackInField;
@@ -20,6 +22,17 @@ public class Model : MonoBehaviour
         this.unit = unit;
     }
 
+    public void SetOffset(Vector3 offset)
+    {
+        view.localPosition = offset;
+    }
+
+    public void Move(Vector3 position, Quaternion rotation)
+    {
+        transform.position = position;
+        transform.rotation = rotation;
+    }
+
     public void ActivateCollider()
     {
         collider.enabled = true;
@@ -28,5 +41,6 @@ public class Model : MonoBehaviour
     private void Reset()
     {
         collider = GetComponent<SphereCollider>();
+        view = GetComponentInChildren<Renderer>().transform;
     }
 }
