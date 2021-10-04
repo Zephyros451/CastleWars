@@ -8,6 +8,7 @@ public class Model : MonoBehaviour
 
     [HideInInspector] public bool IsActive;
     [HideInInspector] public int SegmentsTravelled;
+    [HideInInspector] public int Level;
 
     private Unit unit;
     private Vector3 offset;
@@ -16,10 +17,11 @@ public class Model : MonoBehaviour
     public float Attack => unit.UnitSheetData.UnitLevelData[unit.Level].attackInField;
     public float HP => unit.UnitSheetData.UnitLevelData[unit.Level].hp;
 
-    public void Init(Unit unit, Allegiance allegiance)
+    public void Init(Unit unit, Allegiance allegiance, int level)
     {
-        Allegiance = allegiance;
+        this.Allegiance = allegiance;
         this.unit = unit;
+        this.Level = level;
     }
 
     public void SetOffset(Vector3 offset)

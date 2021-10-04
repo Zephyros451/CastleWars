@@ -16,6 +16,7 @@ public class TowerView : MonoBehaviour
     [SerializeField] private Image levelCounterFront;
     [SerializeField] private TextMeshProUGUI levelCounterText;
     [SerializeField] private Image levelUp;
+    [SerializeField] private TowerScaffoldingFlag towerScaffolding;
     [SerializeField] private List<Renderer> renderers;
 
     private void OnEnable()
@@ -29,8 +30,11 @@ public class TowerView : MonoBehaviour
         }
 
         tower.TowerDataChanged += UpdateTower;
-        tower.LevelChanged += OnLevelChanged;
+        tower.LevelUpStarted += OnLevelUpStarted;
+        tower.LevelUpEnded += OnLevelUpEnded;
         tower.GarrisonCountChanged += UpdateGarrisonCount;
+
+        towerScaffolding.gameObject.SetActive(false);
 
         LevelUpButtonAnimation();
     }
@@ -38,7 +42,8 @@ public class TowerView : MonoBehaviour
     private void OnDisable()
     {
         tower.TowerDataChanged -= UpdateTower;
-        tower.LevelChanged -= OnLevelChanged;
+        tower.LevelUpStarted -= OnLevelUpStarted;
+        tower.LevelUpEnded -= OnLevelUpEnded;
         tower.GarrisonCountChanged -= UpdateGarrisonCount;
     }
 
@@ -55,9 +60,15 @@ public class TowerView : MonoBehaviour
         levelCounterFront.sprite = tower.TowerData.frontLevelUI;
     }
 
-    private void OnLevelChanged()
+    private void OnLevelUpStarted()
     {
         UpdateLevel();
+        towerScaffolding.gameObject.SetActive(true);
+    }
+
+    private void OnLevelUpEnded()
+    {
+        towerScaffolding.gameObject.SetActive(false);
     }
 
     private void UpdateLevel(bool withAnimation = true)
@@ -124,11 +135,13 @@ public class TowerView : MonoBehaviour
         levelCounterFront = tower.GetComponentInChildren<TowerLevelFrontImageFlag>().GetComponent<Image>();
         levelCounterText = tower.GetComponentInChildren<TowerLevelTextFlag>().GetComponent<TextMeshProUGUI>();
         levelUp = tower.GetComponentInChildren<TowerLevelUpImageFlag>().GetComponent<Image>();
+        towerScaffolding = tower.GetComponentInChildren<TowerScaffoldingFlag>();
         renderers = new List<Renderer>(tower.GetComponentsInChildren<Renderer>());
 
         for (int i = renderers.Count - 1; i >= 0; i--) 
         {
-            if(renderers[i].TryGetComponent<TowerGroundAreaFlag>(out TowerGroundAreaFlag flag))
+            if(renderers[i].TryGetComponent(out TowerGroundAreaFlag groundFlag) ||
+               renderers[i].TryGetComponent(out TowerScaffoldingFlag scaffoldingFlag))
             {
                 renderers.Remove(renderers[i]);
             }

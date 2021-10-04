@@ -17,12 +17,10 @@ public class Unit : MonoBehaviour
     public int Level { get; private set; }
     public BezierCurve Curve { get; private set; }
 
-    public void Init(BezierCurve curve, Tower destination, int level, DirectionType direction)
+    public void Init(BezierCurve curve, Tower destination, DirectionType direction)
     {
         Curve = curve;
         path = curve.GetSegmentPoints();
-        Level = level;
-        modelTimeSpacing = new WaitForSeconds(0.55f/unitSheetData.UnitLevelData[level].speed);
 
         switch(direction)
         {
@@ -45,6 +43,7 @@ public class Unit : MonoBehaviour
         {
             models.Enqueue(newModels[i]);
         }
+        modelTimeSpacing = new WaitForSeconds(0.55f / unitSheetData.UnitLevelData[newModels[0].Level].speed);
     }
 
     private void Update()
@@ -74,7 +73,8 @@ public class Unit : MonoBehaviour
             if (activeModels[i].SegmentsTravelled == path.Count)
                 continue;
 
-            Vector3 newPosition = Vector3.MoveTowards(activeModels[i].transform.position, path[activeModels[i].SegmentsTravelled], unitSheetData.UnitLevelData[Level].speed * Time.deltaTime);
+            Vector3 newPosition = Vector3.MoveTowards(activeModels[i].transform.position, path[activeModels[i].SegmentsTravelled],
+                                                      unitSheetData.UnitLevelData[activeModels[i].Level].speed * Time.deltaTime);
             Quaternion newRotation = Quaternion.identity;
             if (newPosition - activeModels[i].transform.position != Vector3.zero)
             {

@@ -8,7 +8,8 @@ using UnityEngine;
 public class Tower : MonoBehaviour
 {
     public event Action<TowerData> TowerDataChanged;
-    public event Action LevelChanged;
+    public event Action LevelUpStarted;
+    public event Action LevelUpEnded;
     public event Action GarrisonCountChanged;
 
     [SerializeField, HideInInspector] private Allegiance allegiance;
@@ -58,7 +59,6 @@ public class Tower : MonoBehaviour
         private set
         {
             towerLevel = value;
-            LevelChanged?.Invoke();
         }
     }
 
@@ -135,6 +135,8 @@ public class Tower : MonoBehaviour
         if (levelUpCoroutine != null)
         {
             StopCoroutine(levelUpCoroutine);
+            IsNotLevelingUp = true;
+            LevelUpEnded?.Invoke();
         }
 
         TowerDataChanged?.Invoke(towerData);
@@ -189,7 +191,7 @@ public class Tower : MonoBehaviour
         if(unit == null)
         {
             unit = Instantiate(towerData.unitData.unitPrefab, transform.position, Quaternion.identity);
-            unit.Init(path, tower, Level, direction);
+            unit.Init(path, tower, direction);
             units.Add(unit);
         }
 
@@ -197,8 +199,9 @@ public class Tower : MonoBehaviour
 
         for (int i = 0; i < troopSize; i++)
         {
-            var model = Instantiate(unit.UnitData.modelPrefab, navigator.GetStartingPointTo(tower), Quaternion.identity, unit.transform);
-            model.Init(unit, Allegiance);
+            var model = Instantiate(towerData.unitData.modelPrefab, navigator.GetStartingPointTo(tower),
+                                    Quaternion.identity, unit.transform);
+            model.Init(unit, Allegiance, Level);
             models.Add(model);
         }
         unit.AddModels(models);
@@ -247,8 +250,10 @@ public class Tower : MonoBehaviour
     private IEnumerator LevelUpProcessing()
     {
         IsNotLevelingUp = false;
+        LevelUpStarted?.Invoke();
         yield return LevelUpCooldown;
         IsNotLevelingUp = true;
+        LevelUpEnded?.Invoke();
     }
 
 #if UNITY_EDITOR
