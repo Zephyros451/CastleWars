@@ -44,14 +44,14 @@ public class AIBrain : MonoBehaviour
             {
                 if (ShouldLevelUp(tower))
                 {
-                    tower.LevelUp();
+                    tower.Level.LevelUp();
                 }
 
                 foreach (var closeTower in nonAICloseTowers)
                 {
                     if (ShouldAttack(tower, closeTower))
                     {
-                        tower.SendTroopTo(closeTower);
+                        tower.TroopSender.SendTroopTo(closeTower);
                     }
                 }
             }
@@ -92,7 +92,7 @@ public class AIBrain : MonoBehaviour
 
     private bool ShouldLevelUp(Tower tower)
     {
-        if (tower.Level == 4)
+        if (tower.Level.Value == 4)
             return false;
 
         switch (gameDifficulty)
@@ -100,18 +100,18 @@ public class AIBrain : MonoBehaviour
             case GameDifficulty.Hard:
                 if (tower.Navigator.HasNeighbourWithAllegiance(Allegiance.Player))
                 {
-                    if (tower.GarrisonCount >= tower.QuantityCap)
+                    if (tower.Garrison.Count >= tower.QuantityCap)
                         return true;
                 }
                 else
                 {
-                    if (tower.GarrisonCount >= tower.LvlUpQuantity)
+                    if (tower.Garrison.Count >= tower.LvlUpQuantity)
                         return true;
                 }
                 return false;
 
             case GameDifficulty.Normal:
-                if (tower.GarrisonCount >= tower.QuantityCap * 0.75f)
+                if (tower.Garrison.Count >= tower.QuantityCap * 0.75f)
                 {
                     return true;
                 }
@@ -120,12 +120,12 @@ public class AIBrain : MonoBehaviour
             case GameDifficulty.Easy:
                 if (tower.Navigator.HasNeighbourWithAllegiance(Allegiance.Player))
                 {
-                    if (tower.GarrisonCount >= tower.LvlUpQuantity)
+                    if (tower.Garrison.Count >= tower.LvlUpQuantity)
                         return true;
                 }
                 else
                 {
-                    if (tower.GarrisonCount == tower.QuantityCap)
+                    if (tower.Garrison.Count == tower.QuantityCap)
                         return true;
                 }
                 return false;
@@ -137,28 +137,28 @@ public class AIBrain : MonoBehaviour
 
     private bool ShouldAttack(Tower aiTower, Tower nonAITower)
     {
-        if (!aiTower.IsNotUnderAttack)
+        if (!aiTower.Garrison.IsNotUnderAttack)
             return false;
 
         int random = Random.Range(0, 101);
         switch (gameDifficulty)
         {
             case GameDifficulty.Hard:
-                if (random <= 30 && (aiTower.GarrisonCount * 0.5f - nonAITower.GarrisonCount) > aiTower.GarrisonCount * 0.2f)
+                if (random <= 30 && (aiTower.Garrison.Count * 0.5f - nonAITower.Garrison.Count) > aiTower.Garrison.Count * 0.2f)
                     return true;
-                if ((aiTower.GarrisonCount * 0.5f - nonAITower.GarrisonCount) > aiTower.GarrisonCount * 0.5f)
+                if ((aiTower.Garrison.Count * 0.5f - nonAITower.Garrison.Count) > aiTower.Garrison.Count * 0.5f)
                     return true;
                 return false;
             case GameDifficulty.Normal:
-                if (random <= 30 && (aiTower.GarrisonCount * 0.5f - nonAITower.GarrisonCount) > aiTower.GarrisonCount * 0.1f)
+                if (random <= 30 && (aiTower.Garrison.Count * 0.5f - nonAITower.Garrison.Count) > aiTower.Garrison.Count * 0.1f)
                     return true;
-                if ((aiTower.GarrisonCount * 0.5f - nonAITower.GarrisonCount) > aiTower.GarrisonCount * 0.25f)
+                if ((aiTower.Garrison.Count * 0.5f - nonAITower.Garrison.Count) > aiTower.Garrison.Count * 0.25f)
                     return true;
                 return false;
             case GameDifficulty.Easy:
-                if (random <= 30 && (aiTower.GarrisonCount * 0.5f - nonAITower.GarrisonCount) > aiTower.GarrisonCount * 0.01f)
+                if (random <= 30 && (aiTower.Garrison.Count * 0.5f - nonAITower.Garrison.Count) > aiTower.Garrison.Count * 0.01f)
                     return true;
-                if ((aiTower.GarrisonCount * 0.5f - nonAITower.GarrisonCount) > aiTower.GarrisonCount * 0.1f)
+                if ((aiTower.Garrison.Count * 0.5f - nonAITower.Garrison.Count) > aiTower.Garrison.Count * 0.1f)
                     return true;
                 return false;
             default:

@@ -457,6 +457,7 @@ GameObject:
   - component: {fileID: 4161037228064988565}
   - component: {fileID: 8933114704521346019}
   - component: {fileID: 8310280199241107491}
+  - component: {fileID: 2874094043961048831}
   m_Layer: 0
   m_Name: HumanTowerA
   m_TagString: Untagged
@@ -515,8 +516,22 @@ MonoBehaviour:
   towerSheetData: {fileID: 0}
   towerDataInstances: []
   towerData: {fileID: 0}
+  collision: {fileID: 4559269191753461062}
+  troopSender: {fileID: 2874094043961048831}
   navigator: {fileID: 8933114704521346019}
-  towerCollision: {fileID: 4559269191753461062}
+--- !u!114 &2874094043961048831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4161037228064988564}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 533940186fad7384782e4115beceb83e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tower: {fileID: 8310280199241107491}
 --- !u!1 &4161037229745151026
 GameObject:
   m_ObjectHideFlags: 0
@@ -1182,6 +1197,7 @@ MonoBehaviour:
   levelCounterFront: {fileID: 6240222863954077680}
   levelCounterText: {fileID: 8021092093671457683}
   levelUp: {fileID: 1789408372208775330}
+  towerScaffolding: {fileID: 0}
   renderers:
   - {fileID: 9108426486601628034}
   - {fileID: 4140634595067293653}
@@ -1487,12 +1503,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dac3a7d556fc40a4298c6f36900f0d29, type: 3}
---- !u!23 &4140634595067293653 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 3332440426582570110, guid: dac3a7d556fc40a4298c6f36900f0d29,
-    type: 3}
-  m_PrefabInstance: {fileID: 1677953496327330731}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7938875811706815213 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8747614101541148998, guid: dac3a7d556fc40a4298c6f36900f0d29,
@@ -1508,6 +1518,12 @@ MeshRenderer:
 --- !u!1 &7306912075782658135 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8227535564455183356, guid: dac3a7d556fc40a4298c6f36900f0d29,
+    type: 3}
+  m_PrefabInstance: {fileID: 1677953496327330731}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &4140634595067293653 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 3332440426582570110, guid: dac3a7d556fc40a4298c6f36900f0d29,
     type: 3}
   m_PrefabInstance: {fileID: 1677953496327330731}
   m_PrefabAsset: {fileID: 0}

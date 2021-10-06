@@ -61,7 +61,7 @@ public class PlayerInput : MonoBehaviour
                     {
                         if(collision.Tower.Allegiance == Allegiance.Player)
                         {
-                            collision.Tower.LevelUp();
+                            collision.Tower.Level.LevelUp();
                         }
                     }
                 }
@@ -87,7 +87,7 @@ public class PlayerInput : MonoBehaviour
                             return;
                         }
 
-                        firstTower.SendTroopTo(secondTower);
+                        firstTower.TroopSender.SendTroopTo(secondTower);
                     }
                 }
             }

@@ -22,29 +22,37 @@ public class TowerView : MonoBehaviour
     private void OnEnable()
     {
         Reset();
-        UpdateLevel(false);
 
         if(tower.Allegiance != Allegiance.Player)
         {
             levelUp.enabled = false;
         }
 
-        tower.TowerDataChanged += UpdateTower;
-        tower.LevelUpStarted += OnLevelUpStarted;
-        tower.LevelUpEnded += OnLevelUpEnded;
-        tower.GarrisonCountChanged += UpdateGarrisonCount;
-
         towerScaffolding.gameObject.SetActive(false);
 
         LevelUpButtonAnimation();
     }
 
-    private void OnDisable()
+    private void Start()
+    {
+        UpdateLevelWithoutAnimation();
+
+        tower.TowerDataChanged += UpdateTower;
+        tower.Garrison.CountChanged += UpdateGarrisonCount;
+        tower.TroopSender.CountChanged += UpdateGarrisonCount;
+        tower.Level.LevelReseted += UpdateLevelWithoutAnimation;
+        tower.Level.LevelUpStarted += OnLevelUpStarted;
+        tower.Level.LevelUpEnded += OnLevelUpEnded;
+    }
+
+    private void OnDestroy()
     {
         tower.TowerDataChanged -= UpdateTower;
-        tower.LevelUpStarted -= OnLevelUpStarted;
-        tower.LevelUpEnded -= OnLevelUpEnded;
-        tower.GarrisonCountChanged -= UpdateGarrisonCount;
+        tower.Garrison.CountChanged -= UpdateGarrisonCount;
+        tower.TroopSender.CountChanged -= UpdateGarrisonCount;
+        tower.Level.LevelReseted -= UpdateLevelWithoutAnimation;
+        tower.Level.LevelUpStarted -= OnLevelUpEnded;
+        tower.Level.LevelUpEnded -= OnLevelUpEnded;
     }
 
     private void UpdateTower(TowerData data)
@@ -71,28 +79,29 @@ public class TowerView : MonoBehaviour
         towerScaffolding.gameObject.SetActive(false);
     }
 
-    private void UpdateLevel(bool withAnimation = true)
+    private void UpdateLevel()
     {
-        levelCounterText.text = $"Lv. {(tower.Level + 1).ToString()}";
-
+        levelCounterText.text = $"Lv. {(tower.Level.Value + 1).ToString()}";
         garrisonCounterSlider.maxValue = tower.QuantityCap;
+        SquashAnimation();
+        UpdateGarrisonCount();
+    }
 
-        if (withAnimation)
-        {
-            SquashAnimation();
-        }
-
+    private void UpdateLevelWithoutAnimation()
+    {
+        levelCounterText.text = $"Lv. {(tower.Level.Value + 1).ToString()}";
+        garrisonCounterSlider.maxValue = tower.QuantityCap;
         UpdateGarrisonCount();
     }
 
     private void UpdateGarrisonCount()
     {
-        garrisonCounterText.text = ((int)tower.GarrisonCount).ToString();
-        garrisonCounterSlider.value = tower.GarrisonCount;
+        garrisonCounterText.text = ((int)tower.Garrison.Count).ToString();
+        garrisonCounterSlider.value = tower.Garrison.Count;
 
         if (tower.Allegiance == Allegiance.Player)
         {
-            if (tower.GarrisonCount < tower.LvlUpQuantity)
+            if (tower.Garrison.Count < tower.LvlUpQuantity)
             {
                 levelUp.enabled = false;
             }
