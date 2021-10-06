@@ -28,8 +28,7 @@ public class TowerGarrison
         }
     }
 
-    public TowerGarrison()
-    { }
+    public TowerGarrison() { }
 
     public TowerGarrison(ITower tower, TowerSheetData data)
     {

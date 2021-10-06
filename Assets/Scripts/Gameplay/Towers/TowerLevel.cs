@@ -10,7 +10,6 @@ public class TowerLevel
 
     private ITower tower;
     public bool IsNotLevelingUp = true;
-    private WaitForSeconds LevelUpCooldown = new WaitForSeconds(5f);
     private Coroutine levelUpCoroutine;
 
     public int Value { get; private set; } = 0;

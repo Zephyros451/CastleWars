@@ -19,11 +19,11 @@ public class Tower : MonoBehaviour, ITower
     [SerializeField, ReadOnly] private TowerTroopSender troopSender;
     [SerializeField, ReadOnly] private Navigator navigator;
 
+    public TowerCollision Collision => collision;
     public TowerTroopSender TroopSender => troopSender;
     public Navigator Navigator => navigator;
     public TowerGarrison Garrison { get; private set; }
     public TowerLevel Level { get; private set; }
-    public TowerCollision Collision => collision;
 
     public int QuantityCap => towerSheetData.TowerLevelData[Level.Value].quantityCap;
     public int LvlUpQuantity => towerSheetData.TowerLevelData[Level.Value].lvlUpQuantity;
@@ -33,7 +33,6 @@ public class Tower : MonoBehaviour, ITower
     public float HP => towerSheetData.TowerLevelData[Level.Value].hp;
     public Unit UnitPrefab => towerData.unitData.unitPrefab;
     public Model ModelPrefab => towerData.unitData.modelPrefab;
-
     public Allegiance Allegiance => allegiance;
     public TowerType TowerType => type;
     public TowerData TowerData => towerData;

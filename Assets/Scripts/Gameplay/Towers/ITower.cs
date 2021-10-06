@@ -19,8 +19,6 @@ public interface ITower
     TowerTroopSender TroopSender { get; }
     Unit UnitPrefab { get; }
 
-    event Action<TowerData> TowerDataChanged;
 
     void ChangeAllegiance(Allegiance newAllegiance);
-    void Initialize(TowerType newType, Allegiance newAllegiance);
 }

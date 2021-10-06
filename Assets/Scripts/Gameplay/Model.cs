@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [RequireComponent(typeof(SphereCollider))]
-public class Model : MonoBehaviour
+public class Model : MonoBehaviour, IModel
 {
     [SerializeField, HideInInspector] private SphereCollider collider;
     [SerializeField, HideInInspector] private Transform view;
