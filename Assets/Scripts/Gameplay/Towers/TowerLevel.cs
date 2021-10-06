@@ -8,15 +8,18 @@ public class TowerLevel
     public event Action LevelUpEnded;
     public event Action LevelReseted;
 
-    private Tower tower;
+    private ITower tower;
     public bool IsNotLevelingUp = true;
     private WaitForSeconds LevelUpCooldown = new WaitForSeconds(5f);
     private Coroutine levelUpCoroutine;
 
     public int Value { get; private set; } = 0;
 
-    public TowerLevel(Tower tower, int startingLevel)
+    public TowerLevel(ITower tower, int startingLevel)
     {
+        if (startingLevel < 0)
+            startingLevel = 0;
+
         this.tower = tower;
         Value = startingLevel;
     }

@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEngine;
 
 [RequireComponent(typeof(Navigator))]
-public class Tower : MonoBehaviour
+public class Tower : MonoBehaviour, ITower
 {
     public event Action<TowerData> TowerDataChanged;
 

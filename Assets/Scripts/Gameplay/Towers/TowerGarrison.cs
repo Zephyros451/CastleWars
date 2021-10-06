@@ -6,7 +6,7 @@ public class TowerGarrison
 {
     public event Action CountChanged;
 
-    private Tower tower;
+    private ITower tower;
 
     private WaitForSeconds generationRate;
     private WaitForSeconds degenerationRate;
@@ -28,7 +28,10 @@ public class TowerGarrison
         }
     }
 
-    public TowerGarrison(Tower tower, TowerSheetData data)
+    public TowerGarrison()
+    { }
+
+    public TowerGarrison(ITower tower, TowerSheetData data)
     {
         this.tower = tower;
         generationRate = new WaitForSeconds(data.TowerLevelData[tower.Level.Value].generationRate);
