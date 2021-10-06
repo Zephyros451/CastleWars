@@ -6,8 +6,6 @@ public class TowerCollision : MonoBehaviour
     public event Action AllyCame;
     public event Action<Model> TowerAttacked;
 
-    private Coroutine attackedCoroutine;
-
     [SerializeField, HideInInspector] private Tower tower;
     public Tower Tower => tower;    
 
@@ -27,12 +25,6 @@ public class TowerCollision : MonoBehaviour
         }
         else
         {
-            if (attackedCoroutine != null)
-            {
-                StopCoroutine(attackedCoroutine);
-            }
-            attackedCoroutine = StartCoroutine(tower.Garrison.AttackedProcessing());
-
             TowerAttacked?.Invoke(model);
         }
 

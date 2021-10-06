@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class TowerGarrison
@@ -33,10 +34,18 @@ public class TowerGarrison
     public TowerGarrison(ITower tower, TowerSheetData data)
     {
         this.tower = tower;
-        generationRate = new WaitForSeconds(data.TowerLevelData[tower.Level.Value].generationRate);
+        generationRate = new WaitForSeconds(data.TowerLevelData[tower.Level].generationRate);
         degenerationRate = new WaitForSeconds(0.8f);
-        tower.Collision.TowerAttacked += OnTowerAttacked;
-        tower.Collision.AllyCame += OnAllyCame;
+    }
+
+    public void DecreaseGarrisonCount(int amount)
+    {
+        Count -= amount;
+    }
+
+    public void SetGarrisonCount(float newCount)
+    {
+        Count = newCount;
     }
 
     public IEnumerator GarrisonGeneration()
@@ -44,7 +53,7 @@ public class TowerGarrison
         while (true)
         {
             yield return generationRate;
-            if (Count < tower.QuantityCap && IsNotUnderAttack && tower.Level.IsNotLevelingUp)
+            if (Count < tower.QuantityCap && IsNotUnderAttack && tower.IsNotLevelingUp)
             {
                 Count++;
             }
@@ -63,20 +72,22 @@ public class TowerGarrison
         }
     }
 
-    public IEnumerator AttackedProcessing()
+    public async void AttackedProcessing()
     {
         IsNotUnderAttack = false;
-        yield return attackedCooldown;
+        await Task.Delay(2000);
         IsNotUnderAttack = true;
     }
 
-    private void OnAllyCame()
+    public void OnAllyCame()
     {
-        tower.Garrison.Count++;
+        Count++;
     }
 
-    private void OnTowerAttacked(Model model)
+    public void OnTowerAttacked(Model model)
     {
+        AttackedProcessing();
+
         if (Mathf.Approximately(Count, 0f))
         {
             tower.ChangeAllegiance(model.Allegiance);

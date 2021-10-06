@@ -8,7 +8,7 @@ public class Unit : MonoBehaviour
     [SerializeField] private UnitSheetData unitSheetData;
 
     private List<Vector3> path;
-    private Queue<Model> models = new Queue<Model>();
+    private Stack<Model> models = new Stack<Model>();
     private List<Model> activeModels = new List<Model>();
     private WaitForSeconds modelTimeSpacing;
 
@@ -41,7 +41,7 @@ public class Unit : MonoBehaviour
     {
         for (int i = 0; i < newModels.Count; i++)
         {
-            models.Enqueue(newModels[i]);
+            models.Push(newModels[i]);
         }
         modelTimeSpacing = new WaitForSeconds(0.55f / unitSheetData.UnitLevelData[newModels[0].Level].speed);
     }
@@ -70,10 +70,10 @@ public class Unit : MonoBehaviour
     {
         for (int i = 0; i < activeModels.Count; i++)
         {
-            if (activeModels[i].SegmentsTravelled == path.Count)
+            if (activeModels[i].CurrentSegment == path.Count)
                 continue;
 
-            Vector3 newPosition = Vector3.MoveTowards(activeModels[i].transform.position, path[activeModels[i].SegmentsTravelled],
+            Vector3 newPosition = Vector3.MoveTowards(activeModels[i].transform.position, path[activeModels[i].CurrentSegment],
                                                       unitSheetData.UnitLevelData[activeModels[i].Level].speed * Time.deltaTime);
             Quaternion newRotation = Quaternion.identity;
             if (newPosition - activeModels[i].transform.position != Vector3.zero)
@@ -82,12 +82,12 @@ public class Unit : MonoBehaviour
             }
             activeModels[i].Move(newPosition, newRotation);
 
-            var difference = Vector3.Distance(activeModels[i].transform.position, path[activeModels[i].SegmentsTravelled]);
+            var difference = Vector3.Distance(activeModels[i].transform.position, path[activeModels[i].CurrentSegment]);
             if (difference < 0.1f)
             {
-                activeModels[i].SegmentsTravelled++;
+                activeModels[i].IncrementSegment();
 
-                if (activeModels[i].SegmentsTravelled > path.Count / 2)
+                if (activeModels[i].CurrentSegment > path.Count / 2)
                 {
                     activeModels[i].ActivateCollider();
                 }
@@ -103,11 +103,11 @@ public class Unit : MonoBehaviour
             {
                 if (models.Count % 2 == 0)
                 {
-                    var model = models.Dequeue();
+                    var model = models.Pop();
                     model.SetOffset(-Vector3.left * 0.5f);
                     activeModels.Add(model);
 
-                    model = models.Dequeue();
+                    model = models.Pop();
                     model.SetOffset(Vector3.left * 0.5f);
                     activeModels.Add(model);
 
@@ -115,7 +115,7 @@ public class Unit : MonoBehaviour
                 }
                 else
                 {
-                    activeModels.Add(models.Dequeue());
+                    activeModels.Add(models.Pop());
                     yield return modelTimeSpacing;
                 }
             }

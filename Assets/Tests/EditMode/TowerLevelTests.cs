@@ -33,8 +33,7 @@ namespace Tests
         public void LevelUpIncreasesLevelByOne()
         {
             var garrison = new TowerGarrison();
-            tower.Garrison.Returns(garrison);
-            tower.Garrison.Count = 10f;
+            tower.GarrisonCount.Returns(10f);
             tower.LvlUpQuantity.Returns(5);
 
             int levelValue = towerLevel.Value;

@@ -4,11 +4,8 @@ public interface ITower
 {
     Allegiance Allegiance { get; }
     float AttackInTower { get; }
-    TowerCollision Collision { get; }
-    TowerGarrison Garrison { get; }
     float GenerationRate { get; }
     float HP { get; }
-    TowerLevel Level { get; }
     int LvlUpQuantity { get; }
     float LvlUpTime { get; }
     Model ModelPrefab { get; }
@@ -16,9 +13,11 @@ public interface ITower
     int QuantityCap { get; }
     TowerData TowerData { get; }
     TowerType TowerType { get; }
-    TowerTroopSender TroopSender { get; }
     Unit UnitPrefab { get; }
+    float GarrisonCount { get; }
+    int Level { get; }
+    bool IsNotLevelingUp { get; }
 
-
-    void ChangeAllegiance(Allegiance newAllegiance);
+    void DecreaseGarrisonCount(int amount);
+    void ChangeAllegiance(Allegiance allegiance);
 }

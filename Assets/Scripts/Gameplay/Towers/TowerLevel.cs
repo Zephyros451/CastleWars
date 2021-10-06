@@ -34,10 +34,10 @@ public class TowerLevel
 
     public void LevelUp()
     {
-        if (tower.Garrison.Count < tower.LvlUpQuantity)
+        if (tower.GarrisonCount < tower.LvlUpQuantity)
             return;
 
-        tower.Garrison.Count -= tower.LvlUpQuantity;
+        tower.DecreaseGarrisonCount(tower.LvlUpQuantity);
         Value++;
 
         LevelUpProcessing();

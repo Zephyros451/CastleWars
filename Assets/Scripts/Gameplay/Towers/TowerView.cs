@@ -38,21 +38,19 @@ public class TowerView : MonoBehaviour
         UpdateLevelWithoutAnimation();
 
         tower.TowerDataChanged += UpdateTower;
-        tower.Garrison.CountChanged += UpdateGarrisonCount;
-        tower.TroopSender.CountChanged += UpdateGarrisonCount;
-        tower.Level.LevelReseted += UpdateLevelWithoutAnimation;
-        tower.Level.LevelUpStarted += OnLevelUpStarted;
-        tower.Level.LevelUpEnded += OnLevelUpEnded;
+        tower.GarrisonCountChanged += UpdateGarrisonCount;
+        tower.LevelReseted += UpdateLevelWithoutAnimation;
+        tower.LevelUpStarted += OnLevelUpStarted;
+        tower.LevelUpEnded += OnLevelUpEnded;
     }
 
     private void OnDestroy()
     {
         tower.TowerDataChanged -= UpdateTower;
-        tower.Garrison.CountChanged -= UpdateGarrisonCount;
-        tower.TroopSender.CountChanged -= UpdateGarrisonCount;
-        tower.Level.LevelReseted -= UpdateLevelWithoutAnimation;
-        tower.Level.LevelUpStarted -= OnLevelUpEnded;
-        tower.Level.LevelUpEnded -= OnLevelUpEnded;
+        tower.GarrisonCountChanged -= UpdateGarrisonCount;
+        tower.LevelReseted -= UpdateLevelWithoutAnimation;
+        tower.LevelUpStarted -= OnLevelUpStarted;
+        tower.LevelUpEnded -= OnLevelUpEnded;
     }
 
     private void UpdateTower(TowerData data)
@@ -81,7 +79,7 @@ public class TowerView : MonoBehaviour
 
     private void UpdateLevel()
     {
-        levelCounterText.text = $"Lv. {(tower.Level.Value + 1).ToString()}";
+        levelCounterText.text = $"Lv. {(tower.Level + 1).ToString()}";
         garrisonCounterSlider.maxValue = tower.QuantityCap;
         SquashAnimation();
         UpdateGarrisonCount();
@@ -89,19 +87,19 @@ public class TowerView : MonoBehaviour
 
     private void UpdateLevelWithoutAnimation()
     {
-        levelCounterText.text = $"Lv. {(tower.Level.Value + 1).ToString()}";
+        levelCounterText.text = $"Lv. {(tower.Level + 1).ToString()}";
         garrisonCounterSlider.maxValue = tower.QuantityCap;
         UpdateGarrisonCount();
     }
 
     private void UpdateGarrisonCount()
     {
-        garrisonCounterText.text = ((int)tower.Garrison.Count).ToString();
-        garrisonCounterSlider.value = tower.Garrison.Count;
+        garrisonCounterText.text = ((int)tower.GarrisonCount).ToString();
+        garrisonCounterSlider.value = tower.GarrisonCount;
 
         if (tower.Allegiance == Allegiance.Player)
         {
-            if (tower.Garrison.Count < tower.LvlUpQuantity)
+            if (tower.GarrisonCount < tower.LvlUpQuantity)
             {
                 levelUp.enabled = false;
             }

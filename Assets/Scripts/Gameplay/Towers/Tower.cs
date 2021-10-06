@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[RequireComponent(typeof(Navigator))]
 public class Tower : MonoBehaviour, ITower
 {
     public event Action<TowerData> TowerDataChanged;
+    public event Action GarrisonCountChanged;
+    public event Action LevelReseted;
+    public event Action LevelUpStarted;
+    public event Action LevelUpEnded;
 
     [SerializeField, HideInInspector] private Allegiance allegiance;
     [SerializeField, HideInInspector] private TowerType type;
@@ -19,27 +22,30 @@ public class Tower : MonoBehaviour, ITower
     [SerializeField, ReadOnly] private TowerTroopSender troopSender;
     [SerializeField, ReadOnly] private Navigator navigator;
 
-    public TowerCollision Collision => collision;
-    public TowerTroopSender TroopSender => troopSender;
     public Navigator Navigator => navigator;
-    public TowerGarrison Garrison { get; private set; }
-    public TowerLevel Level { get; private set; }
+    private TowerGarrison Garrison { get; set; }
+    private TowerLevel level { get; set; }
 
-    public int QuantityCap => towerSheetData.TowerLevelData[Level.Value].quantityCap;
-    public int LvlUpQuantity => towerSheetData.TowerLevelData[Level.Value].lvlUpQuantity;
-    public float GenerationRate => towerSheetData.TowerLevelData[Level.Value].generationRate;
-    public float LvlUpTime => towerSheetData.TowerLevelData[Level.Value].lvlUpTime;
-    public float AttackInTower => towerSheetData.TowerLevelData[Level.Value].attackInTower;
-    public float HP => towerSheetData.TowerLevelData[Level.Value].hp;
+    public int QuantityCap => towerSheetData.TowerLevelData[level.Value].quantityCap;
+    public int LvlUpQuantity => towerSheetData.TowerLevelData[level.Value].lvlUpQuantity;
+    public float GenerationRate => towerSheetData.TowerLevelData[level.Value].generationRate;
+    public float LvlUpTime => towerSheetData.TowerLevelData[level.Value].lvlUpTime;
+    public float AttackInTower => towerSheetData.TowerLevelData[level.Value].attackInTower;
+    public float HP => towerSheetData.TowerLevelData[level.Value].hp;
     public Unit UnitPrefab => towerData.unitData.unitPrefab;
     public Model ModelPrefab => towerData.unitData.modelPrefab;
     public Allegiance Allegiance => allegiance;
     public TowerType TowerType => type;
     public TowerData TowerData => towerData;
+    public float GarrisonCount => Garrison.Count;
+    public bool IsNotUnderAttack => Garrison.IsNotUnderAttack;
+    public int Level => level.Value;
+    public bool IsNotLevelingUp => level.IsNotLevelingUp;
+
 
     private void Awake()
     {
-        Level = new TowerLevel(this, 0);
+        level = new TowerLevel(this, 0);
         Garrison = new TowerGarrison(this, towerSheetData);
     }
 
@@ -49,11 +55,63 @@ public class Tower : MonoBehaviour, ITower
 
         StartCoroutine(Garrison.GarrisonGeneration());
         StartCoroutine(Garrison.GarrisonDegeneration());
+
+        collision.TowerAttacked += OnTowerAttacked;
+        collision.AllyCame += OnTowerGotBackUp;
+        Garrison.CountChanged += OnGarrisonCountChanged;
+        level.LevelUpStarted += OnLevelUpStarted;
+        level.LevelUpEnded += OnLevelUpEnded;
+        level.LevelReseted += OnLevelReseted;
+    }
+
+    private void OnDestroy()
+    {
+        collision.TowerAttacked -= OnTowerAttacked;
+        collision.AllyCame -= OnTowerGotBackUp;
+        Garrison.CountChanged -= OnGarrisonCountChanged;
+        level.LevelUpStarted -= OnLevelUpStarted;
+        level.LevelUpEnded -= OnLevelUpEnded;
+        level.LevelReseted -= OnLevelReseted;
+    }
+
+    private void OnTowerAttacked(Model model)
+    {
+        Garrison.OnTowerAttacked(model);
+    }
+
+    private void OnTowerGotBackUp()
+    {
+        Garrison.OnAllyCame();
+    }
+
+    private void OnGarrisonCountChanged()
+    {
+        GarrisonCountChanged?.Invoke();
+    }
+
+    private void OnLevelReseted()
+    {
+        LevelReseted?.Invoke();
+    }
+
+    private void OnLevelUpStarted()
+    {
+        LevelUpStarted?.Invoke();
+    }
+
+    private void OnLevelUpEnded()
+    {
+        LevelUpEnded?.Invoke();
+    }
+
+    public void SendTroopTo(Tower anotherTower)
+    {
+        troopSender.SendTroopTo(anotherTower);
     }
 
     public void ChangeAllegiance(Allegiance newAllegiance)
     {
-        Level.Reset();
+        level.Reset();
 
         switch(newAllegiance)
         {
@@ -73,9 +131,24 @@ public class Tower : MonoBehaviour, ITower
         
         allegiance = newAllegiance;
         
-        Level.IsNotLevelingUp = true;
+        level.IsNotLevelingUp = true;
 
         TowerDataChanged?.Invoke(towerData);
+    }
+
+    public void DecreaseGarrisonCount(int amount)
+    {
+        Garrison.DecreaseGarrisonCount(amount);
+    }
+
+    public void SetGarrisonCount(float newCount)
+    {
+        Garrison.SetGarrisonCount(newCount);
+    }
+
+    public void LevelUp()
+    {
+        level.LevelUp();
     }
 
 #if UNITY_EDITOR

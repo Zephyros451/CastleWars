@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class TowerTroopSender : MonoBehaviour
 {
-    public Action CountChanged;
-
     [SerializeField] private Tower tower;
 
     private List<Unit> units = new List<Unit>();
@@ -13,7 +11,7 @@ public class TowerTroopSender : MonoBehaviour
 
     public void SendTroopTo(Tower anotherTower)
     {
-        if (!tower.Level.IsNotLevelingUp)
+        if (!tower.IsNotLevelingUp)
             return;
 
         var path = tower.Navigator.GetPathTo(anotherTower);
@@ -21,8 +19,9 @@ public class TowerTroopSender : MonoBehaviour
         if (path == null)
             return;
 
-        float newGarrisonCount = tower.Garrison.Count / 2f;
-        int troopSize = (int)(tower.Garrison.Count - newGarrisonCount);
+        float newGarrisonCount = tower.GarrisonCount / 2f;
+        int troopSize = (int)(tower.GarrisonCount - newGarrisonCount);
+        tower.SetGarrisonCount(newGarrisonCount);
 
         Unit unit = null;
         for (int i = 0; i < units.Count; i++)
@@ -46,12 +45,10 @@ public class TowerTroopSender : MonoBehaviour
         {
             var model = Instantiate(tower.ModelPrefab, tower.Navigator.GetStartingPointTo(anotherTower),
                                     Quaternion.identity, unit.transform);
-            model.Init(unit, tower.Allegiance, tower.Level.Value);
+            model.Init(unit, tower.Allegiance, tower.Level);
             models.Add(model);
         }
         unit.AddModels(models);
-
-        tower.Garrison.Count = newGarrisonCount;
     }
 
     private void Reset()
