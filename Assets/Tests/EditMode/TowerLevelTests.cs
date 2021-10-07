@@ -5,45 +5,43 @@ namespace Tests
 {
     public class TowerLevelTests
     {
-        TowerLevel towerLevel;
-        ITower tower;
-
-        public TowerLevelTests()
+        public class Reset
         {
-            tower = Substitute.For<ITower>();
-            towerLevel = new TowerLevel(tower, 0);
+            [Test]
+            public void LevelValueSetsToZero()
+            {
+                ITower tower = Substitute.For<ITower>();
+                TowerLevel towerLevel = new TowerLevel(tower, 0);
+
+                towerLevel.Reset();
+
+                Assert.AreEqual(0, towerLevel.Value);
+            }
         }
 
-        [Test]
-        public void SettingStartingLevelThroughConstructor()
+        public class LevelUp
         {
-            Assert.AreEqual(5, new TowerLevel(null, 5).Value);
-            Assert.AreEqual(0, new TowerLevel(null, 0).Value);
-            Assert.AreEqual(0, new TowerLevel(null, -5).Value);
+            [Test]
+            public void LevelValueIncreasesByOne()
+            {
+                ITower tower = Substitute.For<ITower>();
+                TowerLevel towerLevel = new TowerLevel(tower, 0);
+                var garrison = new TowerGarrison(tower, 1f);
+                tower.GarrisonCount.Returns(10f);
+                tower.LvlUpQuantity.Returns(5);
+
+                int levelValue = towerLevel.Value;
+                towerLevel.LevelUp();
+                int newLevelValue = towerLevel.Value;
+
+                Assert.AreEqual(1, newLevelValue - levelValue);
+
+                towerLevel.LevelUp();
+                newLevelValue = towerLevel.Value;
+
+                Assert.AreEqual(2, newLevelValue - levelValue);
+            }
         }
-
-        [Test]
-        public void ResetSetsLevelValueToZero()
-        {
-            towerLevel.Reset();
-            Assert.AreEqual(0, towerLevel.Value);
-        }
-
-        [Test]
-        public void LevelUpIncreasesLevelByOne()
-        {
-            var garrison = new TowerGarrison();
-            tower.GarrisonCount.Returns(10f);
-            tower.LvlUpQuantity.Returns(5);
-
-            int levelValue = towerLevel.Value;
-            towerLevel.LevelUp();
-            int newLevelValue = towerLevel.Value;
-            Assert.AreEqual(1, newLevelValue - levelValue);
-
-            towerLevel.LevelUp();
-            newLevelValue = towerLevel.Value;
-            Assert.AreEqual(2, newLevelValue - levelValue);
-        }
+        
     }
 }

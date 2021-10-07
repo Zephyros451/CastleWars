@@ -29,23 +29,21 @@ public class TowerGarrison
         }
     }
 
-    public TowerGarrison() { }
-
-    public TowerGarrison(ITower tower, TowerSheetData data)
+    public TowerGarrison(ITower tower, float generationRate)
     {
         this.tower = tower;
-        generationRate = new WaitForSeconds(data.TowerLevelData[tower.Level].generationRate);
+        this.generationRate = new WaitForSeconds(generationRate);
         degenerationRate = new WaitForSeconds(0.8f);
     }
 
     public void DecreaseGarrisonCount(int amount)
     {
-        Count -= amount;
-    }
+        if(amount < 0)
+        {
+            amount = -amount;
+        }
 
-    public void SetGarrisonCount(float newCount)
-    {
-        Count = newCount;
+        Count -= amount;
     }
 
     public IEnumerator GarrisonGeneration()
@@ -94,8 +92,12 @@ public class TowerGarrison
             return;
         }
 
-        int numberOfAttacksBeforeDeath = Mathf.Approximately(model.HP % tower.AttackInTower, 0f) ?
-                                         (int)(model.HP / tower.AttackInTower) : (int)(model.HP / tower.AttackInTower + 1);
+        int numberOfAttacksBeforeDeath = CalculateDamage(model.HP, tower.AttackInTower);
         Count -= model.Attack * numberOfAttacksBeforeDeath / tower.HP;
+    }
+
+    public int CalculateDamage(float HP, float AttackInTower)
+    {
+        return Mathf.Approximately(HP % AttackInTower, 0f) ? (int)(HP / AttackInTower) : (int)(HP / AttackInTower + 1);
     }
 }

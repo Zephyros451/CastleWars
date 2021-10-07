@@ -17,7 +17,7 @@ public class Unit : MonoBehaviour
     public int Level { get; private set; }
     public BezierCurve Curve { get; private set; }
 
-    public void Init(BezierCurve curve, Tower destination, DirectionType direction)
+    public void Init(BezierCurve curve, ITower destination, DirectionType direction)
     {
         Curve = curve;
         path = curve.GetSegmentPoints();

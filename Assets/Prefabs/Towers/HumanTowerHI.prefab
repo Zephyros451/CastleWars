@@ -814,6 +814,7 @@ GameObject:
   - component: {fileID: 3617874578662907270}
   - component: {fileID: 6148163026109484392}
   - component: {fileID: 2689246305811017658}
+  - component: {fileID: 4939973301656353080}
   m_Layer: 0
   m_Name: HumanTowerHI
   m_TagString: Untagged
@@ -871,9 +872,7 @@ MonoBehaviour:
   towerSheetData: {fileID: 0}
   towerDataInstances: []
   towerData: {fileID: 0}
-  collision: {fileID: 2935813035471409496}
-  troopSender: {fileID: 2689246305811017658}
-  navigator: {fileID: 3617874578662907270}
+  mediator: {fileID: 4939973301656353080}
 --- !u!114 &2689246305811017658
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -887,6 +886,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tower: {fileID: 6148163026109484392}
+--- !u!114 &4939973301656353080
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6148163026109484374}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e2773cee2cc86b49b68c2b64630ed39, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tower: {fileID: 6148163026109484392}
+  collision: {fileID: 2935813035471409496}
+  troopSender: {fileID: 2689246305811017658}
+  navigator: {fileID: 3617874578662907270}
 --- !u!1 &6428902342270642125
 GameObject:
   m_ObjectHideFlags: 0
@@ -1447,12 +1462,6 @@ MeshRenderer:
     type: 3}
   m_PrefabInstance: {fileID: 4074156100539956629}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &2404396947493874163 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1861232581191357542, guid: 41c0912d49b9f4549ac203006d955bb6,
-    type: 3}
-  m_PrefabInstance: {fileID: 4074156100539956629}
-  m_PrefabAsset: {fileID: 0}
 --- !u!23 &1557248236801965287 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 3248848392859910514, guid: 41c0912d49b9f4549ac203006d955bb6,
@@ -1468,6 +1477,12 @@ MeshRenderer:
 --- !u!4 &3032596987197764425 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1341999602655235804, guid: 41c0912d49b9f4549ac203006d955bb6,
+    type: 3}
+  m_PrefabInstance: {fileID: 4074156100539956629}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &2404396947493874163 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1861232581191357542, guid: 41c0912d49b9f4549ac203006d955bb6,
     type: 3}
   m_PrefabInstance: {fileID: 4074156100539956629}
   m_PrefabAsset: {fileID: 0}

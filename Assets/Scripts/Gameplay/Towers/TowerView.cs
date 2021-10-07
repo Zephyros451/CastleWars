@@ -19,6 +19,8 @@ public class TowerView : MonoBehaviour
     [SerializeField] private TowerScaffoldingFlag towerScaffolding;
     [SerializeField] private List<Renderer> renderers;
 
+    private ITower mediator => tower.Mediator;
+
     private void OnEnable()
     {
         Reset();
@@ -38,19 +40,19 @@ public class TowerView : MonoBehaviour
         UpdateLevelWithoutAnimation();
 
         tower.TowerDataChanged += UpdateTower;
-        tower.GarrisonCountChanged += UpdateGarrisonCount;
-        tower.LevelReseted += UpdateLevelWithoutAnimation;
-        tower.LevelUpStarted += OnLevelUpStarted;
-        tower.LevelUpEnded += OnLevelUpEnded;
+        mediator.GarrisonCountChanged += UpdateGarrisonCount;
+        mediator.LevelReseted += UpdateLevelWithoutAnimation;
+        mediator.LevelUpStarted += OnLevelUpStarted;
+        mediator.LevelUpEnded += OnLevelUpEnded;
     }
 
     private void OnDestroy()
     {
         tower.TowerDataChanged -= UpdateTower;
-        tower.GarrisonCountChanged -= UpdateGarrisonCount;
-        tower.LevelReseted -= UpdateLevelWithoutAnimation;
-        tower.LevelUpStarted -= OnLevelUpStarted;
-        tower.LevelUpEnded -= OnLevelUpEnded;
+        mediator.GarrisonCountChanged -= UpdateGarrisonCount;
+        mediator.LevelReseted -= UpdateLevelWithoutAnimation;
+        mediator.LevelUpStarted -= OnLevelUpStarted;
+        mediator.LevelUpEnded -= OnLevelUpEnded;
     }
 
     private void UpdateTower(TowerData data)
@@ -79,27 +81,27 @@ public class TowerView : MonoBehaviour
 
     private void UpdateLevel()
     {
-        levelCounterText.text = $"Lv. {(tower.Level + 1).ToString()}";
-        garrisonCounterSlider.maxValue = tower.QuantityCap;
+        levelCounterText.text = $"Lv. {(tower.Mediator.Level + 1).ToString()}";
+        garrisonCounterSlider.maxValue = tower.Mediator.QuantityCap;
         SquashAnimation();
         UpdateGarrisonCount();
     }
 
     private void UpdateLevelWithoutAnimation()
     {
-        levelCounterText.text = $"Lv. {(tower.Level + 1).ToString()}";
-        garrisonCounterSlider.maxValue = tower.QuantityCap;
+        levelCounterText.text = $"Lv. {(tower.Mediator.Level + 1).ToString()}";
+        garrisonCounterSlider.maxValue = tower.Mediator.QuantityCap;
         UpdateGarrisonCount();
     }
 
     private void UpdateGarrisonCount()
     {
-        garrisonCounterText.text = ((int)tower.GarrisonCount).ToString();
-        garrisonCounterSlider.value = tower.GarrisonCount;
+        garrisonCounterText.text = ((int)tower.Mediator.GarrisonCount).ToString();
+        garrisonCounterSlider.value = tower.Mediator.GarrisonCount;
 
         if (tower.Allegiance == Allegiance.Player)
         {
-            if (tower.GarrisonCount < tower.LvlUpQuantity)
+            if (tower.Mediator.GarrisonCount < tower.Mediator.LvlUpQuantity)
             {
                 levelUp.enabled = false;
             }

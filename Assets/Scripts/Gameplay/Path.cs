@@ -15,7 +15,7 @@ public class Path : MonoBehaviour
     {
         for (int i = 0; i < towers.Count; i++) 
         {
-            towers[i].Navigator.UnRegisterPath(this);
+            towers[i].Mediator.Navigator.UnRegisterPath(this);
         }
     }
 
@@ -55,8 +55,8 @@ public class Path : MonoBehaviour
         towers.Add(tower1);
         towers.Add(tower2);
 
-        tower1.Navigator.RegisterPathTo(tower2, this);
-        tower2.Navigator.RegisterPathTo(tower1, this);
+        tower1.Mediator.Navigator.RegisterPathTo(tower2, this);
+        tower2.Mediator.Navigator.RegisterPathTo(tower1, this);
 
         GetComponent<Road>().InitializeRoad();
     }

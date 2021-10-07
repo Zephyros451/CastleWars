@@ -16,9 +16,6 @@ public class TowerLevel
 
     public TowerLevel(ITower tower, int startingLevel)
     {
-        if (startingLevel < 0)
-            startingLevel = 0;
-
         this.tower = tower;
         Value = startingLevel;
     }

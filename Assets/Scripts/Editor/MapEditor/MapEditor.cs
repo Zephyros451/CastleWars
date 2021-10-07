@@ -147,10 +147,10 @@ public class MapEditor : EditorWindow
 
         pathsList = root.Q<ListView>("path-list");
         Func<VisualElement> makeItem = () => new Label();
-        Action<VisualElement, int> bindItem = (e, i) => (e as Label).text = currentTower.Navigator.Paths[i].name;
+        Action<VisualElement, int> bindItem = (e, i) => (e as Label).text = currentTower.Mediator.Navigator.Paths[i].name;
         int itemHeight = 15;
 
-        pathsList.itemsSource = currentTower.Navigator.Paths;
+        pathsList.itemsSource = currentTower.Mediator.Navigator.Paths;
         pathsList.itemHeight = itemHeight;
         pathsList.makeItem = makeItem;
         pathsList.bindItem = bindItem;
@@ -172,7 +172,7 @@ public class MapEditor : EditorWindow
         Func<DropdownMenuAction, DropdownMenuAction.Status> func = (a) => { return DropdownMenuAction.Status.Normal; };
 
         addPathMenu.menu.MenuItems().Clear();
-        foreach (var tower in currentTower.Navigator.NotConnectedTowers)
+        foreach (var tower in currentTower.Mediator.Navigator.NotConnectedTowers)
         {
             addPathMenu.menu.AppendAction($"{tower.name}", CreatePath, func, new PathUserData(pathPrefab, currentTower, tower));
         }
@@ -188,8 +188,8 @@ public class MapEditor : EditorWindow
 
         InitializePathsList();
         InitializePathsToolbar();
-        EditorUtility.SetDirty(userData.Tower1.Navigator);
-        EditorUtility.SetDirty(userData.Tower2.Navigator);
+        EditorUtility.SetDirty(userData.Tower1.Mediator.Navigator);
+        EditorUtility.SetDirty(userData.Tower2.Mediator.Navigator);
         EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
     }
 

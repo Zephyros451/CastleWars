@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class TowerTroopSender : MonoBehaviour
@@ -9,19 +8,21 @@ public class TowerTroopSender : MonoBehaviour
     private List<Unit> units = new List<Unit>();
     private int inactiveAttackersInTower = 0;
 
-    public void SendTroopTo(Tower anotherTower)
+    private TowerMediator Tower => tower.Mediator;
+
+    public void SendTroopTo(ITower anotherTower)
     {
-        if (!tower.IsNotLevelingUp)
+        if (!Tower.IsNotLevelingUp)
             return;
 
-        var path = tower.Navigator.GetPathTo(anotherTower);
-        var direction = tower.Navigator.GetDirectionTypeTo(anotherTower);
+        var path = Tower.Navigator.GetPathTo(anotherTower.Tower);
+        var direction = Tower.Navigator.GetDirectionTypeTo(anotherTower.Tower);
         if (path == null)
             return;
 
-        float newGarrisonCount = tower.GarrisonCount / 2f;
-        int troopSize = (int)(tower.GarrisonCount - newGarrisonCount);
-        tower.SetGarrisonCount(newGarrisonCount);
+        float newGarrisonCount = Tower.GarrisonCount / 2f;
+        int troopSize = (int)(Tower.GarrisonCount - newGarrisonCount);
+        Tower.SetGarrisonCount(newGarrisonCount);
 
         Unit unit = null;
         for (int i = 0; i < units.Count; i++)
@@ -34,8 +35,8 @@ public class TowerTroopSender : MonoBehaviour
         }
         if (unit == null)
         {
-            unit = Instantiate(tower.UnitPrefab, transform.position, Quaternion.identity);
-            unit.Init(path, tower, direction);
+            unit = Instantiate(Tower.UnitPrefab, transform.position, Quaternion.identity);
+            unit.Init(path, Tower, direction);
             units.Add(unit);
         }
 
@@ -43,9 +44,9 @@ public class TowerTroopSender : MonoBehaviour
 
         for (int i = 0; i < troopSize; i++)
         {
-            var model = Instantiate(tower.ModelPrefab, tower.Navigator.GetStartingPointTo(anotherTower),
+            var model = Instantiate(Tower.ModelPrefab, Tower.Navigator.GetStartingPointTo(anotherTower.Tower),
                                     Quaternion.identity, unit.transform);
-            model.Init(unit, tower.Allegiance, tower.Level);
+            model.Init(unit, tower.Allegiance, Tower.Level);
             models.Add(model);
         }
         unit.AddModels(models);

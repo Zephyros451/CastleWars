@@ -44,14 +44,14 @@ public class AIBrain : MonoBehaviour
             {
                 if (ShouldLevelUp(tower))
                 {
-                    tower.LevelUp();
+                    tower.Mediator.LevelUp();
                 }
 
                 foreach (var closeTower in nonAICloseTowers)
                 {
                     if (ShouldAttack(tower, closeTower))
                     {
-                        tower.SendTroopTo(closeTower);
+                        tower.Mediator.SendTroopTo(closeTower.Mediator);
                     }
                 }
             }
@@ -71,7 +71,7 @@ public class AIBrain : MonoBehaviour
                 continue;
             }
 
-            if (tower.Navigator.HasNeighbourWithAllegiance(Allegiance.Enemy))
+            if (tower.Mediator.Navigator.HasNeighbourWithAllegiance(Allegiance.Enemy))
             {
                 nonAICloseTowers.Add(tower);
                 continue;
@@ -92,40 +92,40 @@ public class AIBrain : MonoBehaviour
 
     private bool ShouldLevelUp(Tower tower)
     {
-        if (tower.Level == 4)
+        if (tower.Mediator.Level == 4)
             return false;
 
         switch (gameDifficulty)
         {
             case GameDifficulty.Hard:
-                if (tower.Navigator.HasNeighbourWithAllegiance(Allegiance.Player))
+                if (tower.Mediator.Navigator.HasNeighbourWithAllegiance(Allegiance.Player))
                 {
-                    if (tower.GarrisonCount >= tower.QuantityCap)
+                    if (tower.Mediator.GarrisonCount >= tower.Mediator.QuantityCap)
                         return true;
                 }
                 else
                 {
-                    if (tower.GarrisonCount >= tower.LvlUpQuantity)
+                    if (tower.Mediator.GarrisonCount >= tower.Mediator.LvlUpQuantity)
                         return true;
                 }
                 return false;
 
             case GameDifficulty.Normal:
-                if (tower.GarrisonCount >= tower.QuantityCap * 0.75f)
+                if (tower.Mediator.GarrisonCount >= tower.Mediator.QuantityCap * 0.75f)
                 {
                     return true;
                 }
                 return false;
 
             case GameDifficulty.Easy:
-                if (tower.Navigator.HasNeighbourWithAllegiance(Allegiance.Player))
+                if (tower.Mediator.Navigator.HasNeighbourWithAllegiance(Allegiance.Player))
                 {
-                    if (tower.GarrisonCount >= tower.LvlUpQuantity)
+                    if (tower.Mediator.GarrisonCount >= tower.Mediator.LvlUpQuantity)
                         return true;
                 }
                 else
                 {
-                    if (tower.GarrisonCount == tower.QuantityCap)
+                    if (tower.Mediator.GarrisonCount == tower.Mediator.QuantityCap)
                         return true;
                 }
                 return false;
@@ -137,28 +137,28 @@ public class AIBrain : MonoBehaviour
 
     private bool ShouldAttack(Tower aiTower, Tower nonAITower)
     {
-        if (!aiTower.IsNotUnderAttack)
+        if (!aiTower.Mediator.IsNotUnderAttack)
             return false;
 
         int random = Random.Range(0, 101);
         switch (gameDifficulty)
         {
             case GameDifficulty.Hard:
-                if (random <= 30 && (aiTower.GarrisonCount * 0.5f - nonAITower.GarrisonCount) > aiTower.GarrisonCount * 0.2f)
+                if (random <= 30 && (aiTower.Mediator.GarrisonCount * 0.5f - nonAITower.Mediator.GarrisonCount) > aiTower.Mediator.GarrisonCount * 0.2f)
                     return true;
-                if ((aiTower.GarrisonCount * 0.5f - nonAITower.GarrisonCount) > aiTower.GarrisonCount * 0.5f)
+                if ((aiTower.Mediator.GarrisonCount * 0.5f - nonAITower.Mediator.GarrisonCount) > aiTower.Mediator.GarrisonCount * 0.5f)
                     return true;
                 return false;
             case GameDifficulty.Normal:
-                if (random <= 30 && (aiTower.GarrisonCount * 0.5f - nonAITower.GarrisonCount) > aiTower.GarrisonCount * 0.1f)
+                if (random <= 30 && (aiTower.Mediator.GarrisonCount * 0.5f - nonAITower.Mediator.GarrisonCount) > aiTower.Mediator.GarrisonCount * 0.1f)
                     return true;
-                if ((aiTower.GarrisonCount * 0.5f - nonAITower.GarrisonCount) > aiTower.GarrisonCount * 0.25f)
+                if ((aiTower.Mediator.GarrisonCount * 0.5f - nonAITower.Mediator.GarrisonCount) > aiTower.Mediator.GarrisonCount * 0.25f)
                     return true;
                 return false;
             case GameDifficulty.Easy:
-                if (random <= 30 && (aiTower.GarrisonCount * 0.5f - nonAITower.GarrisonCount) > aiTower.GarrisonCount * 0.01f)
+                if (random <= 30 && (aiTower.Mediator.GarrisonCount * 0.5f - nonAITower.Mediator.GarrisonCount) > aiTower.Mediator.GarrisonCount * 0.01f)
                     return true;
-                if ((aiTower.GarrisonCount * 0.5f - nonAITower.GarrisonCount) > aiTower.GarrisonCount * 0.1f)
+                if ((aiTower.Mediator.GarrisonCount * 0.5f - nonAITower.Mediator.GarrisonCount) > aiTower.Mediator.GarrisonCount * 0.1f)
                     return true;
                 return false;
             default:
