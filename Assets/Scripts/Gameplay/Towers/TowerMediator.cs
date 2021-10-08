@@ -63,6 +63,7 @@ public class TowerMediator : MonoBehaviour, ITower
         level.LevelUpEnded -= OnLevelUpEnded;
         level.LevelReseted -= OnLevelReseted;
     }
+
     private void OnTowerAttacked(Model model)
     {
         Garrison.OnTowerAttacked(model);

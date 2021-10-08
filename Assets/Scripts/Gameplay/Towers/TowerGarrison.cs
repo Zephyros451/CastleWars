@@ -82,7 +82,7 @@ public class TowerGarrison
         Count++;
     }
 
-    public void OnTowerAttacked(Model model)
+    public void OnTowerAttacked(IModel model)
     {
         AttackedProcessing();
 
@@ -92,11 +92,11 @@ public class TowerGarrison
             return;
         }
 
-        int numberOfAttacksBeforeDeath = CalculateDamage(model.HP, tower.AttackInTower);
+        int numberOfAttacksBeforeDeath = CalculateNumberOfAttacks(model.HP, tower.AttackInTower);
         Count -= model.Attack * numberOfAttacksBeforeDeath / tower.HP;
     }
 
-    public int CalculateDamage(float HP, float AttackInTower)
+    public int CalculateNumberOfAttacks(float HP, float AttackInTower)
     {
         return Mathf.Approximately(HP % AttackInTower, 0f) ? (int)(HP / AttackInTower) : (int)(HP / AttackInTower + 1);
     }
