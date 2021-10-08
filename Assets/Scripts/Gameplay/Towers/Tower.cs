@@ -93,7 +93,7 @@ public class Tower : MonoBehaviour
                 break;
         }
 
-        GetComponent<TowerView>().Initialize(towerData);
+        GetComponentInChildren<TowerView>().Initialize(towerData);
     }
 
     private void Reset()

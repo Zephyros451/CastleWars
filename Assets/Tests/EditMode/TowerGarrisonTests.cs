@@ -112,10 +112,11 @@ namespace Tests
             }
 
             [Test]
-            public void GarrisonCountIsTwo_When_ModelHPIsTwoModelAttackIsFourAndTowerAttackIsOne()
+            public void GarrisonCountIsTwo_When_ModelHPIsTwoModelAttackIsFourAndTowerAttackIsOneTowerHPIsOne()
             {
                 ITower tower = Substitute.For<ITower>();
                 tower.AttackInTower.Returns(1f);
+                tower.HP.Returns(1f);
                 TowerGarrison garrison = new TowerGarrison(tower, 1f);
                 IModel model = Substitute.For<IModel>();
                 model.Attack.Returns(4f);

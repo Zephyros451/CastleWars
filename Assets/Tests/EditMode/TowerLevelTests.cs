@@ -8,7 +8,7 @@ namespace Tests
         public class Reset
         {
             [Test]
-            public void LevelValueSetsToZero()
+            public void LevelValueSetsToZero_When_Called()
             {
                 ITower tower = Substitute.For<ITower>();
                 TowerLevel towerLevel = new TowerLevel(tower, 0);
@@ -22,7 +22,7 @@ namespace Tests
         public class LevelUp
         {
             [Test]
-            public void LevelValueIncreasesByOne()
+            public void LevelValueIncreasesByOne_When_Called()
             {
                 ITower tower = Substitute.For<ITower>();
                 TowerLevel towerLevel = new TowerLevel(tower, 0);
@@ -41,7 +41,6 @@ namespace Tests
 
                 Assert.AreEqual(2, newLevelValue - levelValue);
             }
-        }
-        
+        }        
     }
 }
