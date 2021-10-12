@@ -35,7 +35,7 @@ Material:
     m_TexEnvs:
     - _BaseMap:
         m_Texture: {fileID: 2800000, guid: 11b710081d708aa449d7a5eb7f9425e7, type: 3}
-        m_Scale: {x: 30, y: 30}
+        m_Scale: {x: 15, y: 15}
         m_Offset: {x: 0.25, y: 0.1}
     - _BumpMap:
         m_Texture: {fileID: 0}
@@ -148,7 +148,7 @@ Material:
     - _RampSmooth: 0.2
     - _RampSmoothAdd: 0.75
     - _RampSmoothing: 1
-    - _RampThreshold: 0.01
+    - _RampThreshold: 0.429
     - _RampType: 0
     - _ReadMask: 255
     - _ReceiveShadows: 1
@@ -156,8 +156,8 @@ Material:
     - _ReflectionMapType: 0
     - _ReflectionSmoothness: 0.5
     - _RenderingMode: 0
-    - _RimMax: 1
-    - _RimMin: 0.5
+    - _RimMax: 1.22
+    - _RimMin: 0.6
     - _RimStrength: 0.5
     - _SampleGI: 0
     - _ShadowColorLightAtten: 0
@@ -171,7 +171,7 @@ Material:
     - _SpecSource: 0
     - _SpecularHighlights: 1
     - _SpecularMapType: 0
-    - _SpecularRoughness: 0.5
+    - _SpecularRoughness: 0.193
     - _SpecularToonSize: 0.25
     - _SpecularToonSmoothness: 0.05
     - _SpecularType: 0
