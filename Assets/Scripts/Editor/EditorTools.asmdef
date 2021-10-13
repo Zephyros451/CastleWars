@@ -1,7 +1,11 @@
 {
-    "name": "Plugins",
-    "references": [],
-    "includePlatforms": [],
+    "name": "EditorTools",
+    "references": [
+        "GUID:2b09fb27025b5fd42a38346de25e75ec"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

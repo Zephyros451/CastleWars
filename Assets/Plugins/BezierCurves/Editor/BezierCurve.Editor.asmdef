@@ -1,7 +1,11 @@
 {
-    "name": "Plugins",
-    "references": [],
-    "includePlatforms": [],
+    "name": "BezierCurve.Editor",
+    "references": [
+        "BezierCurves"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

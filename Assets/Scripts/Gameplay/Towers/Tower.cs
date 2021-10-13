@@ -8,12 +8,12 @@ public class Tower : MonoBehaviour
     public event Action<TowerData> TowerDataChanged;
     public event Action BeingDestroyed;
 
-    [SerializeField, ReadOnly] private Allegiance allegiance;
-    [SerializeField, ReadOnly] private TowerType type;
+    [SerializeField] private Allegiance allegiance;
+    [SerializeField] private TowerType type;
     [SerializeField, HideInInspector] private TowerSheetData towerSheetData;
     [SerializeField, HideInInspector] private List<TowerData> towerDataInstances;
     [SerializeField, HideInInspector] private TowerData towerData;
-    [SerializeField, ReadOnly] private TowerMediator mediator;
+    [SerializeField] private TowerMediator mediator;
 
     public Allegiance Allegiance => allegiance;
     public TowerType TowerType => type;

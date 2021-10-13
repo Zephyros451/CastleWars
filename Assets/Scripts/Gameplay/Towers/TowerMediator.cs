@@ -9,10 +9,10 @@ public class TowerMediator : MonoBehaviour, ITower
     public event Action LevelUpEnded;
 
     [Space]
-    [SerializeField, ReadOnly] private Tower tower;
-    [SerializeField, ReadOnly] private TowerCollision collision;
-    [SerializeField, ReadOnly] private TowerTroopSender troopSender;
-    [SerializeField, ReadOnly] private Navigator navigator;
+    [SerializeField] private Tower tower;
+    [SerializeField] private TowerCollision collision;
+    [SerializeField] private TowerTroopSender troopSender;
+    [SerializeField] private Navigator navigator;
 
     public Navigator Navigator => navigator;
     private TowerGarrison Garrison { get; set; }

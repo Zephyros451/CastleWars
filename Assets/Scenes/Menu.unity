@@ -444,7 +444,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa0c30ab5a6c5d542ba5989deac00ccb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneIndex: 1
+  sceneIndex: 0
 --- !u!114 &142060955
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1949,7 +1949,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa0c30ab5a6c5d542ba5989deac00ccb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneIndex: 1
+  sceneIndex: 0
 --- !u!1001 &716120715
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2900,7 +2900,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39c6228b50f15a64d9bfb7a187d493e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  settingsPanel: {fileID: 1913406981}
+  settingsPanel: {fileID: 142060952}
   difficultySettings: {fileID: 11400000, guid: fe63bbcbfe950634eb562a88ae72173a, type: 2}
   dropdown: {fileID: 159211497}
 --- !u!1 &1454232179
