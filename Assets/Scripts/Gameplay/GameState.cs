@@ -23,12 +23,12 @@ public class GameState : MonoBehaviour
     public void RaiseYouWin()
     {
         YouWin?.Invoke();
-        SceneSwitcher.instance.SwitchTo(5);
+        SceneSwitcher.instance.SwitchTo(11);
     }
 
     public void RaiseYouLose()
     {
         YouLose?.Invoke();
-        SceneSwitcher.instance.SwitchTo(5);
+        SceneSwitcher.instance.SwitchTo(11);
     }
 }

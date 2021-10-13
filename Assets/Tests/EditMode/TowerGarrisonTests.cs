@@ -65,7 +65,7 @@ namespace Tests
             }
 
             [Test]
-            public void CountValueSetsWithoutModifications()
+            public void CountValueSets_WithoutModifications()
             {
                 ITower tower = Substitute.For<ITower>();
                 TowerGarrison garrison = new TowerGarrison(tower, 1f);
@@ -73,6 +73,96 @@ namespace Tests
                 garrison.Count = 123456;
 
                 Assert.AreEqual(123456, garrison.Count);
+            }
+        }
+
+        public class OnAllyCame
+        {
+            [Test]
+            public void IncreasesCountValueByOne_When_Called()
+            {
+                ITower tower = Substitute.For<ITower>();
+                TowerGarrison garrison = new TowerGarrison(tower, 1f);
+
+                float firstValue = garrison.Count;
+                garrison.OnAllyCame();
+                float secondValue = garrison.Count;
+
+                Assert.AreEqual(1, secondValue - firstValue);
+            }
+        }
+
+        public class OnTowerAttacked
+        {
+            [Test]
+            public void GarrisonCountLowers_When_Called()
+            {
+                ITower tower = Substitute.For<ITower>();
+                tower.AttackInTower.Returns(5f);
+                TowerGarrison garrison = new TowerGarrison(tower, 1f);
+                IModel model = Substitute.For<IModel>();
+                model.Attack.Returns(5f);
+                model.HP.Returns(5f);
+
+                float firstValue = garrison.Count;
+                garrison.OnTowerAttacked(model);
+                float secondValue = garrison.Count;
+
+                Assert.Greater(firstValue, secondValue);
+            }
+
+            [Test]
+            public void GarrisonCountIsTwo_When_ModelHPIsTwoModelAttackIsFourAndTowerAttackIsOneTowerHPIsOne()
+            {
+                ITower tower = Substitute.For<ITower>();
+                tower.AttackInTower.Returns(1f);
+                tower.HP.Returns(1f);
+                TowerGarrison garrison = new TowerGarrison(tower, 1f);
+                IModel model = Substitute.For<IModel>();
+                model.Attack.Returns(4f);
+                model.HP.Returns(2f);
+
+                float firstValue = garrison.Count;
+                garrison.OnTowerAttacked(model);
+                float secondValue = garrison.Count;
+
+                Assert.AreEqual(2, garrison.Count);
+            }
+        }
+
+        public class CalculateNumberOfAttacks
+        {
+            [Test]
+            public void ThreeAttacks_When_ModelHPIsFiveAndTowerAttackIsTwo()
+            {
+                ITower tower = Substitute.For<ITower>();
+                TowerGarrison garrison = new TowerGarrison(tower, 1f);
+
+                int numberOfAttacks = garrison.CalculateNumberOfAttacks(5, 2);
+
+                Assert.AreEqual(3, numberOfAttacks);
+            }
+
+            [Test]
+            public void TwoAttacks_When_HPIsFourAndAttacksIsTwo()
+            {
+                ITower tower = Substitute.For<ITower>();
+                TowerGarrison garrison = new TowerGarrison(tower, 1f);
+
+                int numberOfAttacks = garrison.CalculateNumberOfAttacks(4, 2);
+
+                Assert.AreEqual(2, numberOfAttacks);
+            }
+
+            [Test]
+            public void OneAttack_When_HPIsLessThanAttack()
+            {
+                ITower tower = Substitute.For<ITower>();
+                TowerGarrison garrison = new TowerGarrison(tower, 1f);
+
+                int numberOfAttacks = garrison.CalculateNumberOfAttacks(1, 4);
+
+                Assert.AreEqual(1, numberOfAttacks);
             }
         }
     }

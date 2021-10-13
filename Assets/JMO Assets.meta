@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/JMO Assets.meta
 guid: 58140db68f26a8b4fb638b19995c16c1
+=======
+guid: a19bb4d647eb97340bead89e636d2b10
+>>>>>>> code:Assets/Art/UI/Gameplay.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}
