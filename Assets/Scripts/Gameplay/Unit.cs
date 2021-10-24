@@ -4,16 +4,14 @@ using UnityEngine;
 
 public class Unit : MonoBehaviour
 {
-    [SerializeField] private UnitData unitData;
-    [SerializeField] private UnitSheetData unitSheetData;
+    [SerializeField] private UnitSpawnData unitSpawnData;
 
     private List<Vector3> path;
     private Stack<Model> models = new Stack<Model>();
     private List<Model> activeModels = new List<Model>();
     private WaitForSeconds modelTimeSpacing;
 
-    public UnitData UnitData => unitData;
-    public UnitSheetData UnitSheetData => unitSheetData;
+    public UnitSpawnData UnitConfigData => unitSpawnData;
     public int Level { get; private set; }
     public BezierCurve Curve { get; private set; }
 
@@ -39,11 +37,14 @@ public class Unit : MonoBehaviour
 
     public void AddModels(List<Model> newModels)
     {
+        if (newModels.Count == 0)
+            return;
+
         for (int i = 0; i < newModels.Count; i++)
         {
             models.Push(newModels[i]);
         }
-        modelTimeSpacing = new WaitForSeconds(0.55f / unitSheetData.UnitLevelData[newModels[0].Level].speed);
+        modelTimeSpacing = new WaitForSeconds(0.55f / UnitConfigData.GetUnitSpeed(newModels[0].Level));
     }
 
     private void Update()
@@ -73,8 +74,9 @@ public class Unit : MonoBehaviour
             if (activeModels[i].CurrentSegment == path.Count)
                 continue;
 
-            Vector3 newPosition = Vector3.MoveTowards(activeModels[i].transform.position, path[activeModels[i].CurrentSegment],
-                                                      unitSheetData.UnitLevelData[activeModels[i].Level].speed * Time.deltaTime);
+            Vector3 newPosition = Vector3.MoveTowards(activeModels[i].transform.position,
+                path[activeModels[i].CurrentSegment],
+                UnitConfigData.GetUnitSpeed(activeModels[i].Level) * Time.deltaTime);
             Quaternion newRotation = Quaternion.identity;
             if (newPosition - activeModels[i].transform.position != Vector3.zero)
             {
@@ -104,7 +106,7 @@ public class Unit : MonoBehaviour
                 if (models.Count % 2 == 0)
                 {
                     var model = models.Pop();
-                    model.SetOffset(-Vector3.left * 0.5f);
+                    model.SetOffset(Vector3.right * 0.5f);
                     activeModels.Add(model);
 
                     model = models.Pop();

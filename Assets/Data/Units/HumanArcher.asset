@@ -9,10 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7169175adecf73f499a87e0f07bf67f0, type: 3}
-  m_Name: PlayerHI
+  m_Script: {fileID: 11500000, guid: 1f1499cbbbe2d7946b9343f5fe059697, type: 3}
+  m_Name: HumanArcher
   m_EditorClassIdentifier: 
-  unitPrefab: {fileID: 4717645924521646854, guid: 96aed635f4163b8438a2b0c4c04a572d,
-    type: 3}
-  modelPrefab: {fileID: 3514261057358305891, guid: 5150f0e2a4104a348aa59922a780fec1,
-    type: 3}
+  unitPrefab: {fileID: 0}
+  modelPrefab: {fileID: 0}

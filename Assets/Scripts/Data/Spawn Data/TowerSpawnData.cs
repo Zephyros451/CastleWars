@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(menuName ="Data/Tower Data")]
-public class TowerData : ScriptableObject
+[CreateAssetMenu(menuName ="Spawn Data/Tower Data")]
+public class TowerSpawnData : ScriptableObject
 {
-    public UnitData unitData;
+    public UnitSpawnData unitData;
     public Tower[] levelPrefabs;
     public Material material;
 

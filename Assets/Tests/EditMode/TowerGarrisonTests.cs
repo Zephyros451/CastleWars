@@ -15,7 +15,7 @@ namespace Tests
             public void CountValueDecreases_When_PositiveArgumentPassed()
             {
                 ITower tower = Substitute.For<ITower>();
-                TowerGarrison garrison = new TowerGarrison(tower, 1f);
+                TowerGarrison garrison = new TowerGarrison(tower);
 
                 float beforeDecrease = garrison.Count;
                 garrison.DecreaseGarrisonCount(5);
@@ -28,7 +28,7 @@ namespace Tests
             public void CountValueDecreases_When_NegativeArgumentPassed()
             {
                 ITower tower = Substitute.For<ITower>();
-                TowerGarrison garrison = new TowerGarrison(tower, 1f);
+                TowerGarrison garrison = new TowerGarrison(tower);
 
                 float beforeDecrease = garrison.Count;
                 garrison.DecreaseGarrisonCount(-5);
@@ -41,7 +41,7 @@ namespace Tests
             public void CountValueDoesntChange_When_ZeroPassed()
             {
                 ITower tower = Substitute.For<ITower>();
-                TowerGarrison garrison = new TowerGarrison(tower, 1f);
+                TowerGarrison garrison = new TowerGarrison(tower);
 
                 float beforeDecrease = garrison.Count;
                 garrison.DecreaseGarrisonCount(0);
@@ -57,9 +57,9 @@ namespace Tests
             public void CountValueSetsToZero_When_NegativeValuePassed()
             {
                 ITower tower = Substitute.For<ITower>();
-                TowerGarrison garrison = new TowerGarrison(tower, 1f);
+                TowerGarrison garrison = new TowerGarrison(tower);
 
-                garrison.Count = -5;
+                //garrison.Count = -5;
 
                 Assert.AreEqual(0, garrison.Count);
             }
@@ -68,9 +68,9 @@ namespace Tests
             public void CountValueSets_WithoutModifications()
             {
                 ITower tower = Substitute.For<ITower>();
-                TowerGarrison garrison = new TowerGarrison(tower, 1f);
+                TowerGarrison garrison = new TowerGarrison(tower);
 
-                garrison.Count = 123456;
+                //garrison.Count = 123456;
 
                 Assert.AreEqual(123456, garrison.Count);
             }
@@ -82,10 +82,10 @@ namespace Tests
             public void IncreasesCountValueByOne_When_Called()
             {
                 ITower tower = Substitute.For<ITower>();
-                TowerGarrison garrison = new TowerGarrison(tower, 1f);
+                TowerGarrison garrison = new TowerGarrison(tower);
 
                 float firstValue = garrison.Count;
-                garrison.OnAllyCame();
+                //garrison.OnAllyCame();
                 float secondValue = garrison.Count;
 
                 Assert.AreEqual(1, secondValue - firstValue);
@@ -99,7 +99,7 @@ namespace Tests
             {
                 ITower tower = Substitute.For<ITower>();
                 tower.AttackInTower.Returns(5f);
-                TowerGarrison garrison = new TowerGarrison(tower, 1f);
+                TowerGarrison garrison = new TowerGarrison(tower);
                 IModel model = Substitute.For<IModel>();
                 model.Attack.Returns(5f);
                 model.HP.Returns(5f);
@@ -117,7 +117,7 @@ namespace Tests
                 ITower tower = Substitute.For<ITower>();
                 tower.AttackInTower.Returns(1f);
                 tower.HP.Returns(1f);
-                TowerGarrison garrison = new TowerGarrison(tower, 1f);
+                TowerGarrison garrison = new TowerGarrison(tower);
                 IModel model = Substitute.For<IModel>();
                 model.Attack.Returns(4f);
                 model.HP.Returns(2f);
@@ -136,7 +136,7 @@ namespace Tests
             public void ThreeAttacks_When_ModelHPIsFiveAndTowerAttackIsTwo()
             {
                 ITower tower = Substitute.For<ITower>();
-                TowerGarrison garrison = new TowerGarrison(tower, 1f);
+                TowerGarrison garrison = new TowerGarrison(tower);
 
                 int numberOfAttacks = garrison.CalculateNumberOfAttacks(5, 2);
 
@@ -147,7 +147,7 @@ namespace Tests
             public void TwoAttacks_When_HPIsFourAndAttacksIsTwo()
             {
                 ITower tower = Substitute.For<ITower>();
-                TowerGarrison garrison = new TowerGarrison(tower, 1f);
+                TowerGarrison garrison = new TowerGarrison(tower);
 
                 int numberOfAttacks = garrison.CalculateNumberOfAttacks(4, 2);
 
@@ -158,7 +158,7 @@ namespace Tests
             public void OneAttack_When_HPIsLessThanAttack()
             {
                 ITower tower = Substitute.For<ITower>();
-                TowerGarrison garrison = new TowerGarrison(tower, 1f);
+                TowerGarrison garrison = new TowerGarrison(tower);
 
                 int numberOfAttacks = garrison.CalculateNumberOfAttacks(1, 4);
 

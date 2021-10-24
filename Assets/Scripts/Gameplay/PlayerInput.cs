@@ -37,15 +37,19 @@ public class PlayerInput : MonoBehaviour
 
         if(Input.GetMouseButton(0))
         {
-            if(isDragged && Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, 50, 1 << 0))
+            if (isDragged)
             {
-                if(hit.collider.TryGetComponent(out TowerCollision collision))
+                if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, 50, 1 << 0))
                 {
-                    EndPointSet?.Invoke(collision.transform.position);
-                    return;
-                }
+                    if (hit.collider.TryGetComponent(out TowerCollision collision))
+                    {
+                        EndPointSet?.Invoke(collision.transform.position);
+                        return;
+                    }
 
-                EndPointSet?.Invoke(hit.point);
+                    EndPointSet?.Invoke(hit.point);
+                    Debug.Log(hit.collider.name);
+                }
             }
         }
 

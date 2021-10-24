@@ -55,7 +55,7 @@ public class TowerView : MonoBehaviour
         mediator.LevelUpEnded -= OnLevelUpEnded;
     }
 
-    private void UpdateTower(TowerData data)
+    private void UpdateTower(TowerSpawnData data)
     {
         foreach (var renderer in renderers)
         {
@@ -126,7 +126,7 @@ public class TowerView : MonoBehaviour
     }
 
 #if UNITY_EDITOR
-    public void Initialize(TowerData data)
+    public void Initialize(TowerSpawnData data)
     {
         Reset();
         UpdateTower(data);

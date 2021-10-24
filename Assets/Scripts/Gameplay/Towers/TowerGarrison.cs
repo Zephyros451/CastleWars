@@ -1,103 +1,91 @@
-﻿using System;
-using System.Collections;
-using System.Threading.Tasks;
+﻿using DG.Tweening;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class TowerGarrison
 {
     public event Action CountChanged;
 
-    private ITower tower;
+    private Stack<UnitData> units = new Stack<UnitData>();
+    private float degenerationRate = 0.8f;
 
-    private WaitForSeconds generationRate;
-    private WaitForSeconds degenerationRate;
-    private WaitForSeconds attackedCooldown = new WaitForSeconds(2f);
+    protected ITower tower;
 
     public bool IsNotUnderAttack { get; private set; } = true;
 
-    private float count = 10;
-    public float Count
+    public int Count
     {
         get
         {
-            return count;
-        }
-        set
-        {
-            count = Mathf.Clamp(value, 0f, float.MaxValue);
-            CountChanged?.Invoke();
+            return units.Count;
         }
     }
 
-    public TowerGarrison(ITower tower, float generationRate)
+    public TowerGarrison(ITower tower)
     {
         this.tower = tower;
-        this.generationRate = new WaitForSeconds(generationRate);
-        degenerationRate = new WaitForSeconds(0.8f);
+        GarrisonDegeneration();
     }
 
-    public void DecreaseGarrisonCount(int amount)
+    public void GarrisonDegeneration()
+    {
+        DOTween.Sequence()
+            .AppendInterval(degenerationRate)
+            .AppendCallback(() =>
+            {
+                if ((Count - tower.QuantityCap) > 0f)
+                {
+                    units.Pop();
+                }
+            })
+            .SetLoops(-1);
+    }
+
+    public virtual void DecreaseGarrisonCount(int amount)
     {
         if(amount < 0)
         {
             amount = -amount;
         }
 
-        Count -= amount;
+        
+    }    
+
+    public void AttackedProcessing()
+    {
+        DOTween.Sequence()
+            .AppendCallback(() => { IsNotUnderAttack = false; })
+            .AppendInterval(2f)
+            .AppendCallback(() => { IsNotUnderAttack = true; });        
     }
 
-    public IEnumerator GarrisonGeneration()
+    public void OnAllyCame(UnitData ally)
     {
-        while (true)
-        {
-            yield return generationRate;
-            if (Count < tower.QuantityCap && IsNotUnderAttack && tower.IsNotLevelingUp)
-            {
-                Count++;
-            }
-        }
-    }
-
-    public IEnumerator GarrisonDegeneration()
-    {
-        while (true)
-        {
-            yield return degenerationRate;
-            if ((Count - tower.QuantityCap) >= 1f)
-            {
-                Count--;
-            }
-        }
-    }
-
-    public async void AttackedProcessing()
-    {
-        IsNotUnderAttack = false;
-        await Task.Delay(2000);
-        IsNotUnderAttack = true;
-    }
-
-    public void OnAllyCame()
-    {
-        Count++;
+        units.Push(ally);
     }
 
     public void OnTowerAttacked(IModel model)
     {
         AttackedProcessing();
 
-        if (Mathf.Approximately(Count, 0f))
+        if (Count == 0)
         {
             tower.ChangeAllegiance(model.Allegiance);
             return;
         }
 
         int numberOfAttacksBeforeDeath = CalculateNumberOfAttacks(model.HP, tower.AttackInTower);
-        Count -= model.Attack * numberOfAttacksBeforeDeath / tower.HP;
+        //Count -= model.Attack * numberOfAttacksBeforeDeath / tower.HP;
     }
 
-    public int CalculateNumberOfAttacks(float HP, float AttackInTower)
+    public int CalculateNumberOfAttacks(float hp, float AttackInTower)
     {
-        return Mathf.Approximately(HP % AttackInTower, 0f) ? (int)(HP / AttackInTower) : (int)(HP / AttackInTower + 1);
+        return Mathf.Approximately(hp % AttackInTower, 0f) ? (int)(hp / AttackInTower) : (int)((hp / AttackInTower) + 1);
+    }
+
+    public int CalculateNumberOfAttacksToKill(float attack, float HPInTower)
+    {
+        return Mathf.Approximately(HPInTower % attack, 0f) ? (int)(HPInTower / attack) : (int)((HPInTower / attack) + 1);
     }
 }

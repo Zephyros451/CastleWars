@@ -6,7 +6,7 @@ using UnityEngine;
 public class UnitSheetData : ScriptableObject, ICollectionSet<UnitLevelData>
 {
     [SerializeField] protected List<UnitLevelData> unitLevelData;
-    public List<UnitLevelData> UnitLevelData => unitLevelData;
+    public List<UnitLevelData> LevelData => unitLevelData;
 
     void ICollectionSet<UnitLevelData>.SetCollection(List<UnitLevelData> data)
     {

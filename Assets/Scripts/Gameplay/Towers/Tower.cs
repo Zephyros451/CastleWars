@@ -5,20 +5,20 @@ using UnityEngine;
 
 public class Tower : MonoBehaviour
 {
-    public event Action<TowerData> TowerDataChanged;
+    public event Action<TowerSpawnData> TowerDataChanged;
     public event Action BeingDestroyed;
 
     [SerializeField] private Allegiance allegiance;
     [SerializeField] private TowerType type;
     [SerializeField, HideInInspector] private TowerSheetData towerSheetData;
-    [SerializeField, HideInInspector] private List<TowerData> towerDataInstances;
-    [SerializeField, HideInInspector] private TowerData towerData;
-    [SerializeField] private TowerMediator mediator;
+    [SerializeField, HideInInspector] private List<TowerSpawnData> towerDataInstances;
+    [SerializeField, HideInInspector] private TowerSpawnData towerData;
+    [SerializeField, HideInInspector] private TowerMediator mediator;
 
     public Allegiance Allegiance => allegiance;
     public TowerType TowerType => type;
     public TowerSheetData TowerSheetData => towerSheetData;
-    public TowerData TowerData => towerData;
+    public TowerSpawnData TowerData => towerData;
     public TowerMediator Mediator => mediator;
 
     private void Start()
@@ -58,7 +58,7 @@ public class Tower : MonoBehaviour
 
         string[] guids = AssetDatabase.FindAssets("t:TowerDataSettings");
         string path = AssetDatabase.GUIDToAssetPath(guids[0]);
-        towerDataInstances = new List<TowerData>(AssetDatabase.LoadAssetAtPath<TowerDataSettings>(path).GetData(type));
+        towerDataInstances = new List<TowerSpawnData>(AssetDatabase.LoadAssetAtPath<TowerSpawnDataSettings>(path).GetData(type));
 
         switch (type)
         {

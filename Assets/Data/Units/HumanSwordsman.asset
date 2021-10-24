@@ -9,10 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7169175adecf73f499a87e0f07bf67f0, type: 3}
-  m_Name: PlayerA
+  m_Script: {fileID: 11500000, guid: 1f1499cbbbe2d7946b9343f5fe059697, type: 3}
+  m_Name: HumanSwordsman
   m_EditorClassIdentifier: 
-  unitPrefab: {fileID: 8193777980477165702, guid: dc912ad158f469d4da8e35bd0ccb0f2a,
-    type: 3}
-  modelPrefab: {fileID: 7596929321655454336, guid: d6f7993ff5430aa4aa511c24d3f6e5aa,
-    type: 3}
+  unitPrefab: {fileID: 0}
+  modelPrefab: {fileID: 0}

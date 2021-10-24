@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName ="Data/TowerDataSettings")]
-public class TowerDataSettings : ScriptableObject
+[CreateAssetMenu(menuName ="Spawn Data/Tower Spawn Data Settings")]
+public class TowerSpawnDataSettings : ScriptableObject
 {
-    [SerializeField] private List<TowerData> swordsmanTowerData;
-    [SerializeField] private List<TowerData> spearmanTowerData;
-    [SerializeField] private List<TowerData> archerTowerData;
+    [SerializeField] private List<TowerSpawnData> swordsmanTowerData;
+    [SerializeField] private List<TowerSpawnData> spearmanTowerData;
+    [SerializeField] private List<TowerSpawnData> archerTowerData;
 
-    public List<TowerData> GetData(TowerType towerType)
+    public List<TowerSpawnData> GetData(TowerType towerType)
     {
         switch(towerType)
         {

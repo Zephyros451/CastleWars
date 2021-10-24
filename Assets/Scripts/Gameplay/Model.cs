@@ -3,17 +3,17 @@
 [RequireComponent(typeof(SphereCollider))]
 public class Model : MonoBehaviour, IModel
 {
-    [SerializeField, HideInInspector] private SphereCollider collider;
+    [SerializeField, HideInInspector] private new SphereCollider collider;
     [SerializeField, HideInInspector] private Transform view;    
 
     private Unit unit;
-    private Vector3 offset;
 
     public int CurrentSegment { get; private set; }
     public int Level { get; private set; }
     public Allegiance Allegiance { get; private set; }
-    public float Attack => unit.UnitSheetData.UnitLevelData[Level].attackInField;
-    public float HP => unit.UnitSheetData.UnitLevelData[Level].hp;
+    public float Attack => unit.UnitConfigData.GetUnitAttack(Level);
+    public float HP => unit.UnitConfigData.GetUnitHP(Level);
+    public UnitData UnitData => unit.UnitConfigData.GetUnitData(Level);
 
     public void Init(Unit unit, Allegiance allegiance, int level)
     {

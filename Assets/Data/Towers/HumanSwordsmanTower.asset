@@ -9,10 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7169175adecf73f499a87e0f07bf67f0, type: 3}
-  m_Name: EnemyA
+  m_Script: {fileID: 11500000, guid: ecd91c55fc0c1a642a8831e8f000c59c, type: 3}
+  m_Name: HumanSwordsmanTower
   m_EditorClassIdentifier: 
-  unitPrefab: {fileID: 4857119745757701095, guid: 07f8e203081462d44a7c4907a3740670,
-    type: 3}
-  modelPrefab: {fileID: 4133431625004445574, guid: 6321dd10a1d5835478115a7ad6141b6b,
-    type: 3}
+  unitData: {fileID: 0}
+  levelPrefabs: []
+  material: {fileID: 0}
+  backGarrisonUI: {fileID: 0}
+  frontGarrisonUI: {fileID: 0}
+  backLevelUI: {fileID: 0}
+  frontLevelUI: {fileID: 0}

@@ -26,8 +26,8 @@ public class TowerMediator : MonoBehaviour, ITower
     public float LvlUpTime => tower.TowerSheetData.TowerLevelData[level.Value].lvlUpTime;
     public float AttackInTower => tower.TowerSheetData.TowerLevelData[level.Value].attackInTower;
     public float HP => tower.TowerSheetData.TowerLevelData[level.Value].hp;
-    public Unit UnitPrefab => tower.TowerData.unitData.unitPrefab;
-    public Model ModelPrefab => tower.TowerData.unitData.modelPrefab;
+    public Unit UnitPrefab => tower.TowerData.unitData.UnitPrefab;
+    public Model ModelPrefab => tower.TowerData.unitData.ModelPrefab;
     public Allegiance Allegiance => tower.Allegiance;
     public TowerType TowerType => tower.TowerType;
     public float GarrisonCount => Garrison.Count;
@@ -38,14 +38,11 @@ public class TowerMediator : MonoBehaviour, ITower
     private void Awake()
     {
         level = new TowerLevel(this, 0);
-        Garrison = new TowerGarrison(this, GenerationRate);
+        Garrison = new TowerGeneratingGarrison(this, GenerationRate);
     }
 
     private void Start()
     {
-        StartCoroutine(Garrison.GarrisonGeneration());
-        StartCoroutine(Garrison.GarrisonDegeneration());
-
         collision.TowerAttacked += OnTowerAttacked;
         collision.AllyCame += OnTowerGotBackUp;
         Garrison.CountChanged += OnGarrisonCountChanged;
@@ -69,9 +66,9 @@ public class TowerMediator : MonoBehaviour, ITower
         Garrison.OnTowerAttacked(model);
     }
 
-    private void OnTowerGotBackUp()
+    private void OnTowerGotBackUp(UnitData unitData)
     {
-        Garrison.OnAllyCame();
+        Garrison.OnAllyCame(unitData);
     }
 
     private void OnGarrisonCountChanged()
@@ -113,7 +110,7 @@ public class TowerMediator : MonoBehaviour, ITower
 
     public void SetGarrisonCount(float newCount)
     {
-        Garrison.Count = newCount;
+        //Garrison.Count = newCount;
     }
 
     public void LevelUp()
