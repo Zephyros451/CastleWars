@@ -43,6 +43,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18eee6edc0c14764f8b514f0a4982265, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitData: {fileID: 11400000, guid: 109c8d284c3e0fa48b23ead1fedff9d8, type: 2}
-  unitSheetData: {fileID: 11400000, guid: 61f3f777c32b9b347984453508bb9531, type: 2}
-  UnitSheetData: {fileID: 11400000, guid: 61f3f777c32b9b347984453508bb9531, type: 2}
+  unitSpawnData: {fileID: 11400000, guid: ab68dd8ad160e0144a42e52f7edd6bf9, type: 2}

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 654533158033288749}
   - component: {fileID: 4520072395624997256}
   - component: {fileID: 1828024585414907202}
+  - component: {fileID: 2785114230462804048}
   m_Layer: 0
   m_Name: ML_Human_Swordman
   m_TagString: Untagged
@@ -80,6 +81,32 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!114 &2785114230462804048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 170730915205067927}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bfe8c37326a24040b1d2888ba3a8662, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tower: {fileID: 0}
+  garrisonCounterBackground: {fileID: 0}
+  garrisonCounterFront: {fileID: 0}
+  garrisonCounterText: {fileID: 0}
+  garrisonCounterSlider: {fileID: 0}
+  levelCounterBackground: {fileID: 0}
+  levelCounterFront: {fileID: 0}
+  levelCounterText: {fileID: 0}
+  levelUp: {fileID: 0}
+  towerScaffolding: {fileID: 0}
+  renderers:
+  - {fileID: 1828024585414907202}
+  - {fileID: 437056776489195765}
+  - {fileID: 2685916722016039206}
 --- !u!1001 &1283852943882339441
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -155,6 +182,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1283852943882339441}
   m_PrefabAsset: {fileID: 0}
+--- !u!23 &437056776489195765 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 04ecf685c3ca8b34ea8d7bdc612afe69,
+    type: 3}
+  m_PrefabInstance: {fileID: 1283852943882339441}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3641123632101371298
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -224,3 +257,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cda94346ce00e294ebedd827fca37535, type: 3}
+--- !u!23 &2685916722016039206 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: cda94346ce00e294ebedd827fca37535,
+    type: 3}
+  m_PrefabInstance: {fileID: 3641123632101371298}
+  m_PrefabAsset: {fileID: 0}

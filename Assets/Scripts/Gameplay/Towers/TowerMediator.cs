@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class TowerMediator : MonoBehaviour, ITower
@@ -29,7 +30,7 @@ public class TowerMediator : MonoBehaviour, ITower
     public Unit UnitPrefab => tower.TowerData.unitData.UnitPrefab;
     public Model ModelPrefab => tower.TowerData.unitData.ModelPrefab;
     public Allegiance Allegiance => tower.Allegiance;
-    public TowerType TowerType => tower.TowerType;
+    public UnitType TowerType => tower.TowerType;
     public float GarrisonCount => Garrison.Count;
     public bool IsNotUnderAttack => Garrison.IsNotUnderAttack;
     public int Level => level.Value;
@@ -96,19 +97,19 @@ public class TowerMediator : MonoBehaviour, ITower
         troopSender.SendTroopTo(anotherTower);
     }
 
-    public void ChangeAllegiance(Allegiance newAllegiance)
+    void ITower.ChangeAllegiance(Allegiance newAllegiance)
     {
         level.Reset();
         level.IsNotLevelingUp = true;
         tower.ChangeAllegiance(newAllegiance);
     }
 
-    public void DecreaseGarrisonCount(int amount)
+    Stack<UnitData> ITower.PopFromGarrison(int amount)
     {
-        Garrison.DecreaseGarrisonCount(amount);
+        return Garrison.PopFromGarrison(amount);
     }
 
-    public void SetGarrisonCount(float newCount)
+    void ITower.SetGarrisonCount(float newCount)
     {
         //Garrison.Count = newCount;
     }

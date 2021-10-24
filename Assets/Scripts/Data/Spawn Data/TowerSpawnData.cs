@@ -4,8 +4,7 @@
 public class TowerSpawnData : ScriptableObject
 {
     public UnitSpawnData unitData;
-    public Tower[] levelPrefabs;
-    public Material material;
+    public Renderer[] levelPrefabs;
 
     public Sprite backGarrisonUI;
     public Sprite frontGarrisonUI;

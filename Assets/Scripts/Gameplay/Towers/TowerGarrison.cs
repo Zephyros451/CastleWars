@@ -5,12 +5,12 @@ using UnityEngine;
 
 public class TowerGarrison
 {
-    public event Action CountChanged;
-
-    private Stack<UnitData> units = new Stack<UnitData>();
-    private float degenerationRate = 0.8f;
+    public virtual event Action CountChanged;
 
     protected ITower tower;
+    protected Stack<UnitData> units = new Stack<UnitData>();
+
+    private float degenerationRate = 0.8f;
 
     public bool IsNotUnderAttack { get; private set; } = true;
 
@@ -42,14 +42,19 @@ public class TowerGarrison
             .SetLoops(-1);
     }
 
-    public virtual void DecreaseGarrisonCount(int amount)
+    public virtual Stack<UnitData> PopFromGarrison(int amount)
     {
         if(amount < 0)
         {
             amount = -amount;
         }
 
-        
+        var poppedUnits = new Stack<UnitData>();
+        for (int i = 0; i < amount || units.Count == 0; i++)
+        {
+            poppedUnits.Push(units.Pop());
+        }
+        return poppedUnits;
     }    
 
     public void AttackedProcessing()

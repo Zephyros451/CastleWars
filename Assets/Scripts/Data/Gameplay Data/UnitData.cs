@@ -15,6 +15,13 @@
         this.speed = speed;
     }
 
+    public UnitData(UnitData unitData)
+    {
+        this.hp = unitData.hp;
+        this.attack = unitData.attack;
+        this.speed = unitData.speed;
+    }
+
     public void IncreaseHP(float amount)
     {
         this.hp += amount;

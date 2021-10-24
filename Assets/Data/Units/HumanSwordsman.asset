@@ -12,5 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f1499cbbbe2d7946b9343f5fe059697, type: 3}
   m_Name: HumanSwordsman
   m_EditorClassIdentifier: 
-  unitPrefab: {fileID: 0}
-  modelPrefab: {fileID: 0}
+  unitData: {fileID: 11400000, guid: 00946b388393f9d448cde3a7f96fcfa8, type: 2}
+  UnitPrefab: {fileID: 8052059292586794204, guid: 741322b4c4274b94eb7d0e3e578660ec,
+    type: 3}
+  ModelPrefab: {fileID: 7439594255526922153, guid: 389ff912d63d4254cb500f2ebcd331b2,
+    type: 3}

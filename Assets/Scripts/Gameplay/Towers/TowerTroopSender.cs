@@ -22,7 +22,7 @@ public class TowerTroopSender : MonoBehaviour
 
         float newGarrisonCount = Tower.GarrisonCount / 2f;
         int troopSize = (int)(Tower.GarrisonCount - newGarrisonCount);
-        Tower.SetGarrisonCount(newGarrisonCount);
+        ((ITower)Tower).SetGarrisonCount(newGarrisonCount);
 
         Unit unit = null;
         for (int i = 0; i < units.Count; i++)

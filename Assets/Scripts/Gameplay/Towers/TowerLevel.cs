@@ -34,7 +34,7 @@ public class TowerLevel
         if (tower.GarrisonCount < tower.LvlUpQuantity)
             return;
 
-        tower.DecreaseGarrisonCount(tower.LvlUpQuantity);
+        tower.PopFromGarrison(tower.LvlUpQuantity);
         Value++;
 
         LevelUpProcessing();

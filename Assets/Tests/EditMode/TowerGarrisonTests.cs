@@ -18,7 +18,7 @@ namespace Tests
                 TowerGarrison garrison = new TowerGarrison(tower);
 
                 float beforeDecrease = garrison.Count;
-                garrison.DecreaseGarrisonCount(5);
+                garrison.PopFromGarrison(5);
                 float afterDecrease = garrison.Count;
 
                 Assert.Greater(beforeDecrease, afterDecrease);
@@ -31,7 +31,7 @@ namespace Tests
                 TowerGarrison garrison = new TowerGarrison(tower);
 
                 float beforeDecrease = garrison.Count;
-                garrison.DecreaseGarrisonCount(-5);
+                garrison.PopFromGarrison(-5);
                 float afterDecrease = garrison.Count;
 
                 Assert.Greater(beforeDecrease, afterDecrease);
@@ -44,7 +44,7 @@ namespace Tests
                 TowerGarrison garrison = new TowerGarrison(tower);
 
                 float beforeDecrease = garrison.Count;
-                garrison.DecreaseGarrisonCount(0);
+                garrison.PopFromGarrison(0);
                 float afterDecrease = garrison.Count;
 
                 Assert.AreEqual(beforeDecrease, afterDecrease);

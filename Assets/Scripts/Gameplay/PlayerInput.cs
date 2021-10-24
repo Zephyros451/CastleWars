@@ -30,7 +30,8 @@ public class PlayerInput : MonoBehaviour
 
                     StartPointSet?.Invoke((collision.transform.position));
                     isDragged = true;
-                    firstTower = collision.Tower;                    
+                    firstTower = collision.Tower;
+                    Debug.Log(hit.collider.name);
                 }
             }
         }
@@ -68,6 +69,7 @@ public class PlayerInput : MonoBehaviour
                             collision.Tower.Mediator.LevelUp();
                         }
                     }
+                    Debug.Log(hit.collider.name);
                 }
             }
             else

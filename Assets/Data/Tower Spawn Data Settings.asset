@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6a6518edf804b14892b07d08e35362c, type: 3}
+  m_Name: Tower Spawn Data Settings
+  m_EditorClassIdentifier: 
+  swordsmanTowerData:
+  - {fileID: 11400000, guid: ed2f728ea8aac19458b681a353113a2c, type: 2}
+  - {fileID: 11400000, guid: 581a98a981ef9c1448a84ecea91c7a25, type: 2}
+  - {fileID: 11400000, guid: 29f869ac4a8d22746a13c97f866dee2c, type: 2}
+  spearmanTowerData: []
+  archerTowerData:
+  - {fileID: 11400000, guid: b153145ae19b71f4b9737bf87cf1aea7, type: 2}
+  - {fileID: 11400000, guid: 801937ac356173a41af7ba1b577a5423, type: 2}
+  - {fileID: 11400000, guid: 8c57c196a32daf7438d35958102e0e6a, type: 2}

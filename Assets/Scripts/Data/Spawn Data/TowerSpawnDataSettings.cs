@@ -8,15 +8,15 @@ public class TowerSpawnDataSettings : ScriptableObject
     [SerializeField] private List<TowerSpawnData> spearmanTowerData;
     [SerializeField] private List<TowerSpawnData> archerTowerData;
 
-    public List<TowerSpawnData> GetData(TowerType towerType)
+    public List<TowerSpawnData> GetData(UnitType towerType)
     {
         switch(towerType)
         {
-            case TowerType.Swordsman:
+            case UnitType.Swordsman:
                 return swordsmanTowerData;
-            case TowerType.Spearman:
+            case UnitType.Spearman:
                 return spearmanTowerData;
-            case TowerType.Archer:
+            case UnitType.Archer:
                 return archerTowerData;
             default:
                 Debug.LogError("undefined tower type");

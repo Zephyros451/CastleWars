@@ -9,14 +9,15 @@ public class Tower : MonoBehaviour
     public event Action BeingDestroyed;
 
     [SerializeField] private Allegiance allegiance;
-    [SerializeField] private TowerType type;
+    [SerializeField] private UnitType unitType;
+    [SerializeField] private TowerType towerType;
     [SerializeField, HideInInspector] private TowerSheetData towerSheetData;
     [SerializeField, HideInInspector] private List<TowerSpawnData> towerDataInstances;
     [SerializeField, HideInInspector] private TowerSpawnData towerData;
     [SerializeField, HideInInspector] private TowerMediator mediator;
 
     public Allegiance Allegiance => allegiance;
-    public TowerType TowerType => type;
+    public UnitType TowerType => unitType;
     public TowerSheetData TowerSheetData => towerSheetData;
     public TowerSpawnData TowerData => towerData;
     public TowerMediator Mediator => mediator;
@@ -49,26 +50,26 @@ public class Tower : MonoBehaviour
     }
 
 #if UNITY_EDITOR
-    public void Initialize(TowerType newType, Allegiance newAllegiance)
+    public void Initialize(UnitType newType, Allegiance newAllegiance)
     {
         Mediator.Reset();
 
-        type = newType;
+        unitType = newType;
         allegiance = newAllegiance;
 
-        string[] guids = AssetDatabase.FindAssets("t:TowerDataSettings");
+        string[] guids = AssetDatabase.FindAssets("t:TowerSpawnDataSettings");
         string path = AssetDatabase.GUIDToAssetPath(guids[0]);
-        towerDataInstances = new List<TowerSpawnData>(AssetDatabase.LoadAssetAtPath<TowerSpawnDataSettings>(path).GetData(type));
+        towerDataInstances = new List<TowerSpawnData>(AssetDatabase.LoadAssetAtPath<TowerSpawnDataSettings>(path).GetData(unitType));
 
-        switch (type)
+        switch (unitType)
         {
-            case TowerType.Swordsman:
+            case UnitType.Swordsman:
                 guids = AssetDatabase.FindAssets("t:LITowerSheetData");
                 break;
-            case TowerType.Spearman:
+            case UnitType.Spearman:
                 guids = AssetDatabase.FindAssets("t:HITowerSheetData");
                 break;
-            case TowerType.Archer:
+            case UnitType.Archer:
                 guids = AssetDatabase.FindAssets("t:ATowerSheetData");
                 break;
             default:
@@ -109,4 +110,5 @@ public class Tower : MonoBehaviour
 }
 
 public enum Allegiance { Player, Neutral, Enemy }
-public enum TowerType { Swordsman, Spearman, Archer }
+public enum UnitType { Swordsman, Spearman, Archer }
+public enum TowerType { Generating, Buff}

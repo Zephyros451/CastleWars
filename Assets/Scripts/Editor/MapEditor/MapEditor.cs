@@ -73,7 +73,7 @@ public class MapEditor : EditorWindow
     {
         towersParent = FindObjectOfType<TowersParentFlag>();
 
-        var swordsmanTowerPrefab = AssetDatabase.LoadAssetAtPath<Tower>("Assets/Prefabs/Towers/HumanTowerLI.prefab");
+        var swordsmanTowerPrefab = AssetDatabase.LoadAssetAtPath<Tower>("Assets/Prefabs/Towers/HumanSwordsman/HumanTowerLI.prefab");
         var spearmanTowerPrefab = AssetDatabase.LoadAssetAtPath<Tower>("Assets/Prefabs/Towers/HumanTowerHI.prefab");
         var archerTowerPrefab = AssetDatabase.LoadAssetAtPath<Tower>("Assets/Prefabs/Towers/HumanTowerA.prefab");
 
@@ -84,31 +84,31 @@ public class MapEditor : EditorWindow
         Func<DropdownMenuAction, DropdownMenuAction.Status> func = (a) => { return DropdownMenuAction.Status.Normal; };
 
         addTowerMenu.menu.AppendAction("Player/Swordsman", CreateTower, func,
-                                       new TowerUserData(swordsmanTowerPrefab, Allegiance.Player, TowerType.Swordsman));
+                                       new TowerUserData(swordsmanTowerPrefab, Allegiance.Player, UnitType.Swordsman));
 
         addTowerMenu.menu.AppendAction("Player/Spearman", CreateTower, func,
-                                       new TowerUserData(spearmanTowerPrefab, Allegiance.Player, TowerType.Spearman));
+                                       new TowerUserData(spearmanTowerPrefab, Allegiance.Player, UnitType.Spearman));
 
         addTowerMenu.menu.AppendAction("Player/Archer", CreateTower, func,
-                                       new TowerUserData(archerTowerPrefab, Allegiance.Player, TowerType.Archer));
+                                       new TowerUserData(archerTowerPrefab, Allegiance.Player, UnitType.Archer));
 
         addTowerMenu.menu.AppendAction("Neutral/Swordsman", CreateTower, func,
-                                       new TowerUserData(swordsmanTowerPrefab, Allegiance.Neutral, TowerType.Swordsman));
+                                       new TowerUserData(swordsmanTowerPrefab, Allegiance.Neutral, UnitType.Swordsman));
 
         addTowerMenu.menu.AppendAction("Neutral/Spearman", CreateTower, func,
-                                       new TowerUserData(spearmanTowerPrefab, Allegiance.Neutral, TowerType.Spearman));
+                                       new TowerUserData(spearmanTowerPrefab, Allegiance.Neutral, UnitType.Spearman));
 
         addTowerMenu.menu.AppendAction("Neutral/Archer", CreateTower, func,
-                                       new TowerUserData(archerTowerPrefab, Allegiance.Neutral, TowerType.Archer));
+                                       new TowerUserData(archerTowerPrefab, Allegiance.Neutral, UnitType.Archer));
 
         addTowerMenu.menu.AppendAction("Enemy/Swordsman", CreateTower, func,
-                                       new TowerUserData(swordsmanTowerPrefab, Allegiance.Enemy, TowerType.Swordsman));
+                                       new TowerUserData(swordsmanTowerPrefab, Allegiance.Enemy, UnitType.Swordsman));
 
         addTowerMenu.menu.AppendAction("Enemy/Spearman", CreateTower, func,
-                                       new TowerUserData(spearmanTowerPrefab, Allegiance.Enemy, TowerType.Spearman));
+                                       new TowerUserData(spearmanTowerPrefab, Allegiance.Enemy, UnitType.Spearman));
 
         addTowerMenu.menu.AppendAction("Enemy/Archer", CreateTower, func,
-                                       new TowerUserData(archerTowerPrefab, Allegiance.Enemy, TowerType.Archer));
+                                       new TowerUserData(archerTowerPrefab, Allegiance.Enemy, UnitType.Archer));
     }
 
     private void CreateTower(DropdownMenuAction obj)
@@ -212,9 +212,9 @@ public class MapEditor : EditorWindow
     {
         public Tower TowerPrefab { get; }
         public Allegiance Allegiance { get; }
-        public TowerType TowerType { get; }
+        public UnitType TowerType { get; }
 
-        public TowerUserData(Tower tower, Allegiance allegiance, TowerType towerType)
+        public TowerUserData(Tower tower, Allegiance allegiance, UnitType towerType)
         {
             TowerPrefab = tower;
             Allegiance = allegiance;

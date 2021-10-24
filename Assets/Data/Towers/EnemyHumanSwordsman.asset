@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecd91c55fc0c1a642a8831e8f000c59c, type: 3}
+  m_Name: EnemyHumanSwordsman
+  m_EditorClassIdentifier: 
+  unitData: {fileID: 11400000, guid: 0afcc6c97af5aec4da42a28a6e6e0fb0, type: 2}
+  levelPrefabs:
+  - {fileID: -7511558181221131132, guid: 092f782663846ae4f890a7900598bff3, type: 3}
+  - {fileID: -7511558181221131132, guid: 3f05f2be2e2508e4aae0ea304802c82b, type: 3}
+  - {fileID: -7511558181221131132, guid: 2b0ae9c86ca8e7c48936b3a529b2a769, type: 3}
+  - {fileID: -7511558181221131132, guid: 5443641e236e1bb45b1784f2912dcfa0, type: 3}
+  - {fileID: -7511558181221131132, guid: 39f06f4de42b7e7468151009f34de056, type: 3}
+  backGarrisonUI: {fileID: 21300000, guid: 0a49a4be9a3805d448617b1d1f9c5e5a, type: 3}
+  frontGarrisonUI: {fileID: 21300000, guid: cf158cab486e0fd49aeab903c82c0b52, type: 3}
+  backLevelUI: {fileID: 21300000, guid: 600a923bc71360140a773a4d9cc14c47, type: 3}
+  frontLevelUI: {fileID: 21300000, guid: 08857bfaa8efd294c8e9cfa4de7fe4ba, type: 3}
