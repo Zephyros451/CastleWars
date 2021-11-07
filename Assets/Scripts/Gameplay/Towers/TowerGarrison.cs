@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class TowerGarrison
 {
-    public virtual event Action CountChanged;
+    public event Action CountChanged;
 
     protected ITower tower;
     protected Stack<UnitData> units = new Stack<UnitData>();
@@ -13,6 +13,8 @@ public class TowerGarrison
     private float degenerationRate = 0.8f;
 
     public bool IsNotUnderAttack { get; private set; } = true;
+
+    public UnitData TopUnit => units.Peek();
 
     public int Count
     {
@@ -26,6 +28,11 @@ public class TowerGarrison
     {
         this.tower = tower;
         GarrisonDegeneration();
+    }
+
+    protected void RaiseCountChanged()
+    {
+        CountChanged?.Invoke();
     }
 
     public void GarrisonDegeneration()
@@ -50,10 +57,11 @@ public class TowerGarrison
         }
 
         var poppedUnits = new Stack<UnitData>();
-        for (int i = 0; i < amount || units.Count == 0; i++)
+        for (int i = 0; i < amount && units.Count > 0; i++)
         {
             poppedUnits.Push(units.Pop());
         }
+        CountChanged?.Invoke();
         return poppedUnits;
     }    
 
@@ -65,32 +73,39 @@ public class TowerGarrison
             .AppendCallback(() => { IsNotUnderAttack = true; });        
     }
 
-    public void OnAllyCame(UnitData ally)
+    public virtual void OnAllyCame(UnitData ally)
     {
         units.Push(ally);
     }
 
     public void OnTowerAttacked(IModel model)
     {
-        AttackedProcessing();
-
-        if (Count == 0)
+        if(model.Attack == 0f || tower.AttackInTower == 0)
         {
-            tower.ChangeAllegiance(model.Allegiance);
+            Debug.LogError($"attack is zero");
             return;
         }
 
-        int numberOfAttacksBeforeDeath = CalculateNumberOfAttacks(model.HP, tower.AttackInTower);
-        //Count -= model.Attack * numberOfAttacksBeforeDeath / tower.HP;
-    }
+        AttackedProcessing();
 
-    public int CalculateNumberOfAttacks(float hp, float AttackInTower)
-    {
-        return Mathf.Approximately(hp % AttackInTower, 0f) ? (int)(hp / AttackInTower) : (int)((hp / AttackInTower) + 1);
-    }
+        var defenderHP = tower.HP;
+        var attackerHP = model.HP;
 
-    public int CalculateNumberOfAttacksToKill(float attack, float HPInTower)
-    {
-        return Mathf.Approximately(HPInTower % attack, 0f) ? (int)(HPInTower / attack) : (int)((HPInTower / attack) + 1);
+        while (attackerHP > 0f) 
+        {
+            defenderHP -= model.Attack;
+            if (defenderHP < 0f)
+            {
+                tower.DecreaseGarrisonCount(tower.GarrisonCount - 1);
+            }
+
+            if (Count == 0)
+            {
+                tower.ChangeAllegiance(model.Allegiance);
+                return;
+            }
+
+            attackerHP -= tower.AttackInTower;
+        }
     }
 }

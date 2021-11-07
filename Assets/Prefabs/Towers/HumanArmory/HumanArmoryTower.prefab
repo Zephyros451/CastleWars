@@ -460,7 +460,7 @@ GameObject:
   - component: {fileID: 2874094043961048831}
   - component: {fileID: 3521134952317798659}
   m_Layer: 0
-  m_Name: HumanTowerA
+  m_Name: HumanArmoryTower
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -513,7 +513,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   allegiance: 0
-  type: 0
+  towerType: 3
   towerSheetData: {fileID: 0}
   towerDataInstances: []
   towerData: {fileID: 0}
@@ -1213,9 +1213,6 @@ MonoBehaviour:
   levelCounterText: {fileID: 8021092093671457683}
   levelUp: {fileID: 1789408372208775330}
   towerScaffolding: {fileID: 0}
-  renderers:
-  - {fileID: 9108426486601628034}
-  - {fileID: 4140634595067293653}
 --- !u!1 &7355956218998531684
 GameObject:
   m_ObjectHideFlags: 0
@@ -1527,18 +1524,6 @@ GameObject:
 --- !u!4 &7938875811706815213 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8747614101541148998, guid: dac3a7d556fc40a4298c6f36900f0d29,
-    type: 3}
-  m_PrefabInstance: {fileID: 1677953496327330731}
-  m_PrefabAsset: {fileID: 0}
---- !u!23 &9108426486601628034 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 7579250795452899881, guid: dac3a7d556fc40a4298c6f36900f0d29,
-    type: 3}
-  m_PrefabInstance: {fileID: 1677953496327330731}
-  m_PrefabAsset: {fileID: 0}
---- !u!23 &4140634595067293653 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 3332440426582570110, guid: dac3a7d556fc40a4298c6f36900f0d29,
     type: 3}
   m_PrefabInstance: {fileID: 1677953496327330731}
   m_PrefabAsset: {fileID: 0}

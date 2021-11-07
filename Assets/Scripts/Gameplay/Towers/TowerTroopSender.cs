@@ -8,7 +8,7 @@ public class TowerTroopSender : MonoBehaviour
     private List<Unit> units = new List<Unit>();
     private int inactiveAttackersInTower = 0;
 
-    private TowerMediator Tower => tower.Mediator;
+    private ITower Tower => tower.Mediator;
 
     public void SendTroopTo(ITower anotherTower)
     {
@@ -20,9 +20,7 @@ public class TowerTroopSender : MonoBehaviour
         if (path == null)
             return;
 
-        float newGarrisonCount = Tower.GarrisonCount / 2f;
-        int troopSize = (int)(Tower.GarrisonCount - newGarrisonCount);
-        ((ITower)Tower).SetGarrisonCount(newGarrisonCount);
+        int troopSize = (int)(Tower.GarrisonCount / 2f);
 
         Unit unit = null;
         for (int i = 0; i < units.Count; i++)
@@ -40,14 +38,15 @@ public class TowerTroopSender : MonoBehaviour
             units.Add(unit);
         }
 
-        List<Model> models = new List<Model>();
+        Stack<Model> models = new Stack<Model>();
+        Stack<UnitData> unitsData = Tower.PopFromGarrison(troopSize);
 
         for (int i = 0; i < troopSize; i++)
         {
             var model = Instantiate(Tower.ModelPrefab, Tower.Navigator.GetStartingPointTo(anotherTower.Tower),
                                     Quaternion.identity, unit.transform);
-            model.Init(unit, tower.Allegiance, Tower.Level);
-            models.Add(model);
+            model.Init(unitsData.Pop(), tower.Allegiance, Tower.Level);
+            models.Push(model);
         }
         unit.AddModels(models);
     }

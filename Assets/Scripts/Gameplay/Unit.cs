@@ -35,16 +35,16 @@ public class Unit : MonoBehaviour
         StartCoroutine(ActivateModels());
     }
 
-    public void AddModels(List<Model> newModels)
+    public void AddModels(Stack<Model> newModels)
     {
         if (newModels.Count == 0)
             return;
 
-        for (int i = 0; i < newModels.Count; i++)
+        for (; newModels.Count > 0;)
         {
-            models.Push(newModels[i]);
+            models.Push(newModels.Pop());
         }
-        modelTimeSpacing = new WaitForSeconds(0.55f / UnitConfigData.GetUnitSpeed(newModels[0].Level));
+        modelTimeSpacing = new WaitForSeconds(0.55f / UnitConfigData.GetUnitSpeed(models.Peek().Level));
     }
 
     private void Update()

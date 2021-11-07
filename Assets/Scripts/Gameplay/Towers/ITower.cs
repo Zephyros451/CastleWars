@@ -15,7 +15,6 @@ public interface ITower
     Model ModelPrefab { get; }
     Navigator Navigator { get; }
     int QuantityCap { get; }
-    UnitType TowerType { get; }
     Unit UnitPrefab { get; }
     float GarrisonCount { get; }
     int Level { get; }
@@ -27,5 +26,5 @@ public interface ITower
 
     Stack<UnitData> PopFromGarrison(int amount);
     void ChangeAllegiance(Allegiance allegiance);
-    void SetGarrisonCount(float newCount);
+    void DecreaseGarrisonCount(float newCount);
 }

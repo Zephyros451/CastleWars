@@ -5,18 +5,15 @@ using UnityEngine;
 public class TowerSpawnDataSettings : ScriptableObject
 {
     [SerializeField] private List<TowerSpawnData> swordsmanTowerData;
-    [SerializeField] private List<TowerSpawnData> spearmanTowerData;
     [SerializeField] private List<TowerSpawnData> archerTowerData;
 
-    public List<TowerSpawnData> GetData(UnitType towerType)
+    public List<TowerSpawnData> GetData(TowerType towerType)
     {
         switch(towerType)
         {
-            case UnitType.Swordsman:
+            case TowerType.SwordsmanGenerating:
                 return swordsmanTowerData;
-            case UnitType.Spearman:
-                return spearmanTowerData;
-            case UnitType.Archer:
+            case TowerType.ArcherGenerating:
                 return archerTowerData;
             default:
                 Debug.LogError("undefined tower type");

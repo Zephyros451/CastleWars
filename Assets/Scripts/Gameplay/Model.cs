@@ -4,21 +4,19 @@
 public class Model : MonoBehaviour, IModel
 {
     [SerializeField, HideInInspector] private new SphereCollider collider;
-    [SerializeField, HideInInspector] private Transform view;    
-
-    private Unit unit;
+    [SerializeField, HideInInspector] private Transform view;
 
     public int CurrentSegment { get; private set; }
     public int Level { get; private set; }
     public Allegiance Allegiance { get; private set; }
-    public float Attack => unit.UnitConfigData.GetUnitAttack(Level);
-    public float HP => unit.UnitConfigData.GetUnitHP(Level);
-    public UnitData UnitData => unit.UnitConfigData.GetUnitData(Level);
+    public float Attack => UnitData.FieldAttack;
+    public float HP => UnitData.HP;
+    public UnitData UnitData { get; private set; }
 
-    public void Init(Unit unit, Allegiance allegiance, int level)
+    public void Init(UnitData unitData, Allegiance allegiance, int level)
     {
+        this.UnitData = unitData;
         this.Allegiance = allegiance;
-        this.unit = unit;
         this.Level = level;
     }
 

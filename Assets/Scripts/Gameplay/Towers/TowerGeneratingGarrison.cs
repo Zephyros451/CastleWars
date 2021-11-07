@@ -3,8 +3,6 @@ using System;
 
 public class TowerGeneratingGarrison : TowerGarrison
 {
-    public override event Action CountChanged;
-
     private float generationRate;
 
     public TowerGeneratingGarrison(ITower tower, float generationRate) : base(tower)
@@ -22,7 +20,7 @@ public class TowerGeneratingGarrison : TowerGarrison
                 if (Count < tower.QuantityCap && IsNotUnderAttack && tower.IsNotLevelingUp)
                 {
                     units.Push(new UnitData(tower.UnitPrefab.UnitConfigData.GetUnitData(tower.Level)));
-                    CountChanged?.Invoke();
+                    RaiseCountChanged();
                 }
             })
             .SetLoops(-1);

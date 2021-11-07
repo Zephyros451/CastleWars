@@ -1,24 +1,28 @@
 ﻿public struct UnitData
 {
     private float hp;
-    private float attack;
+    private float fieldAttack;
+    private float towerAttack;
     private float speed;
 
     public float HP => hp;
-    public float Attack => attack;
+    public float FieldAttack => fieldAttack;
+    public float TowerAttack => towerAttack;
     public float Speed => speed;
 
-    public UnitData(float hp, float attack, float speed)
+    public UnitData(float hp, float fieldAttack, float towerAttack, float speed)
     {
         this.hp = hp;
-        this.attack = attack;
+        this.fieldAttack = fieldAttack;
+        this.towerAttack = towerAttack;
         this.speed = speed;
     }
 
     public UnitData(UnitData unitData)
     {
         this.hp = unitData.hp;
-        this.attack = unitData.attack;
+        this.fieldAttack = unitData.fieldAttack;
+        this.towerAttack = unitData.towerAttack;
         this.speed = unitData.speed;
     }
 
@@ -29,6 +33,12 @@
 
     public void IncreaseAttack(float amount)
     {
-        this.attack += amount;
+        this.fieldAttack += amount;
+    }
+
+    public void ApplyBuff(BuffData buffData)
+    {
+        this.hp += buffData.hp;
+        this.fieldAttack += buffData.attack;
     }
 }

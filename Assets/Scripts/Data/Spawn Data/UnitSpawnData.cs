@@ -11,6 +11,7 @@ public class UnitSpawnData : ScriptableObject
     {
         return new UnitData(unitData.LevelData[lvl].hp,
             unitData.LevelData[lvl].attackInField,
+            unitData.LevelData[lvl].attackInTower,
             unitData.LevelData[lvl].speed);
     }
 

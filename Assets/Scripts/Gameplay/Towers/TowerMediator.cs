@@ -25,12 +25,11 @@ public class TowerMediator : MonoBehaviour, ITower
     public int LvlUpQuantity => tower.TowerSheetData.TowerLevelData[level.Value].lvlUpQuantity;
     public float GenerationRate => tower.TowerSheetData.TowerLevelData[level.Value].generationRate;
     public float LvlUpTime => tower.TowerSheetData.TowerLevelData[level.Value].lvlUpTime;
-    public float AttackInTower => tower.TowerSheetData.TowerLevelData[level.Value].attackInTower;
-    public float HP => tower.TowerSheetData.TowerLevelData[level.Value].hp;
+    public float AttackInTower => Garrison.TopUnit.TowerAttack;
+    public float HP => Garrison.TopUnit.HP;
     public Unit UnitPrefab => tower.TowerData.unitData.UnitPrefab;
     public Model ModelPrefab => tower.TowerData.unitData.ModelPrefab;
     public Allegiance Allegiance => tower.Allegiance;
-    public UnitType TowerType => tower.TowerType;
     public float GarrisonCount => Garrison.Count;
     public bool IsNotUnderAttack => Garrison.IsNotUnderAttack;
     public int Level => level.Value;
@@ -109,9 +108,24 @@ public class TowerMediator : MonoBehaviour, ITower
         return Garrison.PopFromGarrison(amount);
     }
 
-    void ITower.SetGarrisonCount(float newCount)
+    void ITower.DecreaseGarrisonCount(float newCount)
     {
-        //Garrison.Count = newCount;
+        if (newCount < 0f)
+        {
+            Debug.LogError("garrison count cannot be less than zero");
+            return;
+        }
+
+        if (newCount > GarrisonCount)
+        {
+            Debug.LogError("new garrison count cannot be greater than it was previously");
+            return;
+        }
+
+        while (newCount < GarrisonCount)
+        {
+            Garrison.PopFromGarrison(1);
+        }
     }
 
     public void LevelUp()

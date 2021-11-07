@@ -14,17 +14,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitLevelData:
   - attackInField: 1.4
+    attackInTower: 1.8
     hp: 1.9
     speed: 2
   - attackInField: 1.4
+    attackInTower: 1.8
     hp: 1.9
     speed: 2
   - attackInField: 1.4
+    attackInTower: 1.8
     hp: 1.9
     speed: 2
   - attackInField: 1.4
+    attackInTower: 1.8
     hp: 1.9
     speed: 2
   - attackInField: 1.4
+    attackInTower: 1.8
     hp: 1.9
     speed: 2

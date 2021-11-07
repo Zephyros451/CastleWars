@@ -1,9 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using NSubstitute;
 using NUnit.Framework;
-using UnityEngine;
-using UnityEngine.TestTools;
-using NSubstitute;
 
 namespace Tests
 {
@@ -58,9 +54,6 @@ namespace Tests
             {
                 ITower tower = Substitute.For<ITower>();
                 TowerGarrison garrison = new TowerGarrison(tower);
-
-                //garrison.Count = -5;
-
                 Assert.AreEqual(0, garrison.Count);
             }
 
@@ -69,9 +62,6 @@ namespace Tests
             {
                 ITower tower = Substitute.For<ITower>();
                 TowerGarrison garrison = new TowerGarrison(tower);
-
-                //garrison.Count = 123456;
-
                 Assert.AreEqual(123456, garrison.Count);
             }
         }
@@ -85,7 +75,6 @@ namespace Tests
                 TowerGarrison garrison = new TowerGarrison(tower);
 
                 float firstValue = garrison.Count;
-                //garrison.OnAllyCame();
                 float secondValue = garrison.Count;
 
                 Assert.AreEqual(1, secondValue - firstValue);
@@ -128,42 +117,6 @@ namespace Tests
 
                 Assert.AreEqual(2, garrison.Count);
             }
-        }
-
-        public class CalculateNumberOfAttacks
-        {
-            [Test]
-            public void ThreeAttacks_When_ModelHPIsFiveAndTowerAttackIsTwo()
-            {
-                ITower tower = Substitute.For<ITower>();
-                TowerGarrison garrison = new TowerGarrison(tower);
-
-                int numberOfAttacks = garrison.CalculateNumberOfAttacks(5, 2);
-
-                Assert.AreEqual(3, numberOfAttacks);
-            }
-
-            [Test]
-            public void TwoAttacks_When_HPIsFourAndAttacksIsTwo()
-            {
-                ITower tower = Substitute.For<ITower>();
-                TowerGarrison garrison = new TowerGarrison(tower);
-
-                int numberOfAttacks = garrison.CalculateNumberOfAttacks(4, 2);
-
-                Assert.AreEqual(2, numberOfAttacks);
-            }
-
-            [Test]
-            public void OneAttack_When_HPIsLessThanAttack()
-            {
-                ITower tower = Substitute.For<ITower>();
-                TowerGarrison garrison = new TowerGarrison(tower);
-
-                int numberOfAttacks = garrison.CalculateNumberOfAttacks(1, 4);
-
-                Assert.AreEqual(1, numberOfAttacks);
-            }
-        }
+        }        
     }
 }
