@@ -19,6 +19,10 @@ MonoBehaviour:
   - {fileID: -7511558181221131132, guid: 2b0ae9c86ca8e7c48936b3a529b2a769, type: 3}
   - {fileID: -7511558181221131132, guid: 5443641e236e1bb45b1784f2912dcfa0, type: 3}
   - {fileID: -7511558181221131132, guid: 39f06f4de42b7e7468151009f34de056, type: 3}
+  materials:
+  - {fileID: 2100000, guid: 7e6ac90c8556f2c4385d1f881112ab59, type: 2}
+  - {fileID: 2100000, guid: 2a294e1b448e34d48b29c400f93c6ba5, type: 2}
+  - {fileID: 2100000, guid: ccbc10cc45ae30248bdf3de4077fe571, type: 2}
   backGarrisonUI: {fileID: 21300000, guid: 418288f9c2bea0949907de06350823ee, type: 3}
   frontGarrisonUI: {fileID: 21300000, guid: c0da901cb52a0a04fa5237db151b2b19, type: 3}
   backLevelUI: {fileID: 21300000, guid: a32fc749f780be24f8fa3ac620b87ae2, type: 3}

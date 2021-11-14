@@ -19,6 +19,7 @@ public class TowerView : MonoBehaviour
 
     private Renderer model;
     private ITower mediator => tower.Mediator;
+    private TowerSpawnData currentData;
 
     private void OnEnable()
     {
@@ -58,6 +59,9 @@ public class TowerView : MonoBehaviour
 
     private void UpdateTower(TowerSpawnData data)
     {
+        currentData = data;
+        model.GetComponent<Renderer>().material = data.materials[(int)tower.Allegiance];
+
         garrisonCounterBackground.sprite = tower.TowerData.backGarrisonUI;
         garrisonCounterFront.sprite = tower.TowerData.frontGarrisonUI;
         levelCounterBackground.sprite = tower.TowerData.backLevelUI;
@@ -84,6 +88,7 @@ public class TowerView : MonoBehaviour
         garrisonCounterSlider.maxValue = tower.Mediator.QuantityCap;
         SquashAnimation();
         UpdateGarrisonCount();
+        UpdateTower(currentData);
     }
 
     private void UpdateLevelWithoutAnimation()
@@ -128,7 +133,6 @@ public class TowerView : MonoBehaviour
     public void Initialize(TowerSpawnData data)
     {
         Reset();
-        UpdateTower(data);
     }
 #endif
 

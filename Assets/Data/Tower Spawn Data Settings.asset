@@ -16,8 +16,15 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ed2f728ea8aac19458b681a353113a2c, type: 2}
   - {fileID: 11400000, guid: 581a98a981ef9c1448a84ecea91c7a25, type: 2}
   - {fileID: 11400000, guid: 29f869ac4a8d22746a13c97f866dee2c, type: 2}
-  spearmanTowerData: []
   archerTowerData:
   - {fileID: 11400000, guid: b153145ae19b71f4b9737bf87cf1aea7, type: 2}
   - {fileID: 11400000, guid: 801937ac356173a41af7ba1b577a5423, type: 2}
   - {fileID: 11400000, guid: 8c57c196a32daf7438d35958102e0e6a, type: 2}
+  armoryTowerData:
+  - {fileID: 11400000, guid: 68e36e9b0b7ccb747a12c8023dd34b9c, type: 2}
+  - {fileID: 11400000, guid: 1eac935564e07d54fb9f44a812d6d116, type: 2}
+  - {fileID: 11400000, guid: 7dd02d4d8179924468eb1db032460a9f, type: 2}
+  magicTowerData:
+  - {fileID: 11400000, guid: 57ebf8d93b4083043bfb31e790a262ea, type: 2}
+  - {fileID: 11400000, guid: bfd9d2dd1fac85e44bd60b931ebfa8d4, type: 2}
+  - {fileID: 11400000, guid: e0003870b67b0e345821a6001cd9fb40, type: 2}

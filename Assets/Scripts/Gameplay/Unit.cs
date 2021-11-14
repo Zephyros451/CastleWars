@@ -1,21 +1,23 @@
-﻿using System.Collections;
+﻿using DG.Tweening;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Unit : MonoBehaviour
 {
-    [SerializeField] private UnitSpawnData unitSpawnData;
-
     private List<Vector3> path;
     private Stack<Model> models = new Stack<Model>();
     private List<Model> activeModels = new List<Model>();
     private WaitForSeconds modelTimeSpacing;
 
-    public UnitSpawnData UnitConfigData => unitSpawnData;
+    private float speedMultiplier = 1;
+
     public int Level { get; private set; }
     public BezierCurve Curve { get; private set; }
 
-    public void Init(BezierCurve curve, ITower destination, DirectionType direction)
+    private List<BaseAreaEffect> processedAreaEffects = new List<BaseAreaEffect>(1);
+
+    public void Init(BezierCurve curve, DirectionType direction)
     {
         Curve = curve;
         path = curve.GetSegmentPoints();
@@ -44,7 +46,7 @@ public class Unit : MonoBehaviour
         {
             models.Push(newModels.Pop());
         }
-        modelTimeSpacing = new WaitForSeconds(0.55f / UnitConfigData.GetUnitSpeed(models.Peek().Level));
+        modelTimeSpacing = new WaitForSeconds(0.55f / models.Peek().UnitData.Speed);
     }
 
     private void Update()
@@ -76,7 +78,7 @@ public class Unit : MonoBehaviour
 
             Vector3 newPosition = Vector3.MoveTowards(activeModels[i].transform.position,
                 path[activeModels[i].CurrentSegment],
-                UnitConfigData.GetUnitSpeed(activeModels[i].Level) * Time.deltaTime);
+                activeModels[i].UnitData.Speed * this.speedMultiplier * Time.deltaTime);
             Quaternion newRotation = Quaternion.identity;
             if (newPosition - activeModels[i].transform.position != Vector3.zero)
             {
@@ -97,6 +99,23 @@ public class Unit : MonoBehaviour
         }
     }
 
+    private void ProcessAreaEffect(BaseAreaEffect areaEffect)
+    {
+        if(processedAreaEffects.Contains(areaEffect))
+        {
+            return;
+        }
+        processedAreaEffects.Add(areaEffect);
+
+        if (areaEffect is StopArea)
+        {
+            DOTween.Sequence()
+                .AppendCallback(() => speedMultiplier = 0)
+                .AppendInterval(3f)
+                .AppendCallback(() => speedMultiplier = 1);
+        }
+    }
+
     private IEnumerator ActivateModels()
     {
         while (true)
@@ -106,10 +125,12 @@ public class Unit : MonoBehaviour
                 if (models.Count % 2 == 0)
                 {
                     var model = models.Pop();
+                    model.EnteredAreaTrigger += ProcessAreaEffect;
                     model.SetOffset(Vector3.right * 0.5f);
                     activeModels.Add(model);
 
                     model = models.Pop();
+                    model.EnteredAreaTrigger += ProcessAreaEffect;
                     model.SetOffset(Vector3.left * 0.5f);
                     activeModels.Add(model);
 
@@ -117,7 +138,9 @@ public class Unit : MonoBehaviour
                 }
                 else
                 {
-                    activeModels.Add(models.Pop());
+                    var model = models.Pop();
+                    model.EnteredAreaTrigger += ProcessAreaEffect;
+                    activeModels.Add(model);
                     yield return modelTimeSpacing;
                 }
             }

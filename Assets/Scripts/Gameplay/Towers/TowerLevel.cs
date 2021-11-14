@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using UnityEngine;
 
 public class TowerLevel
 {
@@ -10,7 +9,6 @@ public class TowerLevel
 
     private ITower tower;
     public bool IsNotLevelingUp = true;
-    private Coroutine levelUpCoroutine;
 
     public int Value { get; private set; } = 0;
 

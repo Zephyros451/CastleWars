@@ -19,6 +19,8 @@ public interface ITower
     float GarrisonCount { get; }
     int Level { get; }
     bool IsNotLevelingUp { get; }
+    BuffData BuffData { get; }
+
     event Action GarrisonCountChanged;
     event Action LevelReseted;
     event Action LevelUpStarted;
@@ -27,4 +29,5 @@ public interface ITower
     Stack<UnitData> PopFromGarrison(int amount);
     void ChangeAllegiance(Allegiance allegiance);
     void DecreaseGarrisonCount(float newCount);
+    void ReceiveDamage(float damage);
 }

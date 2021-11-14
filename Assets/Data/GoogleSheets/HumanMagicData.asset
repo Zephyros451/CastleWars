@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 773e6bce4810efa42b33f1c620586b1b, type: 3}
+  m_Name: HumanMagicData
+  m_EditorClassIdentifier: 
+  towerData:
+  - quantityCap: 10
+    lvlUpQuantity: 5
+    generationRate: 10000000
+    lvlUpTime: 5
+    attackInTower: 0
+    hp: 0
+  - quantityCap: 20
+    lvlUpQuantity: 10
+    generationRate: 10000000
+    lvlUpTime: 5
+    attackInTower: 0
+    hp: 0
+  - quantityCap: 30
+    lvlUpQuantity: 15
+    generationRate: 10000000
+    lvlUpTime: 5
+    attackInTower: 0
+    hp: 0
+  - quantityCap: 40
+    lvlUpQuantity: 20
+    generationRate: 10000000
+    lvlUpTime: 5
+    attackInTower: 0
+    hp: 0
+  - quantityCap: 50
+    lvlUpQuantity: 51
+    generationRate: 10000000
+    lvlUpTime: 5
+    attackInTower: 0
+    hp: 0
+  buffData:
+  - HP: 0
+    attack: 100
+    applyTime: 2
+  - HP: 0
+    attack: 100
+    applyTime: 2
+  - HP: 0
+    attack: 100
+    applyTime: 2
+  - HP: 0
+    attack: 100
+    applyTime: 2
+  - HP: 0
+    attack: 100
+    applyTime: 2
+  unitDatas: {fileID: 0}

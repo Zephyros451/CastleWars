@@ -79,6 +79,8 @@ public class MapEditor : EditorWindow
             .LoadAssetAtPath<Tower>("Assets/Prefabs/Towers/HumanArcher/HumanArcherTower.prefab");
         var armoryTowerPrefab = AssetDatabase
             .LoadAssetAtPath<Tower>("Assets/Prefabs/Towers/HumanArmory/HumanArmoryTower.prefab");
+        var magicTowerPrefab = AssetDatabase
+            .LoadAssetAtPath<Tower>("Assets/Prefabs/Towers/HumanMagic/HumanMagicTower.prefab");
 
         deleteTowerButton = root.Q<ToolbarButton>("delete-tower");
         deleteTowerButton.clicked += DeleteTower;
@@ -93,6 +95,8 @@ public class MapEditor : EditorWindow
             new TowerUserData(archerTowerPrefab, Allegiance.Player, TowerType.ArcherGenerating));
         addTowerMenu.menu.AppendAction("Player/Armory", CreateTower, func,
             new TowerUserData(armoryTowerPrefab, Allegiance.Player, TowerType.HPBuff));
+        addTowerMenu.menu.AppendAction("Player/Magic", CreateTower, func,
+            new TowerUserData(magicTowerPrefab, Allegiance.Player, TowerType.AttackBuff));
 
         addTowerMenu.menu.AppendAction("Neutral/Swordsman", CreateTower, func,
             new TowerUserData(swordsmanTowerPrefab, Allegiance.Neutral, TowerType.SwordsmanGenerating));
@@ -100,6 +104,8 @@ public class MapEditor : EditorWindow
             new TowerUserData(archerTowerPrefab, Allegiance.Neutral, TowerType.ArcherGenerating));
         addTowerMenu.menu.AppendAction("Neutral/Armory", CreateTower, func,
             new TowerUserData(armoryTowerPrefab, Allegiance.Neutral, TowerType.HPBuff));
+        addTowerMenu.menu.AppendAction("Neutral/Magic", CreateTower, func,
+            new TowerUserData(magicTowerPrefab, Allegiance.Neutral, TowerType.AttackBuff));
 
         addTowerMenu.menu.AppendAction("Enemy/Swordsman", CreateTower, func,
             new TowerUserData(swordsmanTowerPrefab, Allegiance.Enemy, TowerType.SwordsmanGenerating));
@@ -107,6 +113,8 @@ public class MapEditor : EditorWindow
             new TowerUserData(archerTowerPrefab, Allegiance.Enemy, TowerType.ArcherGenerating));
         addTowerMenu.menu.AppendAction("Enemy/Armory", CreateTower, func,
             new TowerUserData(armoryTowerPrefab, Allegiance.Enemy, TowerType.HPBuff));
+        addTowerMenu.menu.AppendAction("Enemy/Magic", CreateTower, func,
+            new TowerUserData(magicTowerPrefab, Allegiance.Enemy, TowerType.AttackBuff));
     }
 
     private void CreateTower(DropdownMenuAction obj)
@@ -115,7 +123,7 @@ public class MapEditor : EditorWindow
         var instance = PrefabUtility
             .InstantiatePrefab(userData.TowerPrefab, towersParent.transform) as Tower;
         instance.Initialize(userData.Allegiance, userData.TowerType);
-        instance.name = $"Tower {towers.Length + 1}";
+        instance.name = $"{userData.Allegiance} {userData.TowerType} {towers.Length + 1}";
 
         InitializeTowerList();
     }
@@ -181,9 +189,10 @@ public class MapEditor : EditorWindow
     {
         var userData = obj.userData as PathUserData;
         var instance = PrefabUtility.InstantiatePrefab(userData.PathPrefab, pathsParent.transform) as Path;
-        instance.transform.localPosition = new Vector3(0f, 0.01f, 0f);
+        instance.transform.localPosition = new Vector3(0f, 0.005f, 0f);
         instance.Initialize(userData.Tower1, userData.Tower2);
-        instance.name = $"{userData.Tower1.name} <-> {userData.Tower2.name}";
+        instance.name = $"{userData.Tower1.name[userData.Tower1.name.Length-1]}" +
+            $" <-> {userData.Tower2.name[userData.Tower2.name.Length-1]}";
 
         InitializePathsList();
         InitializePathsToolbar();

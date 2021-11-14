@@ -12,34 +12,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75f826af1a5c3794b88281c854af0ea3, type: 3}
   m_Name: A Tower Sheet Data
   m_EditorClassIdentifier: 
-  towerLevelData:
+  towerData:
   - quantityCap: 10
     lvlUpQuantity: 5
-    generationRate: 1000000
-    lvlUpTime: 4
-    attackInTower: 1.5
-    hp: 1.6
+    generationRate: 0.8
+    lvlUpTime: 5
+    attackInTower: 1
+    hp: 1
   - quantityCap: 20
     lvlUpQuantity: 10
-    generationRate: 1000000
-    lvlUpTime: 4
-    attackInTower: 1.5
-    hp: 1.6
+    generationRate: 0.8
+    lvlUpTime: 5
+    attackInTower: 1
+    hp: 1
   - quantityCap: 30
     lvlUpQuantity: 15
-    generationRate: 1000000
-    lvlUpTime: 4
-    attackInTower: 1.5
-    hp: 1.6
+    generationRate: 0.8
+    lvlUpTime: 5
+    attackInTower: 1
+    hp: 1
   - quantityCap: 40
     lvlUpQuantity: 20
-    generationRate: 1000000
-    lvlUpTime: 4
-    attackInTower: 1.5
-    hp: 1.6
+    generationRate: 0.8
+    lvlUpTime: 5
+    attackInTower: 1
+    hp: 1
   - quantityCap: 50
-    lvlUpQuantity: 1000
-    generationRate: 1000000
-    lvlUpTime: 4
-    attackInTower: 1.5
-    hp: 1.6
+    lvlUpQuantity: 51
+    generationRate: 0.8
+    lvlUpTime: 5
+    attackInTower: 1
+    hp: 1
+  buffData: []
+  unitDatas: {fileID: 11400000, guid: 61f3f777c32b9b347984453508bb9531, type: 2}

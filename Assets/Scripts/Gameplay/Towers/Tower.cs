@@ -19,6 +19,7 @@ public class Tower : MonoBehaviour
     public TowerSheetData TowerSheetData => towerSheetData;
     public TowerSpawnData TowerData => towerData;
     public TowerMediator Mediator => mediator;
+    public TowerType TowerType => towerType;
 
     private void Start()
     {
@@ -54,10 +55,7 @@ public class Tower : MonoBehaviour
 
         this.towerType = towerType;
         this.allegiance = allegiance;
-
-        string[] guids = AssetDatabase.FindAssets("t:TowerSpawnDataSettings");
-        string path = AssetDatabase.GUIDToAssetPath(guids[0]);
-        towerDataInstances = new List<TowerSpawnData>(AssetDatabase.LoadAssetAtPath<TowerSpawnDataSettings>(path).GetData(towerType));
+        string[] guids;
 
         switch (towerType)
         {
@@ -68,10 +66,10 @@ public class Tower : MonoBehaviour
                 guids = AssetDatabase.FindAssets("t:ATowerSheetData");
                 break;
             case TowerType.AttackBuff:
-                guids = AssetDatabase.FindAssets("t:");
+                guids = AssetDatabase.FindAssets("t:MagicTowerSheetData");
                 break;
             case TowerType.HPBuff:
-                guids = AssetDatabase.FindAssets("t:");
+                guids = AssetDatabase.FindAssets("t:ArmoryTowerSheetData");
                 break;
             default:
                 guids = new string[1];
@@ -79,8 +77,12 @@ public class Tower : MonoBehaviour
                 break;
         }
 
-        path = AssetDatabase.GUIDToAssetPath(guids[0]);
+        var path = AssetDatabase.GUIDToAssetPath(guids[0]);
         towerSheetData = AssetDatabase.LoadAssetAtPath<TowerSheetData>(path);
+
+        guids = AssetDatabase.FindAssets("t:TowerSpawnDataSettings");
+        path = AssetDatabase.GUIDToAssetPath(guids[0]);
+        towerDataInstances = new List<TowerSpawnData>(AssetDatabase.LoadAssetAtPath<TowerSpawnDataSettings>(path).GetData(towerType));
 
         switch (this.allegiance)
         {
@@ -110,6 +112,5 @@ public class Tower : MonoBehaviour
 #endif
 }
 
-public enum Allegiance { Player, Neutral, Enemy }
-public enum UnitType { Swordsman, Spearman, Archer }
+public enum Allegiance { Player = 0, Neutral = 1, Enemy = 2 }
 public enum TowerType { SwordsmanGenerating, ArcherGenerating, AttackBuff, HPBuff }

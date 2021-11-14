@@ -34,11 +34,19 @@ public class TowerMediator : MonoBehaviour, ITower
     public bool IsNotUnderAttack => Garrison.IsNotUnderAttack;
     public int Level => level.Value;
     public bool IsNotLevelingUp => level.IsNotLevelingUp;
+    public BuffData BuffData => tower.TowerSheetData.BuffData[level.Value];
 
     private void Awake()
     {
         level = new TowerLevel(this, 0);
-        Garrison = new TowerGeneratingGarrison(this, GenerationRate);
+        if (tower.TowerType == TowerType.ArcherGenerating || tower.TowerType == TowerType.SwordsmanGenerating)
+        {
+            Garrison = new TowerGeneratingGarrison(this, GenerationRate, tower.TowerData.unitData.GetUnitData(level.Value));
+        }
+        else
+        {
+            Garrison = new TowerBuffingGarrison(this, this.BuffData);
+        }
     }
 
     private void Start()
@@ -139,6 +147,21 @@ public class TowerMediator : MonoBehaviour, ITower
         navigator = GetComponent<Navigator>();
         collision = GetComponentInChildren<TowerCollision>();
         troopSender = GetComponent<TowerTroopSender>();
+    }
+
+    public void ReceiveDamage(float damage)
+    {
+        if(this.GarrisonCount == 0)
+        {
+            return;
+        }
+
+        this.Garrison.TopUnit.DecreaseHP(damage);
+
+        if(this.Garrison.TopUnit.HP < 0f)
+        {
+            this.Garrison.PopFromGarrison(1);
+        }
     }
 
     public void Destroy()

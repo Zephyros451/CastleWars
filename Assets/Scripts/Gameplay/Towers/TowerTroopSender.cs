@@ -6,7 +6,6 @@ public class TowerTroopSender : MonoBehaviour
     [SerializeField] private Tower tower;
 
     private List<Unit> units = new List<Unit>();
-    private int inactiveAttackersInTower = 0;
 
     private ITower Tower => tower.Mediator;
 
@@ -34,7 +33,7 @@ public class TowerTroopSender : MonoBehaviour
         if (unit == null)
         {
             unit = Instantiate(Tower.UnitPrefab, transform.position, Quaternion.identity);
-            unit.Init(path, Tower, direction);
+            unit.Init(path, direction);
             units.Add(unit);
         }
 
@@ -43,9 +42,10 @@ public class TowerTroopSender : MonoBehaviour
 
         for (int i = 0; i < troopSize; i++)
         {
-            var model = Instantiate(Tower.ModelPrefab, Tower.Navigator.GetStartingPointTo(anotherTower.Tower),
+            var model = Instantiate(unitsData.Peek().ModelPrefab, Tower.Navigator.GetStartingPointTo(anotherTower.Tower),
                                     Quaternion.identity, unit.transform);
-            model.Init(unitsData.Pop(), tower.Allegiance, Tower.Level);
+            
+            model.Init(unitsData.Pop(), tower.Allegiance, Tower.Level, anotherTower);
             models.Push(model);
         }
         unit.AddModels(models);

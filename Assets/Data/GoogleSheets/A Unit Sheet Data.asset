@@ -17,19 +17,24 @@ MonoBehaviour:
     attackInTower: 1.5
     hp: 1.6
     speed: 2.3
+    range: 10
   - attackInField: 1
     attackInTower: 1.5
     hp: 1.6
     speed: 2.3
+    range: 4
   - attackInField: 1
     attackInTower: 1.5
     hp: 1.6
     speed: 2.3
+    range: 4
   - attackInField: 1
     attackInTower: 1.5
     hp: 1.6
     speed: 2.3
+    range: 4
   - attackInField: 1
     attackInTower: 1.5
     hp: 1.6
     speed: 2.3
+    range: 4
