@@ -4,8 +4,9 @@ using System;
 [RequireComponent(typeof(SphereCollider))]
 public class Model : MonoBehaviour, IModel
 {
-    [SerializeField, HideInInspector] private new SphereCollider collider;
-    [SerializeField, HideInInspector] private Transform view;
+    [SerializeField] private new SphereCollider collider;
+    [SerializeField] private MeshFilter view;
+    [SerializeField] private Mesh[] levelSkins;
 
     public event Action<BaseAreaEffect> EnteredAreaTrigger;
 
@@ -24,6 +25,8 @@ public class Model : MonoBehaviour, IModel
         this.Allegiance = allegiance;
         this.Level = level;
         this.target = target;
+
+        this.view.mesh = levelSkins[level];
     }
 
     public void IncrementSegment()
@@ -33,7 +36,7 @@ public class Model : MonoBehaviour, IModel
 
     public void SetOffset(Vector3 offset)
     {
-        view.localPosition = offset;
+        view.transform.localPosition = offset;
     }
 
     public void Move(Vector3 position, Quaternion rotation)
@@ -60,6 +63,6 @@ public class Model : MonoBehaviour, IModel
     private void Reset()
     {
         collider = GetComponent<SphereCollider>();
-        view = GetComponentInChildren<Renderer>().transform;
+        view = GetComponentInChildren<MeshFilter>();
     }
 }

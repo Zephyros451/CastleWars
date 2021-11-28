@@ -1,11 +1,14 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(menuName="Spawn Data/Unit Data")]
+[CreateAssetMenu(menuName = "Spawn Data/Unit Data")]
 public class UnitSpawnData : ScriptableObject
 {
     [SerializeField] private UnitSheetData unitData;
     public Unit UnitPrefab;
     public Model ModelPrefab;
+
+    [Space]
+    [SerializeField] private MeshRenderer[] levelSkins;
 
     public UnitData GetUnitData(int lvl)
     {
@@ -30,5 +33,10 @@ public class UnitSpawnData : ScriptableObject
     public float GetUnitSpeed(int lvl)
     {
         return unitData.LevelData[lvl].speed;
+    }
+
+    public MeshRenderer GetSkin(int level)
+    {
+        return levelSkins[level];
     }
 }
