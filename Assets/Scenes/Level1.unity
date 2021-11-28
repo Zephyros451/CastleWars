@@ -32,7 +32,7 @@ RenderSettings:
   m_FlareFadeSpeed: 3
   m_HaloTexture: {fileID: 0}
   m_SpotCookie: {fileID: 10001, guid: 0000000000000000e000000000000000, type: 0}
-  m_DefaultReflectionMode: 1
+  m_DefaultReflectionMode: 0
   m_DefaultReflectionResolution: 128
   m_ReflectionBounces: 1
   m_ReflectionIntensity: 1
@@ -98,7 +98,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 112000000, guid: 7595e8b414d3a4d4dbacb0f43bd1762d,
+  m_LightingDataAsset: {fileID: 112000000, guid: e8006ef4c46c7e04093884cdfe8c08dc,
     type: 2}
   m_UseShadowmask: 0
 --- !u!196 &4
@@ -765,11 +765,6 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 262076246077607332, guid: eda549aaab370c5438916eebed6f980a,
         type: 3}
-      propertyPath: m_Depth
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 262076246077607332, guid: eda549aaab370c5438916eebed6f980a,
-        type: 3}
       propertyPath: m_ClearFlags
       value: 1
       objectReference: {fileID: 0}
@@ -863,71 +858,6 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 262076247948163908, guid: eda549aaab370c5438916eebed6f980a,
-        type: 3}
-      propertyPath: m_Intensity
-      value: 0.85
-      objectReference: {fileID: 0}
-    - target: {fileID: 262076247948163908, guid: eda549aaab370c5438916eebed6f980a,
-        type: 3}
-      propertyPath: m_Shadows.m_Bias
-      value: 1.12
-      objectReference: {fileID: 0}
-    - target: {fileID: 262076247948163908, guid: eda549aaab370c5438916eebed6f980a,
-        type: 3}
-      propertyPath: m_Shadows.m_Type
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 262076247948163908, guid: eda549aaab370c5438916eebed6f980a,
-        type: 3}
-      propertyPath: m_Shadows.m_Strength
-      value: 0.75
-      objectReference: {fileID: 0}
-    - target: {fileID: 262076247948163908, guid: eda549aaab370c5438916eebed6f980a,
-        type: 3}
-      propertyPath: m_Shadows.m_NormalBias
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 262076247948163909, guid: eda549aaab370c5438916eebed6f980a,
-        type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 262076247948163911, guid: eda549aaab370c5438916eebed6f980a,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.83817154
-      objectReference: {fileID: 0}
-    - target: {fileID: 262076247948163911, guid: eda549aaab370c5438916eebed6f980a,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0.452641
-      objectReference: {fileID: 0}
-    - target: {fileID: 262076247948163911, guid: eda549aaab370c5438916eebed6f980a,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0.24205112
-      objectReference: {fileID: 0}
-    - target: {fileID: 262076247948163911, guid: eda549aaab370c5438916eebed6f980a,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0.18437983
-      objectReference: {fileID: 0}
-    - target: {fileID: 262076247948163911, guid: eda549aaab370c5438916eebed6f980a,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 57.999004
-      objectReference: {fileID: 0}
-    - target: {fileID: 262076247948163911, guid: eda549aaab370c5438916eebed6f980a,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: -26.789001
-      objectReference: {fileID: 0}
-    - target: {fileID: 262076247948163911, guid: eda549aaab370c5438916eebed6f980a,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 9.774
-      objectReference: {fileID: 0}
     - target: {fileID: 619526425481960948, guid: eda549aaab370c5438916eebed6f980a,
         type: 3}
       propertyPath: m_Name
@@ -943,22 +873,6 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1166569894347811086, guid: eda549aaab370c5438916eebed6f980a,
-        type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2923321035316415147, guid: eda549aaab370c5438916eebed6f980a,
-        type: 3}
-      propertyPath: m_UsePipelineSettings
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3342879771332119531, guid: eda549aaab370c5438916eebed6f980a,
-        type: 3}
-      propertyPath: sharedProfile
-      value: 
-      objectReference: {fileID: 11400000, guid: 6c5473154a2076b47a444978f5757574,
-        type: 2}
     - target: {fileID: 3467082066956861524, guid: eda549aaab370c5438916eebed6f980a,
         type: 3}
       propertyPath: m_RootOrder
