@@ -3,24 +3,38 @@ using SIDGIN.GoogleSheets;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TowerSheetData : ScriptableObject, ICollectionSet<TowerData>
+public class TowerSheetData : ScriptableObject, ICollectionSet<SheetData>
 {
-    [SerializeField] protected List<TowerData> towerData;
-    [SerializeField] protected List<BuffData> buffData;
+    [SerializeField] protected List<SheetData> towerData;
     [SerializeField] protected UnitSheetData unitDatas;
 
-    public List<TowerData> TowerLevelData => towerData;
-    public List<BuffData> BuffData => buffData;
-    public UnitSheetData UnitDatas => unitDatas;
+    protected List<BuffData> buffData = new List<BuffData>();
 
-    void ICollectionSet<TowerData>.SetCollection(List<TowerData> data)
+    public List<SheetData> TowerLevelData => towerData;
+    public UnitSheetData UnitDatas => unitDatas;
+    public List<BuffData> BuffData
+    {
+        get
+        {
+            if(buffData.Count == 0)
+            {
+                foreach (var item in towerData)
+                {
+                    buffData.Add(new BuffData(item.hpBuff, item.attackBuff, item.applyBuffTime));
+                }
+            }
+            return buffData;
+        }
+    }
+
+    void ICollectionSet<SheetData>.SetCollection(List<SheetData> data)
     {
         towerData = data;
     }
 }
 
 [System.Serializable]
-public class TowerData
+public class SheetData
 {
     [SerializeField, GoogleSheetParam("quantity_cap")]
     public int quantityCap;
@@ -34,22 +48,31 @@ public class TowerData
     public float attackInTower;
     [SerializeField, GoogleSheetParam("hp")]
     public float hp;
+    [SerializeField, GoogleSheetParam("hp_buff")]
+    public float hpBuff;
+    [SerializeField, GoogleSheetParam("attack_buff")]
+    public float attackBuff;
+    [SerializeField, GoogleSheetParam("apply_time")]
+    public float applyBuffTime;
 }
 
-[System.Serializable]
 public class BuffData
 {
-    [SerializeField, GoogleSheetParam("hp")]
     public float HP;
-    [SerializeField, GoogleSheetParam("attack")]
-    public float attack;
-    [SerializeField, GoogleSheetParam("apply_time")]
-    public float applyTime;
+    public float Attack;
+    public float ApplyBuffTime;
+
+    public BuffData(float hp, float attack, float applyBuffTime)
+    {
+        HP = hp;
+        Attack = attack;
+        ApplyBuffTime = applyBuffTime;
+    }
 
     public BuffData(BuffData buffData)
     {
-        this.HP = buffData.HP;
-        this.attack = buffData.attack;
-        this.applyTime = buffData.applyTime;
+        HP = buffData.HP;
+        Attack = buffData.Attack;
+        ApplyBuffTime = buffData.ApplyBuffTime;
     }
 }

@@ -52,6 +52,6 @@
     public void ApplyBuff(BuffData buffData)
     {
         this.hp += buffData.HP;
-        this.fieldAttack += buffData.attack;
+        this.fieldAttack += buffData.Attack;
     }
 }

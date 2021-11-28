@@ -96,13 +96,13 @@ public class TowerBuffingGarrison : TowerGarrison
             {
                 foreach(var unitBuffPair in unitsWaitingForBuff)
                 {
-                    unitBuffPair.Key.applyTime -= 0.1f;
+                    unitBuffPair.Key.ApplyBuffTime -= 0.1f;
                 }
 
                 for (int i = unitsWaitingForBuff.Count - 1; i >= 0; i--)
                 {
                     var key = unitsWaitingForBuff.Keys.ElementAt(i);
-                    if (key.applyTime > 0f)
+                    if (key.ApplyBuffTime > 0f)
                     {
                         continue;
                     }
