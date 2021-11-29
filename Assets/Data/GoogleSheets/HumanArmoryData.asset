@@ -18,44 +18,59 @@ MonoBehaviour:
     generationRate: 0
     lvlUpTime: 1
     attackInTower: 1.6
-    hp: 2
-    hpBuff: 1
+    hp: 3
+    hpBuff: 0.1
     attackBuff: 0
     applyBuffTime: 2
+    aoeTime: 0
+    rangeDamage: 2
+    rangeDistance: 2
   - quantityCap: 20
     lvlUpQuantity: 10
     generationRate: 0
     lvlUpTime: 2
     attackInTower: 1.6
-    hp: 2
-    hpBuff: 1
+    hp: 3
+    hpBuff: 0.2
     attackBuff: 0
     applyBuffTime: 2
+    aoeTime: 0
+    rangeDamage: 2
+    rangeDistance: 2
   - quantityCap: 30
     lvlUpQuantity: 15
     generationRate: 0
     lvlUpTime: 3
     attackInTower: 1.6
-    hp: 2
-    hpBuff: 1
+    hp: 3
+    hpBuff: 0.3
     attackBuff: 0
     applyBuffTime: 2
+    aoeTime: 0
+    rangeDamage: 2
+    rangeDistance: 2
   - quantityCap: 40
     lvlUpQuantity: 20
     generationRate: 0
     lvlUpTime: 4
     attackInTower: 1.6
-    hp: 2
-    hpBuff: 1
+    hp: 3
+    hpBuff: 0.4
     attackBuff: 0
     applyBuffTime: 2
+    aoeTime: 0
+    rangeDamage: 2
+    rangeDistance: 2
   - quantityCap: 50
     lvlUpQuantity: 1000
     generationRate: 0
     lvlUpTime: 1000
     attackInTower: 1.6
-    hp: 2
-    hpBuff: 1
+    hp: 3
+    hpBuff: 0.5
     attackBuff: 0
     applyBuffTime: 2
+    aoeTime: 0
+    rangeDamage: 2
+    rangeDistance: 2
   unitDatas: {fileID: 0}

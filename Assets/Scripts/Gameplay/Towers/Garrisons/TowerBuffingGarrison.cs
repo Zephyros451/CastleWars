@@ -26,7 +26,7 @@ public class TowerBuffingGarrison : TowerGarrison
         }
     }
 
-    public TowerBuffingGarrison(ITower tower, BuffData buffData) : base(tower)
+    public TowerBuffingGarrison(ITower tower, BuffData buffData, UnitData configUnitData) : base(tower, configUnitData)
     {
         this.buffData = buffData;
 

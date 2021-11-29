@@ -21,10 +21,15 @@ public abstract class TowerGarrison
         get => units.Count;
     }
 
-    public TowerGarrison(ITower tower)
+    public TowerGarrison(ITower tower, UnitData configUnitData, int startCount = 10)
     {
         this.tower = tower;
         GarrisonDegeneration();
+
+        for (int i = 0; i < startCount; i++)
+        {
+            units.Push(new UnitData(configUnitData));
+        }
     }
 
     protected void RaiseCountChanged()

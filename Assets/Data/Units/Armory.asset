@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f1499cbbbe2d7946b9343f5fe059697, type: 3}
   m_Name: Armory
   m_EditorClassIdentifier: 
-  unitData: {fileID: 0}
+  unitData: {fileID: 11400000, guid: 26c2fd1649fcf6f4d8dc476f6a38be66, type: 2}
   UnitPrefab: {fileID: 6186662658383850568, guid: 964b8911adacbea49b9cf4d963fe2729,
     type: 3}
   ModelPrefab: {fileID: 0}
+  levelSkins: []

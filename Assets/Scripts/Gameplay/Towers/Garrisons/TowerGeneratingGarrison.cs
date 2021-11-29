@@ -5,7 +5,7 @@ public class TowerGeneratingGarrison : TowerGarrison
     private float generationRate;
     private UnitData configUnitData;
 
-    public TowerGeneratingGarrison(ITower tower, float generationRate, UnitData configUnitData) : base(tower)
+    public TowerGeneratingGarrison(ITower tower, float generationRate, UnitData configUnitData) : base(tower, configUnitData)
     {
         this.generationRate = generationRate;
         this.configUnitData = configUnitData;

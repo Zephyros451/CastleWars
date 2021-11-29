@@ -45,7 +45,7 @@ public class TowerMediator : MonoBehaviour, ITower
         }
         else
         {
-            Garrison = new TowerBuffingGarrison(this, this.BuffData);
+            Garrison = new TowerBuffingGarrison(this, this.BuffData, tower.TowerData.unitData.GetUnitData(level.Value));
         }
     }
 

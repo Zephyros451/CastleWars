@@ -1100,6 +1100,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tower: {fileID: 8310280199241107491}
+  rangeCollider: {fileID: 7476451313250576214}
 --- !u!54 &6698755135722353641
 Rigidbody:
   m_ObjectHideFlags: 0

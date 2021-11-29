@@ -54,6 +54,12 @@ public class SheetData
     public float attackBuff;
     [SerializeField, GoogleSheetParam("apply_time")]
     public float applyBuffTime;
+    [SerializeField, GoogleSheetParam("aoe_time")]
+    public float aoeTime;
+    [SerializeField, GoogleSheetParam("range_damage")]
+    public float rangeDamage;
+    [SerializeField, GoogleSheetParam("range_dst")]
+    public float rangeDistance;
 }
 
 public class BuffData

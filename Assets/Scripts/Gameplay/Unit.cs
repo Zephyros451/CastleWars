@@ -109,9 +109,10 @@ public class Unit : MonoBehaviour
 
         if (areaEffect is StopArea)
         {
+            var stopEffect = areaEffect as StopArea;
             DOTween.Sequence()
                 .AppendCallback(() => speedMultiplier = 0)
-                .AppendInterval(3f)
+                .AppendInterval(stopEffect.StopTime)
                 .AppendCallback(() => speedMultiplier = 1);
         }
     }

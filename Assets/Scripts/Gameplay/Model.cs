@@ -55,6 +55,15 @@ public class Model : MonoBehaviour, IModel
         EnteredAreaTrigger?.Invoke(areaEffect);
     }
 
+    public void ApplyDamage(float damage)
+    {
+        UnitData.DecreaseHP(damage);
+        if (HP < 0)
+        {
+            Destroy(this.gameObject);
+        }
+    }
+
     private void OnDestroy()
     {
         EnteredAreaTrigger = null;
