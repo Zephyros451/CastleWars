@@ -1,23 +1,23 @@
-﻿using System.Collections;
+﻿using DG.Tweening;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Unit : MonoBehaviour
 {
-    [SerializeField] private UnitData unitData;
-    [SerializeField] private UnitSheetData unitSheetData;
-
     private List<Vector3> path;
     private Stack<Model> models = new Stack<Model>();
     private List<Model> activeModels = new List<Model>();
     private WaitForSeconds modelTimeSpacing;
 
-    public UnitData UnitData => unitData;
-    public UnitSheetData UnitSheetData => unitSheetData;
+    private float speedMultiplier = 1;
+
     public int Level { get; private set; }
     public BezierCurve Curve { get; private set; }
 
-    public void Init(BezierCurve curve, ITower destination, DirectionType direction)
+    private List<BaseAreaEffect> processedAreaEffects = new List<BaseAreaEffect>(1);
+
+    public void Init(BezierCurve curve, DirectionType direction)
     {
         Curve = curve;
         path = curve.GetSegmentPoints();
@@ -37,13 +37,16 @@ public class Unit : MonoBehaviour
         StartCoroutine(ActivateModels());
     }
 
-    public void AddModels(List<Model> newModels)
+    public void AddModels(Stack<Model> newModels)
     {
-        for (int i = 0; i < newModels.Count; i++)
+        if (newModels.Count == 0)
+            return;
+
+        for (; newModels.Count > 0;)
         {
-            models.Push(newModels[i]);
+            models.Push(newModels.Pop());
         }
-        modelTimeSpacing = new WaitForSeconds(0.55f / unitSheetData.UnitLevelData[newModels[0].Level].speed);
+        modelTimeSpacing = new WaitForSeconds(0.55f / models.Peek().UnitData.Speed);
     }
 
     private void Update()
@@ -73,8 +76,9 @@ public class Unit : MonoBehaviour
             if (activeModels[i].CurrentSegment == path.Count)
                 continue;
 
-            Vector3 newPosition = Vector3.MoveTowards(activeModels[i].transform.position, path[activeModels[i].CurrentSegment],
-                                                      unitSheetData.UnitLevelData[activeModels[i].Level].speed * Time.deltaTime);
+            Vector3 newPosition = Vector3.MoveTowards(activeModels[i].transform.position,
+                path[activeModels[i].CurrentSegment],
+                activeModels[i].UnitData.Speed * this.speedMultiplier * Time.deltaTime);
             Quaternion newRotation = Quaternion.identity;
             if (newPosition - activeModels[i].transform.position != Vector3.zero)
             {
@@ -95,6 +99,24 @@ public class Unit : MonoBehaviour
         }
     }
 
+    private void ProcessAreaEffect(BaseAreaEffect areaEffect)
+    {
+        if(processedAreaEffects.Contains(areaEffect))
+        {
+            return;
+        }
+        processedAreaEffects.Add(areaEffect);
+
+        if (areaEffect is StopArea)
+        {
+            var stopEffect = areaEffect as StopArea;
+            DOTween.Sequence()
+                .AppendCallback(() => speedMultiplier = 0)
+                .AppendInterval(stopEffect.StopTime)
+                .AppendCallback(() => speedMultiplier = 1);
+        }
+    }
+
     private IEnumerator ActivateModels()
     {
         while (true)
@@ -104,10 +126,12 @@ public class Unit : MonoBehaviour
                 if (models.Count % 2 == 0)
                 {
                     var model = models.Pop();
-                    model.SetOffset(-Vector3.left * 0.5f);
+                    model.EnteredAreaTrigger += ProcessAreaEffect;
+                    model.SetOffset(Vector3.right * 0.5f);
                     activeModels.Add(model);
 
                     model = models.Pop();
+                    model.EnteredAreaTrigger += ProcessAreaEffect;
                     model.SetOffset(Vector3.left * 0.5f);
                     activeModels.Add(model);
 
@@ -115,7 +139,9 @@ public class Unit : MonoBehaviour
                 }
                 else
                 {
-                    activeModels.Add(models.Pop());
+                    var model = models.Pop();
+                    model.EnteredAreaTrigger += ProcessAreaEffect;
+                    activeModels.Add(model);
                     yield return modelTimeSpacing;
                 }
             }

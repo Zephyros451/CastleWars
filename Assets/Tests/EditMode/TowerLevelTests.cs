@@ -26,7 +26,6 @@ namespace Tests
             {
                 ITower tower = Substitute.For<ITower>();
                 TowerLevel towerLevel = new TowerLevel(tower, 0);
-                var garrison = new TowerGarrison(tower, 1f);
                 tower.GarrisonCount.Returns(10f);
                 tower.LvlUpQuantity.Returns(5);
 

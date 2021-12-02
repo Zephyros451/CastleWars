@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class TowerMediator : MonoBehaviour, ITower
@@ -24,28 +25,32 @@ public class TowerMediator : MonoBehaviour, ITower
     public int LvlUpQuantity => tower.TowerSheetData.TowerLevelData[level.Value].lvlUpQuantity;
     public float GenerationRate => tower.TowerSheetData.TowerLevelData[level.Value].generationRate;
     public float LvlUpTime => tower.TowerSheetData.TowerLevelData[level.Value].lvlUpTime;
-    public float AttackInTower => tower.TowerSheetData.TowerLevelData[level.Value].attackInTower;
-    public float HP => tower.TowerSheetData.TowerLevelData[level.Value].hp;
-    public Unit UnitPrefab => tower.TowerData.unitData.unitPrefab;
-    public Model ModelPrefab => tower.TowerData.unitData.modelPrefab;
+    public float AttackInTower => Garrison.TopUnit.TowerAttack;
+    public float HP => Garrison.TopUnit.HP;
+    public Unit UnitPrefab => tower.TowerData.unitData.UnitPrefab;
+    public Model ModelPrefab => tower.TowerData.unitData.ModelPrefab;
     public Allegiance Allegiance => tower.Allegiance;
-    public TowerType TowerType => tower.TowerType;
     public float GarrisonCount => Garrison.Count;
     public bool IsNotUnderAttack => Garrison.IsNotUnderAttack;
     public int Level => level.Value;
     public bool IsNotLevelingUp => level.IsNotLevelingUp;
+    public BuffData BuffData => tower.TowerSheetData.BuffData[level.Value];
 
     private void Awake()
     {
         level = new TowerLevel(this, 0);
-        Garrison = new TowerGarrison(this, GenerationRate);
+        if (tower.TowerType == TowerType.ArcherGenerating || tower.TowerType == TowerType.SwordsmanGenerating)
+        {
+            Garrison = new TowerGeneratingGarrison(this, GenerationRate, tower.TowerData.unitData.GetUnitData(level.Value));
+        }
+        else
+        {
+            Garrison = new TowerBuffingGarrison(this, this.BuffData, tower.TowerData.unitData.GetUnitData(level.Value));
+        }
     }
 
     private void Start()
     {
-        StartCoroutine(Garrison.GarrisonGeneration());
-        StartCoroutine(Garrison.GarrisonDegeneration());
-
         collision.TowerAttacked += OnTowerAttacked;
         collision.AllyCame += OnTowerGotBackUp;
         Garrison.CountChanged += OnGarrisonCountChanged;
@@ -69,9 +74,9 @@ public class TowerMediator : MonoBehaviour, ITower
         Garrison.OnTowerAttacked(model);
     }
 
-    private void OnTowerGotBackUp()
+    private void OnTowerGotBackUp(UnitData unitData)
     {
-        Garrison.OnAllyCame();
+        Garrison.OnAllyCame(unitData);
     }
 
     private void OnGarrisonCountChanged()
@@ -99,21 +104,36 @@ public class TowerMediator : MonoBehaviour, ITower
         troopSender.SendTroopTo(anotherTower);
     }
 
-    public void ChangeAllegiance(Allegiance newAllegiance)
+    void ITower.ChangeAllegiance(Allegiance newAllegiance)
     {
         level.Reset();
         level.IsNotLevelingUp = true;
         tower.ChangeAllegiance(newAllegiance);
     }
 
-    public void DecreaseGarrisonCount(int amount)
+    Stack<UnitData> ITower.PopFromGarrison(int amount)
     {
-        Garrison.DecreaseGarrisonCount(amount);
+        return Garrison.PopFromGarrison(amount);
     }
 
-    public void SetGarrisonCount(float newCount)
+    void ITower.DecreaseGarrisonCount(float newCount)
     {
-        Garrison.Count = newCount;
+        if (newCount < 0f)
+        {
+            Debug.LogError("garrison count cannot be less than zero");
+            return;
+        }
+
+        if (newCount > GarrisonCount)
+        {
+            Debug.LogError("new garrison count cannot be greater than it was previously");
+            return;
+        }
+
+        while (newCount < GarrisonCount)
+        {
+            Garrison.PopFromGarrison(1);
+        }
     }
 
     public void LevelUp()
@@ -127,6 +147,21 @@ public class TowerMediator : MonoBehaviour, ITower
         navigator = GetComponent<Navigator>();
         collision = GetComponentInChildren<TowerCollision>();
         troopSender = GetComponent<TowerTroopSender>();
+    }
+
+    public void ReceiveDamage(float damage)
+    {
+        if(this.GarrisonCount == 0)
+        {
+            return;
+        }
+
+        this.Garrison.TopUnit.DecreaseHP(damage);
+
+        if(this.Garrison.TopUnit.HP < 0f)
+        {
+            this.Garrison.PopFromGarrison(1);
+        }
     }
 
     public void Destroy()

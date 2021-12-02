@@ -1,4 +1,4 @@
-﻿using UnityEditor;
+﻿ using UnityEditor;
 using UnityEngine;
 
 [RequireComponent(typeof(Path))]
@@ -8,7 +8,7 @@ public class Road : MonoBehaviour
 {
     [Range(0.05f, 5f)]
     [SerializeField] private float spacing = 1f;
-    [SerializeField] private float roadWidth = 1f;
+    [SerializeField] private float roadWidth = 0.1f;
 
     [SerializeField, HideInInspector] private float tiling = 1f;
     [SerializeField, HideInInspector] private MeshRenderer renderer;
@@ -77,7 +77,7 @@ public class Road : MonoBehaviour
     public void InitializeRoad()
     {
         tiling = 24f;
-        var roadMaterial = AssetDatabase.LoadAssetAtPath<Material>("Assets/Materials/Road.mat");
+        var roadMaterial = AssetDatabase.LoadAssetAtPath<Material>("Assets/Materials/New_Materials/Road_mat 1.mat");
         renderer = GetComponent<MeshRenderer>();
         renderer.sharedMaterial = roadMaterial;
 

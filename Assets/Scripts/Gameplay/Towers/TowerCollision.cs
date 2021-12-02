@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class TowerCollision : MonoBehaviour
 {
-    public event Action AllyCame;
+    public event Action<UnitData> AllyCame;
     public event Action<Model> TowerAttacked;
 
     [SerializeField, HideInInspector] private Tower tower;
@@ -21,7 +21,7 @@ public class TowerCollision : MonoBehaviour
     {
         if (model.Allegiance == tower.Allegiance)
         {
-            AllyCame?.Invoke();
+            AllyCame?.Invoke(model.UnitData);
         }
         else
         {

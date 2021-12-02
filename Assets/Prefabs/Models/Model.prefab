@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 9018209138761626342}
   - component: {fileID: 7142593347430253631}
   m_Layer: 0
-  m_Name: EnemyModel
+  m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -59,9 +59,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   collider: {fileID: 9018209138761626342}
-  view: {fileID: 7814644169551835343}
-  IsActive: 0
-  SegmentsTravelled: 0
+  view: {fileID: 3555084322837650195}
+  levelSkins: []
 --- !u!1 &5007267536765505742
 GameObject:
   m_ObjectHideFlags: 0

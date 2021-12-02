@@ -1,25 +1,32 @@
 ﻿using UnityEngine;
+using System;
 
 [RequireComponent(typeof(SphereCollider))]
 public class Model : MonoBehaviour, IModel
 {
-    [SerializeField, HideInInspector] private SphereCollider collider;
-    [SerializeField, HideInInspector] private Transform view;    
+    [SerializeField] private new SphereCollider collider;
+    [SerializeField] private MeshFilter view;
+    [SerializeField] private Mesh[] levelSkins;
 
-    private Unit unit;
-    private Vector3 offset;
+    public event Action<BaseAreaEffect> EnteredAreaTrigger;
+
+    protected ITower target;
 
     public int CurrentSegment { get; private set; }
     public int Level { get; private set; }
     public Allegiance Allegiance { get; private set; }
-    public float Attack => unit.UnitSheetData.UnitLevelData[Level].attackInField;
-    public float HP => unit.UnitSheetData.UnitLevelData[Level].hp;
+    public float Attack => UnitData.FieldAttack;
+    public float HP => UnitData.HP;
+    public UnitData UnitData { get; private set; }
 
-    public void Init(Unit unit, Allegiance allegiance, int level)
+    public virtual void Init(UnitData unitData, Allegiance allegiance, int level, ITower target)
     {
+        this.UnitData = unitData;
         this.Allegiance = allegiance;
-        this.unit = unit;
         this.Level = level;
+        this.target = target;
+
+        this.view.mesh = levelSkins[level];
     }
 
     public void IncrementSegment()
@@ -29,7 +36,7 @@ public class Model : MonoBehaviour, IModel
 
     public void SetOffset(Vector3 offset)
     {
-        view.localPosition = offset;
+        view.transform.localPosition = offset;
     }
 
     public void Move(Vector3 position, Quaternion rotation)
@@ -43,9 +50,28 @@ public class Model : MonoBehaviour, IModel
         collider.enabled = true;
     }
 
+    public void RaiseEnteredAreaTrigger(BaseAreaEffect areaEffect)
+    {
+        EnteredAreaTrigger?.Invoke(areaEffect);
+    }
+
+    public void ApplyDamage(float damage)
+    {
+        UnitData.DecreaseHP(damage);
+        if (HP < 0)
+        {
+            Destroy(this.gameObject);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        EnteredAreaTrigger = null;
+    }
+
     private void Reset()
     {
         collider = GetComponent<SphereCollider>();
-        view = GetComponentInChildren<Renderer>().transform;
+        view = GetComponentInChildren<MeshFilter>();
     }
 }

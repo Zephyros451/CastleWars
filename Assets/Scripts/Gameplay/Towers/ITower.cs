@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public interface ITower
@@ -14,17 +15,19 @@ public interface ITower
     Model ModelPrefab { get; }
     Navigator Navigator { get; }
     int QuantityCap { get; }
-    TowerType TowerType { get; }
     Unit UnitPrefab { get; }
     float GarrisonCount { get; }
     int Level { get; }
     bool IsNotLevelingUp { get; }
+    BuffData BuffData { get; }
+
     event Action GarrisonCountChanged;
     event Action LevelReseted;
     event Action LevelUpStarted;
     event Action LevelUpEnded;
 
-    void DecreaseGarrisonCount(int amount);
+    Stack<UnitData> PopFromGarrison(int amount);
     void ChangeAllegiance(Allegiance allegiance);
-    void SetGarrisonCount(float newCount);
+    void DecreaseGarrisonCount(float newCount);
+    void ReceiveDamage(float damage);
 }

@@ -12,34 +12,65 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6c4f9e648376fe4382ab75a51ffd8c8, type: 3}
   m_Name: LI Tower Sheet Data
   m_EditorClassIdentifier: 
-  towerLevelData:
+  towerData:
   - quantityCap: 10
     lvlUpQuantity: 5
     generationRate: 0.8
-    lvlUpTime: 4
-    attackInTower: 1.8
+    lvlUpTime: 1
+    attackInTower: 1.5
     hp: 1.9
+    hpBuff: 0
+    attackBuff: 0
+    applyBuffTime: 0
+    aoeTime: 0
+    rangeDamage: 0
+    rangeDistance: 0
   - quantityCap: 20
     lvlUpQuantity: 10
     generationRate: 0.8
-    lvlUpTime: 4
-    attackInTower: 1.8
+    lvlUpTime: 2
+    attackInTower: 1.5
     hp: 1.9
+    hpBuff: 0
+    attackBuff: 0
+    applyBuffTime: 0
+    aoeTime: 0
+    rangeDamage: 0
+    rangeDistance: 0
   - quantityCap: 30
     lvlUpQuantity: 15
     generationRate: 0.8
-    lvlUpTime: 4
-    attackInTower: 1.8
+    lvlUpTime: 3
+    attackInTower: 1.5
     hp: 1.9
+    hpBuff: 0
+    attackBuff: 0
+    applyBuffTime: 0
+    aoeTime: 0
+    rangeDamage: 0
+    rangeDistance: 0
   - quantityCap: 40
     lvlUpQuantity: 20
     generationRate: 0.8
     lvlUpTime: 4
-    attackInTower: 1.8
+    attackInTower: 1.5
     hp: 1.9
+    hpBuff: 0
+    attackBuff: 0
+    applyBuffTime: 0
+    aoeTime: 0
+    rangeDamage: 0
+    rangeDistance: 0
   - quantityCap: 50
     lvlUpQuantity: 1000
     generationRate: 0.8
-    lvlUpTime: 4
-    attackInTower: 1.8
+    lvlUpTime: 1000
+    attackInTower: 1.5
     hp: 1.9
+    hpBuff: 0
+    attackBuff: 0
+    applyBuffTime: 0
+    aoeTime: 0
+    rangeDamage: 0
+    rangeDistance: 0
+  unitDatas: {fileID: 11400000, guid: 00946b388393f9d448cde3a7f96fcfa8, type: 2}
