@@ -2005,6 +2005,12 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3342879771332119531, guid: eda549aaab370c5438916eebed6f980a,
+        type: 3}
+      propertyPath: sharedProfile
+      value: 
+      objectReference: {fileID: 11400000, guid: 6c5473154a2076b47a444978f5757574,
+        type: 2}
     - target: {fileID: 3467082066956861524, guid: eda549aaab370c5438916eebed6f980a,
         type: 3}
       propertyPath: m_RootOrder
